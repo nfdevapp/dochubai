@@ -1,12 +1,13 @@
 "use client";
 
 import { FileText, Receipt, FileSpreadsheet, Sparkles } from "lucide-react";
+import type {JSX} from "react";
 
 interface SidebarProps {
     onSelect: (title: string) => void;
 }
 
-export default function Sidebar({ onSelect }: SidebarProps) {
+export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
     return (
         <aside className="w-64 hidden md:flex flex-col gap-4 p-4 border-r border-sidebar-border bg-sidebar-background text-sidebar-foreground">
             <div className="text-lg font-semibold font-sans tracking-wide flex items-center">
