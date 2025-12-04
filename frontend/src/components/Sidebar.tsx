@@ -9,7 +9,10 @@ interface SidebarProps {
 export default function Sidebar({ onSelect }: SidebarProps) {
     return (
         <aside className="w-64 hidden md:flex flex-col gap-4 p-4 border-r border-sidebar-border bg-sidebar-background text-sidebar-foreground">
-            <div className="text-lg font-semibold font-sans tracking-wide">DochubAi ✨</div>
+            <div className="text-lg font-semibold font-sans tracking-wide flex items-center">
+                DochubAi
+                <Sparkles size={18} className="ml-2 text-red-600" />
+            </div>
 
             <nav className="flex flex-col gap-1 mt-4">
                 <button
@@ -38,8 +41,7 @@ export default function Sidebar({ onSelect }: SidebarProps) {
             </nav>
 
             <div className="mt-auto text-sm text-muted-foreground flex items-center gap-2">
-                © {new Date().getFullYear()} DochubDashBoard
-                <Sparkles size={16} />
+                © {new Date().getFullYear()}
             </div>
         </aside>
     );
