@@ -10,7 +10,7 @@ export default function Sidebar({ onSelect }: SidebarProps) {
     return (
         <aside className="w-64 hidden md:flex flex-col gap-4 p-4 border-r border-sidebar-border bg-sidebar-background text-sidebar-foreground">
             <div className="text-lg font-semibold font-sans tracking-wide flex items-center">
-                DochubAi
+                DocHubAi
                 <Sparkles size={18} className="ml-2 text-red-600" />
             </div>
 
