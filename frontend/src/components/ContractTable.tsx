@@ -119,7 +119,7 @@ const columns: ColumnDef<Contract>[] = [
 
             const description = {
                 1: "Ist einwandfrei",
-                2: "Sollte fachlich überprüft werden",
+                2: "Sollte überprüft werden",
                 3: "Weist kritische Abweichungen auf",
             }[value] ?? "Keine Daten";
 
