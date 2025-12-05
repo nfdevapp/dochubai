@@ -25,6 +25,10 @@ export default function Dashboard() {
                     {title === "Rechnungen" && (
                         <div>Rechnungen werden hier angezeigt…</div>
                     )}
+
+                    {title === "Einstellungen" && (
+                        <div>Einstellungen werden hier angezeigt…</div>
+                    )}
                 </main>
             </div>
         </div>

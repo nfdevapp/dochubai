@@ -53,6 +53,13 @@ function Sidebar() {
                     <FileSpreadsheet size={18} />
                     Rechnungen
                 </a>
+                <a
+                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    href="#einstellungen"
+                >
+                    <FileSpreadsheet size={18} />
+                    Einstellungen
+                </a>
             </nav>
 
             <div className="mt-auto text-sm text-muted-foreground">

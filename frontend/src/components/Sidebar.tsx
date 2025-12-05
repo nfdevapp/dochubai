@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Receipt, FileSpreadsheet, Sparkles } from "lucide-react";
+import { FileText, Receipt, FileSpreadsheet, Sparkles, Settings } from "lucide-react";
 import type {JSX} from "react";
 
 interface SidebarProps {
@@ -39,6 +39,14 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
                 >
                     <FileSpreadsheet size={18} className="ml-2"/>
                     Rechnungen
+                </button>
+
+                <button
+                    onClick={() => onSelect("Einstellungen")}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-left font-medium"
+                >
+                    <Settings size={18} className="ml-2"/>
+                    Einstellungen
                 </button>
             </nav>
 
