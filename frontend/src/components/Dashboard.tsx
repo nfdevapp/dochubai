@@ -6,7 +6,7 @@ import Header from "./Header";
 import ContractPage from "@/pages/ContractPage";
 
 export default function Dashboard() {
-    const [title, setTitle] = useState("Dashboard");
+    const [title, setTitle] = useState("Verträge");
 
     return (
         <div className="min-h-screen flex bg-background text-foreground">
