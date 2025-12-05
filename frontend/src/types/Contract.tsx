@@ -3,5 +3,6 @@ export type Contract = {
     title: string;
     startDate: string;
     endDate: string;
+    description: string;
     ai: number;
 };
