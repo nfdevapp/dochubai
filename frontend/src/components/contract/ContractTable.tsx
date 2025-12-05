@@ -103,13 +103,19 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "aiLevel",
         header: ({ column }) => (
-            <Button variant="ghost" className="pl-6 flex items-center" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button
+                variant="ghost"
+                className="pl-6 flex items-center gap-2"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                <span className="font-medium">AI-Analyse</span>
                 <Sparkles className="h-4 w-4" />
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ArrowUpDown className="h-4 w-4" />
             </Button>
         ),
+
         cell: ({ row }) => {
-            const value = row.getValue("aiLevel") as number;
+            const value = Number(row.getValue("aiLevel"));
 
             const color = {
                 1: "bg-green-500",
@@ -124,7 +130,7 @@ const columns: ColumnDef<Contract>[] = [
             }[value] ?? "Keine Daten";
 
             return (
-                <div className="pl-6 flex items-center">
+                <div className="w-full flex justify-center items-center">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger>
