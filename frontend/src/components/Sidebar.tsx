@@ -13,7 +13,6 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
             <div className="text-lg font-semibold font-sans tracking-wide flex items-center">
                 DocHubAi
                 <Sparkles size={18} className="ml-2 h-4 w-4 text-yellow-500" />
-                {/*<Sparkles size={18} className="ml-2 text-red-600" />*/}
             </div>
 
             <nav className="flex flex-col gap-1 mt-4">
