@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button";
 import type { Contract } from "@/types/Contract.tsx";
+import {Sparkles} from "lucide-react";
 
 interface ContractDialogProps {
     open: boolean;
@@ -25,7 +26,13 @@ export default function ContractDialog({ open, onOpenChange, contract }: Contrac
                     <p><strong>Titel:</strong> {contract.title}</p>
                     <p><strong>Startdatum:</strong> {contract.startDate}</p>
                     <p><strong>Enddatum:</strong> {contract.endDate}</p>
-                    <p><strong>AI-Level:</strong> {contract.ai}</p>
+                    <p><strong>Beschreibung:</strong> {contract.description}</p>
+                    <p className="flex items-center gap-2">
+                        <strong><Sparkles className="h-5 w-5 inline-block" />:</strong>
+                        {" "}{contract.ai}
+                    </p>
+
+
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
