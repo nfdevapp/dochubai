@@ -1,6 +1,7 @@
 export type Contract = {
     id: string;
     title: string;
-    date: string;
+    startDate: string;
+    endDate: string;
     ai: number;
 };

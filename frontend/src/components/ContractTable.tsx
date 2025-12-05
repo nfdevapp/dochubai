@@ -14,7 +14,7 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,41 +40,41 @@ import {
 
 import type { Contract } from "@/types/Contract";
 
-// Testdaten
+// Testdaten aktualisiert (startDate + endDate)
 const data: Contract[] = [
-    { id: "1", title: "Mietvertrag", date: "2024-01-15", ai: 1 },
-    { id: "2", title: "Arbeitsvertrag", date: "2023-11-03", ai: 2 },
-    { id: "3", title: "Dienstleistungsvertrag", date: "2024-02-20", ai: 1 },
-    { id: "4", title: "Kaufvertrag", date: "2022-08-09", ai: 3 },
-    { id: "5", title: "Versicherungsvertrag", date: "2023-12-11", ai: 1 },
-    { id: "6", title: "Leasingvertrag", date: "2022-06-01", ai: 2 },
-    { id: "7", title: "Wartungsvertrag", date: "2024-03-01", ai: 1 },
-    { id: "8", title: "Hostingvertrag", date: "2023-09-14", ai: 1 },
-    { id: "9", title: "Supportvertrag", date: "2024-01-01", ai: 1 },
-    { id: "10", title: "Kooperationsvertrag", date: "2022-11-22", ai: 2 },
-    { id: "11", title: "Liefervertrag", date: "2023-01-10", ai: 1 },
-    { id: "12", title: "Agenturvertrag", date: "2024-02-01", ai: 1 },
-    { id: "13", title: "Lizenzvertrag", date: "2024-01-20", ai: 1 },
-    { id: "14", title: "Bauvertrag", date: "2022-05-15", ai: 3 },
-    { id: "15", title: "Projektvertrag", date: "2023-03-11", ai: 1 },
-    { id: "16", title: "Beratungsvertrag", date: "2023-12-02", ai: 1 },
-    { id: "17", title: "Darlehensvertrag", date: "2021-09-30", ai: 2 },
-    { id: "18", title: "Schulungsvertrag", date: "2024-02-22", ai: 1 },
-    { id: "19", title: "Cloud-Service-Vertrag", date: "2023-10-05", ai: 1 },
-    { id: "20", title: "IT-Rahmenvertrag", date: "2024-01-03", ai: 1 },
-    { id: "21", title: "Werkvertrag", date: "2022-12-12", ai: 2 },
-    { id: "22", title: "ADV-Vertrag", date: "2023-11-22", ai: 1 },
-    { id: "23", title: "Telekommunikationsvertrag", date: "2022-03-09", ai: 3 },
-    { id: "24", title: "Providervertrag", date: "2023-07-12", ai: 1 },
-    { id: "25", title: "Abovertrag", date: "2024-02-14", ai: 1 },
-    { id: "26", title: "Überlassungsvertrag", date: "2021-11-01", ai: 2 },
-    { id: "27", title: "Forschungsvertrag", date: "2023-05-18", ai: 1 },
-    { id: "28", title: "Kreditvertrag", date: "2022-01-28", ai: 3 },
-    { id: "29", title: "Vertriebsvertrag", date: "2023-08-30", ai: 1 },
-    { id: "30", title: "Lizenzverlängerung", date: "2024-02-25", ai: 1 },
-    { id: "31", title: "SaaS-Vertrag", date: "2023-09-01", ai: 1 },
-    { id: "32", title: "Partnerschaftsvertrag", date: "2024-03-12", ai: 1 },
-    { id: "33", title: "Wartungsvertrag Premium", date: "2022-10-10", ai: 2 },
+    { id: "1", title: "Mietvertrag", startDate: "2024-01-15", endDate: "2025-01-15", ai: 1 },
+    { id: "2", title: "Arbeitsvertrag", startDate: "2023-11-03", endDate: "2024-11-03", ai: 2 },
+    { id: "3", title: "Dienstleistungsvertrag", startDate: "2024-02-20", endDate: "2025-02-20", ai: 1 },
+    { id: "4", title: "Kaufvertrag", startDate: "2022-08-09", endDate: "2023-08-09", ai: 3 },
+    { id: "5", title: "Versicherungsvertrag", startDate: "2023-12-11", endDate: "2024-12-11", ai: 1 },
+    { id: "6", title: "Leasingvertrag", startDate: "2022-06-01", endDate: "2025-06-01", ai: 2 },
+    { id: "7", title: "Wartungsvertrag", startDate: "2024-03-01", endDate: "2025-03-01", ai: 1 },
+    { id: "8", title: "Hostingvertrag", startDate: "2023-09-14", endDate: "2024-09-14", ai: 1 },
+    { id: "9", title: "Supportvertrag", startDate: "2024-01-01", endDate: "2025-01-01", ai: 1 },
+    { id: "10", title: "Kooperationsvertrag", startDate: "2022-11-22", endDate: "2023-11-22", ai: 2 },
+    { id: "11", title: "Liefervertrag", startDate: "2023-01-10", endDate: "2024-01-10", ai: 1 },
+    { id: "12", title: "Agenturvertrag", startDate: "2024-02-01", endDate: "2025-02-01", ai: 1 },
+    { id: "13", title: "Lizenzvertrag", startDate: "2024-01-20", endDate: "2025-01-20", ai: 1 },
+    { id: "14", title: "Bauvertrag", startDate: "2022-05-15", endDate: "2024-05-15", ai: 3 },
+    { id: "15", title: "Projektvertrag", startDate: "2023-03-11", endDate: "2024-03-11", ai: 1 },
+    { id: "16", title: "Beratungsvertrag", startDate: "2023-12-02", endDate: "2024-12-02", ai: 1 },
+    { id: "17", title: "Darlehensvertrag", startDate: "2021-09-30", endDate: "2026-09-30", ai: 2 },
+    { id: "18", title: "Schulungsvertrag", startDate: "2024-02-22", endDate: "2025-02-22", ai: 1 },
+    { id: "19", title: "Cloud-Service-Vertrag", startDate: "2023-10-05", endDate: "2024-10-05", ai: 1 },
+    { id: "20", title: "IT-Rahmenvertrag", startDate: "2024-01-03", endDate: "2026-01-03", ai: 1 },
+    { id: "21", title: "Werkvertrag", startDate: "2022-12-12", endDate: "2024-12-12", ai: 2 },
+    { id: "22", title: "ADV-Vertrag", startDate: "2023-11-22", endDate: "2024-11-22", ai: 1 },
+    { id: "23", title: "Telekommunikationsvertrag", startDate: "2022-03-09", endDate: "2023-03-09", ai: 3 },
+    { id: "24", title: "Providervertrag", startDate: "2023-07-12", endDate: "2024-07-12", ai: 1 },
+    { id: "25", title: "Abovertrag", startDate: "2024-02-14", endDate: "2025-02-14", ai: 1 },
+    { id: "26", title: "Überlassungsvertrag", startDate: "2021-11-01", endDate: "2024-11-01", ai: 2 },
+    { id: "27", title: "Forschungsvertrag", startDate: "2023-05-18", endDate: "2024-05-18", ai: 1 },
+    { id: "28", title: "Kreditvertrag", startDate: "2022-01-28", endDate: "2027-01-28", ai: 3 },
+    { id: "29", title: "Vertriebsvertrag", startDate: "2023-08-30", endDate: "2024-08-30", ai: 1 },
+    { id: "30", title: "Lizenzverlängerung", startDate: "2024-02-25", endDate: "2025-02-25", ai: 1 },
+    { id: "31", title: "SaaS-Vertrag", startDate: "2023-09-01", endDate: "2024-09-01", ai: 1 },
+    { id: "32", title: "Partnerschaftsvertrag", startDate: "2024-03-12", endDate: "2026-03-12", ai: 1 },
+    { id: "33", title: "Wartungsvertrag Premium", startDate: "2022-10-10", endDate: "2024-10-10", ai: 2 },
 ];
 
 const columns: ColumnDef<Contract>[] = [
@@ -95,17 +95,68 @@ const columns: ColumnDef<Contract>[] = [
         cell: ({ row }) => <div className="pl-6">{row.getValue("title")}</div>,
     },
     {
-        accessorKey: "date",
-        header: () => <div className="pl-6">Datum</div>,
-        cell: ({ row }) => <div className="pl-6">{row.getValue("date")}</div>,
+        accessorKey: "startDate",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                className="justify-start pl-6"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Vertragsbeginn
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
+        cell: ({ row }) => <div className="pl-6">{row.getValue("startDate")}</div>,
+    },
+    {
+        accessorKey: "endDate",
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                className="justify-start pl-6"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Vertragsende
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        ),
+        cell: ({ row }) => <div className="pl-6">{row.getValue("endDate")}</div>,
     },
     {
         accessorKey: "ai",
-        header: () => <div className="pl-6">Status</div>,
-        cell: ({ row }) => (
-            <div className="pl-6">{Number(row.getValue("ai"))}</div>
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                className="pl-6 flex items-center"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                <Sparkles className="h-4 w-4" />
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
         ),
+        cell: ({ row }) => {
+            const value = Number(row.getValue("ai"));
+
+            const color = {
+                1: "bg-green-500",
+                2: "bg-yellow-400",
+                3: "bg-red-500",
+            }[value] ?? "bg-gray-400";
+
+            return (
+                <div className="pl-6 flex items-center">
+                    <div className={`h-3 w-3 rounded-full ${color}`} />
+                </div>
+            );
+        },
     },
+
     {
         id: "actions",
         enableHiding: false,
@@ -166,7 +217,6 @@ export default function ContractTable() {
 
     return (
         <div className="w-full">
-            {/* Filter + Spalten */}
             <div className="flex items-center py-4">
                 <Input
                     placeholder="Titel filtern..."
@@ -204,7 +254,6 @@ export default function ContractTable() {
                 </DropdownMenu>
             </div>
 
-            {/* Tabelle */}
             <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader>
@@ -249,7 +298,6 @@ export default function ContractTable() {
                 </Table>
             </div>
 
-            {/* Pagination */}
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="space-x-2">
                     <Button

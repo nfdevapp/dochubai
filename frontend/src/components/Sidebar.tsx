@@ -12,7 +12,7 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
         <aside className="w-64 hidden md:flex flex-col gap-4 p-4 border-r border-sidebar-border bg-sidebar-background text-sidebar-foreground">
             <div className="text-lg font-semibold font-sans tracking-wide flex items-center">
                 DocHubAi
-                <Sparkles size={18} className="ml-2" />
+                <Sparkles size={18} className="ml-2 h-4 w-4 text-yellow-500" />
                 {/*<Sparkles size={18} className="ml-2 text-red-600" />*/}
             </div>
 
@@ -21,7 +21,7 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
                     onClick={() => onSelect("Verträge")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-left font-medium"
                 >
-                    <FileText size={18} className="ml-2 text-blue-600"/>
+                    <FileText size={18} className="ml-2"/>
                     Verträge
                 </button>
 
@@ -29,7 +29,7 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
                     onClick={() => onSelect("Zahlungsbelege")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-left font-medium"
                 >
-                    <Receipt size={18} className="ml-2 text-green-600"/>
+                    <Receipt size={18} className="ml-2"/>
                     Zahlungsbelege
                 </button>
 
@@ -37,7 +37,7 @@ export default function Sidebar({ onSelect }: SidebarProps): JSX.Element {
                     onClick={() => onSelect("Rechnungen")}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-left font-medium"
                 >
-                    <FileSpreadsheet size={18} className="ml-2 text-red-600"/>
+                    <FileSpreadsheet size={18} className="ml-2"/>
                     Rechnungen
                 </button>
             </nav>
