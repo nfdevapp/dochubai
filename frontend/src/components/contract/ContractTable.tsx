@@ -14,19 +14,16 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Sparkles } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu.tsx";
 
 import {
     Table,
@@ -35,11 +32,11 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/components/ui/table";
+} from "@/components/ui/table.tsx";
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-import type { Contract } from "@/types/Contract";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
+import type { Contract } from "@/types/Contract.tsx";
+import ContractDialog from "@/components/contract/ContractDialog.tsx";
 
 // Testdaten
 const data: Contract[] = [
@@ -139,29 +136,6 @@ const columns: ColumnDef<Contract>[] = [
             );
         },
     },
-    {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            const contract = row.original;
-
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
-                    </DropdownMenuTrigger>
-
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Aktionen</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(contract.id)}>Vertrag-ID kopieren</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Vertrag öffnen</DropdownMenuItem>
-                        <DropdownMenuItem>Herunterladen</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
-    },
 ];
 
 export default function ContractTable() {
@@ -169,6 +143,10 @@ export default function ContractTable() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+
+    // Neue States
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [selectedContract, setSelectedContract] = React.useState<Contract | null>(null);
 
     const table = useReactTable({
         data,
@@ -186,6 +164,7 @@ export default function ContractTable() {
 
     return (
         <div className="w-full">
+            {/* Filter + Spalten */}
             <div className="flex items-center py-4">
                 <Input placeholder="Titel filtern..." value={(table.getColumn("title")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)} className="max-w-sm" />
 
@@ -202,6 +181,7 @@ export default function ContractTable() {
                 </DropdownMenu>
             </div>
 
+            {/* Tabelle */}
             <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader>
@@ -217,7 +197,14 @@ export default function ContractTable() {
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow
+                                    key={row.id}
+                                    className="cursor-pointer hover:bg-muted/50"
+                                    onClick={() => {
+                                        setSelectedContract(row.original);
+                                        setDialogOpen(true);
+                                    }}
+                                >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
@@ -232,12 +219,21 @@ export default function ContractTable() {
                 </Table>
             </div>
 
+            {/* Pagination */}
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>Zurück</Button>
                     <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>Weiter</Button>
                 </div>
             </div>
+
+            {/* DETAILS-DIALOG */}
+            <ContractDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                contract={selectedContract}
+            />
+
         </div>
     );
 }

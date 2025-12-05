@@ -1,6 +1,6 @@
 "use client";
 
-import ContractTable from "@/components/ContractTable";
+import ContractTable from "@/components/contract/ContractTable.tsx";
 
 export default function ContractPage() {
     return (
