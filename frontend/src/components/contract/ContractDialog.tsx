@@ -11,6 +11,19 @@ interface ContractDialogProps {
     contract: Contract | null;
 }
 
+const aiColorMap: Record<number, string> = {
+    1: "text-green-500",
+    2: "text-yellow-500",
+    3: "text-red-500",
+};
+
+const aiDescriptionMap: Record<number, string> = {
+    1: "Ist einwandfrei",
+    2: "Sollte überprüft werden",
+    3: "Weist kritische Abweichungen auf",
+};
+
+
 export default function ContractDialog({ open, onOpenChange, contract }: ContractDialogProps) {
     if (!contract) return null;
 
@@ -28,11 +41,15 @@ export default function ContractDialog({ open, onOpenChange, contract }: Contrac
                     <p><strong>Enddatum:</strong> {contract.endDate}</p>
                     <p><strong>Beschreibung:</strong> {contract.description}</p>
                     <p className="flex items-center gap-2">
-                        <strong><Sparkles className="h-5 w-5 inline-block" />:</strong>
-                        {" "}{contract.ai}
+                        <strong className="flex items-center gap-1">
+                            AI-Analyse
+                            <Sparkles className="h-5 w-5 inline-block" />
+                            :
+                        </strong>
+                        <span className={`${aiColorMap[Number(contract.aiLevel)] || "text-gray-500"} font-semibold`}>
+                            {aiDescriptionMap[Number(contract.aiLevel)] || "Keine Daten"}
+                        </span>
                     </p>
-
-
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>

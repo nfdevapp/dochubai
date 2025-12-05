@@ -4,5 +4,5 @@ export type Contract = {
     startDate: string;
     endDate: string;
     description: string;
-    ai: string;
+    aiLevel: number;
 };
