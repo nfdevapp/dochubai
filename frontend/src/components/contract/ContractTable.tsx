@@ -14,16 +14,9 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 
-import { ArrowUpDown, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowUpDown, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button.tsx";
-import { Input } from "@/components/ui/input.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu.tsx";
 
 import {
     Table,
@@ -33,7 +26,7 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table.tsx";
-
+import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
 import type { Contract } from "@/types/Contract.tsx";
 import ContractDialog from "@/components/contract/ContractDialog.tsx";
@@ -164,21 +157,13 @@ export default function ContractTable() {
 
     return (
         <div className="w-full">
-            {/* Filter + Spalten */}
+            {/* Vertrag anlegen */}
             <div className="flex items-center py-4">
-                <Input placeholder="Titel filtern..." value={(table.getColumn("title")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)} className="max-w-sm" />
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">Spalten <ChevronDown className="ml-2 h-4 w-4" /></Button>
-                    </DropdownMenuTrigger>
-
-                    <DropdownMenuContent align="end">
-                        {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
-                            <DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>{column.id}</DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="ml-auto">
+                    <Badge className="bg-blue-500 text-white rounded-full px-4 py-1">
+                        Neuen Vertrag anlegen
+                    </Badge>
+                </div>
             </div>
 
             {/* Tabelle */}
