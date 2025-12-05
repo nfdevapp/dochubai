@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 import ContractPage from "@/pages/ContractPage";
 
 export default function Dashboard() {
     const [title, setTitle] = useState("Verträge");
+
+    const pages: Record<string, React.ReactNode> = {
+        "Verträge": <ContractPage />,
+        "Zahlungsbelege": <div>Zahlungsbelege werden hier angezeigt…</div>,
+        "Rechnungen": <div>Rechnungen werden hier angezeigt…</div>,
+        "Einstellungen": <div>Einstellungen werden hier angezeigt…</div>,
+    };
 
     return (
         <div className="min-h-screen flex bg-background text-foreground">
@@ -16,19 +23,7 @@ export default function Dashboard() {
                 <Header title={title} />
 
                 <main className="p-4 flex-1">
-                    {title === "Verträge" && <ContractPage />}
-
-                    {title === "Zahlungsbelege" && (
-                        <div>Zahlungsbelege werden hier angezeigt…</div>
-                    )}
-
-                    {title === "Rechnungen" && (
-                        <div>Rechnungen werden hier angezeigt…</div>
-                    )}
-
-                    {title === "Einstellungen" && (
-                        <div>Einstellungen werden hier angezeigt…</div>
-                    )}
+                    {pages[title] ?? <div>Seite nicht gefunden.</div>}
                 </main>
             </div>
         </div>
