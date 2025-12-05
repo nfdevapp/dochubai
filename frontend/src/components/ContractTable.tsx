@@ -18,7 +18,6 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal, Sparkles } from "lucide-react
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -38,9 +37,11 @@ import {
     TableCell,
 } from "@/components/ui/table";
 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
 import type { Contract } from "@/types/Contract";
 
-// Testdaten aktualisiert (startDate + endDate)
+// Testdaten
 const data: Contract[] = [
     { id: "1", title: "Mietvertrag", startDate: "2024-01-15", endDate: "2025-01-15", ai: 1 },
     { id: "2", title: "Arbeitsvertrag", startDate: "2023-11-03", endDate: "2024-11-03", ai: 2 },
@@ -81,61 +82,28 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "title",
         header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="justify-start pl-6"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
-                Titel
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Titel<ArrowUpDown className="ml-2 h-4 w-4" /></Button>
         ),
         cell: ({ row }) => <div className="pl-6">{row.getValue("title")}</div>,
     },
     {
         accessorKey: "startDate",
         header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="justify-start pl-6"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
-                Vertragsbeginn
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Vertragsbeginn<ArrowUpDown className="ml-2 h-4 w-4" /></Button>
         ),
         cell: ({ row }) => <div className="pl-6">{row.getValue("startDate")}</div>,
     },
     {
         accessorKey: "endDate",
         header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="justify-start pl-6"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
-                Vertragsende
-                <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>Vertragsende<ArrowUpDown className="ml-2 h-4 w-4" /></Button>
         ),
         cell: ({ row }) => <div className="pl-6">{row.getValue("endDate")}</div>,
     },
     {
         accessorKey: "ai",
         header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="pl-6 flex items-center"
-                onClick={() =>
-                    column.toggleSorting(column.getIsSorted() === "asc")
-                }
-            >
+            <Button variant="ghost" className="pl-6 flex items-center" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 <Sparkles className="h-4 w-4" />
                 <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
@@ -149,14 +117,28 @@ const columns: ColumnDef<Contract>[] = [
                 3: "bg-red-500",
             }[value] ?? "bg-gray-400";
 
+            const description = {
+                1: "Ist einwandfrei",
+                2: "Sollte fachlich überprüft werden",
+                3: "Weist kritische Abweichungen auf",
+            }[value] ?? "Keine Daten";
+
             return (
                 <div className="pl-6 flex items-center">
-                    <div className={`h-3 w-3 rounded-full ${color}`} />
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <div className={`h-3 w-3 rounded-full ${color}`} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{description}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             );
         },
     },
-
     {
         id: "actions",
         enableHiding: false,
@@ -166,19 +148,12 @@ const columns: ColumnDef<Contract>[] = [
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                        <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Aktionen</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(contract.id)}
-                        >
-                            Vertrag-ID kopieren
-                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(contract.id)}>Vertrag-ID kopieren</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Vertrag öffnen</DropdownMenuItem>
                         <DropdownMenuItem>Herunterladen</DropdownMenuItem>
@@ -192,8 +167,7 @@ const columns: ColumnDef<Contract>[] = [
 export default function ContractTable() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
     const table = useReactTable({
@@ -207,49 +181,23 @@ export default function ContractTable() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
+        state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
 
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
-                <Input
-                    placeholder="Titel filtern..."
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("title")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+                <Input placeholder="Titel filtern..." value={(table.getColumn("title")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)} className="max-w-sm" />
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Spalten <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
+                        <Button variant="outline" className="ml-auto">Spalten <ChevronDown className="ml-2 h-4 w-4" /></Button>
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => (
-                                <DropdownMenuCheckboxItem
-                                    key={column.id}
-                                    className="capitalize"
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
-                                >
-                                    {column.id}
-                                </DropdownMenuCheckboxItem>
-                            ))}
+                        {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
+                            <DropdownMenuCheckboxItem key={column.id} className="capitalize" checked={column.getIsVisible()} onCheckedChange={(value) => column.toggleVisibility(!!value)}>{column.id}</DropdownMenuCheckboxItem>
+                        ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -260,14 +208,7 @@ export default function ContractTable() {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
+                                    <TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
                                 ))}
                             </TableRow>
                         ))}
@@ -278,20 +219,13 @@ export default function ContractTable() {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
+                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    Keine Ergebnisse.
-                                </TableCell>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">Keine Ergebnisse.</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
@@ -300,22 +234,8 @@ export default function ContractTable() {
 
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Zurück
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Weiter
-                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>Zurück</Button>
+                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>Weiter</Button>
                 </div>
             </div>
         </div>
