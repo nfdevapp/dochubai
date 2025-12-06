@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
-import ContractPage from "@/pages/ContractPage";
+import Sidebar from "@/components/Sidebar.tsx";
+import Header from "@/Header.tsx";
+import ContractPage from "@/pages/ContractPage.tsx";
 import type { ReactNode } from "react";
 
 export default function Dashboard() {
