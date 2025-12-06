@@ -19,10 +19,8 @@ public record Contract(
         String title,
         String description,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-        @DateTimeFormat(pattern = "dd.MM.yyyy")
         LocalDate startDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-        @DateTimeFormat(pattern = "dd.MM.yyyy")
         LocalDate endDate,
         int aiLevel
 //        ObjectId fileId // Referenz auf die Datei in GridFS
