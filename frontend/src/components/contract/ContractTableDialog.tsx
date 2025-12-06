@@ -81,12 +81,12 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
 
                 <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
                     <div className="grid gap-3">
-                        <Label htmlFor="title">Titel</Label>
+                        <Label htmlFor="title" className="font-bold">Titel</Label>
                         <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Startdatum</Label>
+                        <Label htmlFor="startDate" className="font-bold">Startdatum</Label>
                         <Popover open={startOpen} onOpenChange={setStartOpen}>
                             <PopoverTrigger asChild>
                                 <Button variant="outline" className="w-full justify-start text-left font-normal">
@@ -101,7 +101,7 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     </div>
 
                     <div className="grid gap-3">
-                        <Label>Enddatum</Label>
+                        <Label htmlFor="endDate" className="font-bold">Enddatum</Label>
                         <Popover open={endOpen} onOpenChange={setEndOpen}>
                             <PopoverTrigger asChild>
                                 <Button variant="outline" className="w-full justify-start text-left font-normal">
@@ -116,19 +116,20 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     </div>
 
                     <div className="grid gap-3">
-                        <Label htmlFor="description">Beschreibung</Label>
+                        <Label htmlFor="description" className="font-bold">Beschreibung</Label>
                         <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="resize-none" />
                     </div>
 
-                    <p className="flex items-center gap-2 pt-2">
-                        <strong className="flex items-center gap-1">
+                    <div className="grid gap-3">
+                        <Label className="flex items-center gap-1 font-bold">
                             AI-Analyse
-                            <Sparkles className="h-5 w-5 inline-block" />:
-                        </strong>
-                        <span className={`${aiColorMap[Number(contract.aiLevel)] || "text-gray-500"} font-semibold`}>
-              {aiDescriptionMap[Number(contract.aiLevel)] || "Keine Daten"}
-            </span>
-                    </p>
+                            <Sparkles className="h-5 w-5 inline-block" />
+                        </Label>
+                        <span className={`${aiColorMap[Number(contract.aiLevel) || 0] || "text-gray-500"} font-semibold`}>
+                                {aiDescriptionMap[Number(contract.aiLevel) || 0] || "Keine Daten"}
+                        </span>
+                    </div>
+
 
                     <DialogFooter>
                         <Button variant="outline" onClick={() => onOpenChange(false)}>Abbrechen</Button>
