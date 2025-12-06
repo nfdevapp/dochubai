@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Sparkles } from "lucide-react";
 import type { Contract } from "@/model/Contract";
+import {Textarea} from "@/components/ui/textarea.tsx";
 
 interface ContractTableDialogProps {
     open: boolean;
@@ -47,7 +48,13 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
 
                     <div className="grid gap-3">
                         <Label htmlFor="description">Beschreibung</Label>
-                        <Input id="description" name="description" defaultValue={contract.description} />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            defaultValue={contract.description}
+                            rows={4}
+                            className="resize-none"
+                        />
                     </div>
 
                     <div className="grid gap-3">
