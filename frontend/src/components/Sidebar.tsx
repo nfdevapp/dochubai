@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileText, Receipt, FileSpreadsheet, Sparkles, Settings } from "lucide-react";
 import ContractPage from "@/pages/ContractPage";
+import Header from "@/components/Header"; // Pfad zu deinem Header anpassen
 
 export default function Sidebar() {
     const [title, setTitle] = useState("Verträge");
@@ -67,9 +68,7 @@ export default function Sidebar() {
             {/* Content Bereich */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <header className="p-4 border-b">
-                    <h1 className="text-xl font-semibold">{title}</h1>
-                </header>
+                <Header title={title} />
 
                 {/* Content */}
                 <main className="p-4 flex-1">
