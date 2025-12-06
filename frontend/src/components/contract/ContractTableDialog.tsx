@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Sparkles } from "lucide-react";
-import type { Contract } from "@/types/Contract";
+import type { Contract } from "@/model/Contract";
 
 interface ContractTableDialogProps {
     open: boolean;

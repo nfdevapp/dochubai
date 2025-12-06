@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/table.tsx";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
-import type { Contract } from "@/types/Contract.tsx";
+import type { Contract } from "@/model/Contract.tsx";
 
 //Test Data
 const data: Contract[] = [

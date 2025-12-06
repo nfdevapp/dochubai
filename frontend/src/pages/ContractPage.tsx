@@ -3,7 +3,7 @@
 import * as React from "react";
 import ContractTable from "@/components/contract/ContractTable.tsx";
 import ContractTableDialog from "@/components/contract/ContractTableDialog.tsx";
-import type { Contract } from "@/types/Contract.tsx";
+import type { Contract } from "@/model/Contract.tsx";
 
 export default function ContractPage() {
     const [dialogOpen, setDialogOpen] = React.useState(false);
