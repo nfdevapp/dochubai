@@ -17,7 +17,6 @@ import {
 import { ArrowUpDown, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button.tsx";
-
 import {
     Table,
     TableHeader,
@@ -28,47 +27,11 @@ import {
 } from "@/components/ui/table.tsx";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
-import type { Contract } from "@/model/Contract.tsx";
 
+import type { Contract } from "@/model/Contract";
+import { getAllContracts } from "@/api/ContractService";
 
-// Test Data
-const data: Contract[] = [
-    { id: "1", title: "Mietvertrag", startDate: "15.01.2024", endDate: "15.01.2025", description: "Mietvertrag für Büro- oder Wohnräume.", aiLevel: 1 },
-    { id: "2", title: "Arbeitsvertrag", startDate: "03.11.2023", endDate: "03.11.2024", description: "Unbefristeter Arbeitsvertrag mit Standardklauseln.", aiLevel: 2 },
-    { id: "3", title: "Dienstleistungsvertrag", startDate: "20.02.2024", endDate: "20.02.2025", description: "Vertrag über externe Dienstleistungen.", aiLevel: 1 },
-    { id: "4", title: "Kaufvertrag", startDate: "09.08.2022", endDate: "09.08.2023", description: "Einmaliger Kaufvertrag für Waren oder Geräte.", aiLevel: 3 },
-    { id: "5", title: "Versicherungsvertrag", startDate: "11.12.2023", endDate: "11.12.2024", description: "Standard-Versicherungspolice mit jährlicher Laufzeit.", aiLevel: 1 },
-    { id: "6", title: "Leasingvertrag", startDate: "01.06.2022", endDate: "01.06.2025", description: "Leasingvertrag für technische Geräte oder Fahrzeuge.", aiLevel: 2 },
-    { id: "7", title: "Wartungsvertrag", startDate: "01.03.2024", endDate: "01.03.2025", description: "Regelmäßige Wartung von IT-Systemen.", aiLevel: 1 },
-    { id: "8", title: "Hostingvertrag", startDate: "14.09.2023", endDate: "14.09.2024", description: "Webhosting oder Serverhosting-Leistungen.", aiLevel: 1 },
-    { id: "9", title: "Supportvertrag", startDate: "01.01.2024", endDate: "01.01.2025", description: "Technischer Support und Helpdesk.", aiLevel: 1 },
-    { id: "10", title: "Kooperationsvertrag", startDate: "22.11.2022", endDate: "22.11.2023", description: "Partnerschaft für gemeinsame Projekte.", aiLevel: 2 },
-    { id: "11", title: "Liefervertrag", startDate: "10.01.2023", endDate: "10.01.2024", description: "Regelmäßige Lieferung von Waren.", aiLevel: 1 },
-    { id: "12", title: "Agenturvertrag", startDate: "01.02.2024", endDate: "01.02.2025", description: "Marketing- oder Vermittlungsagenturvertrag.", aiLevel: 1 },
-    { id: "13", title: "Lizenzvertrag", startDate: "20.01.2024", endDate: "20.01.2025", description: "Lizenz zur Nutzung geistigen Eigentums.", aiLevel: 1 },
-    { id: "14", title: "Bauvertrag", startDate: "15.05.2022", endDate: "15.05.2024", description: "Vertrag über Bauleistungen.", aiLevel: 3 },
-    { id: "15", title: "Projektvertrag", startDate: "11.03.2023", endDate: "11.03.2024", description: "Befristeter Projektvertrag mit definiertem Umfang.", aiLevel: 1 },
-    { id: "16", title: "Beratungsvertrag", startDate: "02.12.2023", endDate: "02.12.2024", description: "Externe Unternehmensberatung.", aiLevel: 1 },
-    { id: "17", title: "Darlehensvertrag", startDate: "30.09.2021", endDate: "30.09.2026", description: "Kreditvereinbarung mit langfristiger Laufzeit.", aiLevel: 2 },
-    { id: "18", title: "Schulungsvertrag", startDate: "22.02.2024", endDate: "22.02.2025", description: "Vertrag über Weiterbildungs- oder Schulungsleistungen.", aiLevel: 1 },
-    { id: "19", title: "Cloud-Service-Vertrag", startDate: "05.10.2023", endDate: "05.10.2024", description: "Cloud-basierte IT-Services.", aiLevel: 1 },
-    { id: "20", title: "IT-Rahmenvertrag", startDate: "03.01.2024", endDate: "03.01.2026", description: "Übergeordneter Vertrag über IT-Dienstleistungen.", aiLevel: 1 },
-    { id: "21", title: "Werkvertrag", startDate: "12.12.2022", endDate: "12.12.2024", description: "Herstellung eines bestimmten Werkergebnisses.", aiLevel: 2 },
-    { id: "22", title: "ADV-Vertrag", startDate: "22.11.2023", endDate: "22.11.2024", description: "Vertrag zur Auftragsdatenverarbeitung gemäß DSGVO.", aiLevel: 1 },
-    { id: "23", title: "Telekommunikationsvertrag", startDate: "09.03.2022", endDate: "09.03.2023", description: "Mobilfunk oder Internet-Vertrag.", aiLevel: 3 },
-    { id: "24", title: "Providervertrag", startDate: "12.07.2023", endDate: "12.07.2024", description: "Vertrag mit Internet- oder Service-Provider.", aiLevel: 1 },
-    { id: "25", title: "Abovertrag", startDate: "14.02.2024", endDate: "14.02.2025", description: "Wiederkehrendes Abonnement für Dienstleistungen.", aiLevel: 1 },
-    { id: "26", title: "Überlassungsvertrag", startDate: "01.11.2021", endDate: "01.11.2024", description: "Überlassung von Personal oder Gegenständen.", aiLevel: 2 },
-    { id: "27", title: "Forschungsvertrag", startDate: "18.05.2023", endDate: "18.05.2024", description: "Kooperative Forschungstätigkeiten.", aiLevel: 1 },
-    { id: "28", title: "Kreditvertrag", startDate: "28.01.2022", endDate: "28.01.2027", description: "Langfristiger Kreditvertrag mit festen Konditionen.", aiLevel: 3 },
-    { id: "29", title: "Vertriebsvertrag", startDate: "30.08.2023", endDate: "30.08.2024", description: "Vertrieb von Produkten oder Dienstleistungen.", aiLevel: 1 },
-    { id: "30", title: "Lizenzverlängerung", startDate: "25.02.2024", endDate: "25.02.2025", description: "Verlängerung einer bestehenden Lizenz.", aiLevel: 1 },
-    { id: "31", title: "SaaS-Vertrag", startDate: "01.09.2023", endDate: "01.09.2024", description: "Software-as-a-Service-Nutzungslizenz.", aiLevel: 1 },
-    { id: "32", title: "Partnerschaftsvertrag", startDate: "12.03.2024", endDate: "12.03.2026", description: "Langfristige Partnerschaft zwischen Unternehmen.", aiLevel: 1 },
-    { id: "33", title: "Wartungsvertrag Premium", startDate: "10.10.2022", endDate: "10.10.2024", description: "Erweiterter Wartungs- und Servicevertrag.", aiLevel: 2 },
-];
-
-
+// Spalten-Definition
 const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "title",
@@ -139,13 +102,30 @@ type ContractTableProps = {
 };
 
 export default function ContractTable({ onSelectContract }: ContractTableProps) {
+    const [contracts, setContracts] = React.useState<Contract[]>([]);
+    const [loading, setLoading] = React.useState(true);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
+    React.useEffect(() => {
+        const fetchContracts = async () => {
+            try {
+                const data = await getAllContracts();
+                setContracts(data);
+            } catch (error) {
+                console.error("Fehler beim Laden der Verträge:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchContracts();
+    }, []);
+
     const table = useReactTable({
-        data,
+        data: contracts,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -157,6 +137,10 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
         onRowSelectionChange: setRowSelection,
         state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
+
+    if (loading) {
+        return <div className="text-center py-8">Lade Verträge...</div>;
+    }
 
     return (
         <div className="w-full">

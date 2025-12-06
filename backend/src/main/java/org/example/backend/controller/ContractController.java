@@ -37,15 +37,6 @@ public class ContractController {
         return ResponseEntity.ok(contractService.updateContract(id, contract));
     }
 
-
-//    fetch("/api/contract/1", { method: "DELETE" })
-//            .then(response => {
-//        if (response.status === 204) {
-//            console.log("Löschen erfolgreich!");
-//        } else {
-//            console.error("Etwas ist schiefgelaufen!");
-//        }
-//    });
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContract(@PathVariable String id) {
         contractService.deleteContract(id);

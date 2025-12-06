@@ -27,7 +27,7 @@ public class ContractService {
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
         contractRepo.save(
                 oldData.
-                        withName(contract.name()));
+                        withTitle(contract.title()));
         return  contract;
     }
 
@@ -39,5 +39,9 @@ public class ContractService {
 
     public Contract createContract(Contract contract) {
         return contractRepo.save(contract);
+    }
+
+    public void deleteAllContracts() {
+        contractRepo.deleteAll();
     }
 }

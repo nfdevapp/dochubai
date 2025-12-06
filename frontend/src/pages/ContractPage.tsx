@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import ContractTable from "@/components/contract/ContractTable.tsx";
-import ContractTableDialog from "@/components/contract/ContractTableDialog.tsx";
-import type { Contract } from "@/model/Contract.tsx";
+import ContractTable from "@/components/contract/ContractTable";
+import ContractTableDialog from "@/components/contract/ContractTableDialog";
+import type { Contract } from "@/model/Contract";
 
 export default function ContractPage() {
     const [dialogOpen, setDialogOpen] = React.useState(false);

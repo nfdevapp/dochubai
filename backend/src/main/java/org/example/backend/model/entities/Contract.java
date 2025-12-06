@@ -1,5 +1,6 @@
 package org.example.backend.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,10 +16,12 @@ import java.time.LocalDate;
 public record Contract(
         @Id
         String id,
-        String name,
+        String title,
         String description,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
         @DateTimeFormat(pattern = "dd.MM.yyyy")
         LocalDate startDate,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
         @DateTimeFormat(pattern = "dd.MM.yyyy")
         LocalDate endDate,
         int aiLevel
