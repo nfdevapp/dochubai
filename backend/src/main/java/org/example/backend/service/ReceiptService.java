@@ -1,7 +1,7 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.exeptions.DochubAppException;
+import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.entities.Receipt;
 import org.example.backend.repository.ReceiptRepo;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class ReceiptService {
 
     public Receipt getReceiptById(String id) {
         return receiptRepo.findById(id)
-                .orElseThrow(() -> new DochubAppException("Product not found: " + id));
+                .orElseThrow(() -> new DocHubAiException("Product not found: " + id));
     }
 
     public List<Receipt> getAllReceipts() {
@@ -24,7 +24,7 @@ public class ReceiptService {
 
     public Receipt updateReceipt(String id, Receipt receipt) {
         Receipt oldData = receiptRepo.findById(id)
-                .orElseThrow(() -> new DochubAppException("Receipt not found: " + id));
+                .orElseThrow(() -> new DocHubAiException("Receipt not found: " + id));
         receiptRepo.save(
                 oldData.
                         withName(receipt.name()));
@@ -33,7 +33,7 @@ public class ReceiptService {
 
     public void deleteReceipt(String id) {
         Receipt receipt = receiptRepo.findById(id)
-                .orElseThrow(() -> new DochubAppException("Receipt not found: " + id));
+                .orElseThrow(() -> new DocHubAiException("Receipt not found: " + id));
         receiptRepo.delete(receipt);
     }
 
