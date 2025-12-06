@@ -29,8 +29,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
 import type { Contract } from "@/types/Contract.tsx";
-import ContractDialog from "@/components/contract/ContractDialog.tsx";
 
+//Test Data
 const data: Contract[] = [
     { id: "1", title: "Mietvertrag", startDate: "2024-01-15", endDate: "2025-01-15", description: "Mietvertrag für Büro- oder Wohnräume.", aiLevel: 1 },
     { id: "2", title: "Arbeitsvertrag", startDate: "2023-11-03", endDate: "2024-11-03", description: "Unbefristeter Arbeitsvertrag mit Standardklauseln.", aiLevel: 2 },
@@ -67,8 +67,6 @@ const data: Contract[] = [
     { id: "33", title: "Wartungsvertrag Premium", startDate: "2022-10-10", endDate: "2024-10-10", description: "Erweiterter Wartungs- und Servicevertrag.", aiLevel: 2 },
 ];
 
-
-
 const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "title",
@@ -94,40 +92,23 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "description",
         header: () => (
-            <div className="pl-6 font-medium">
-                Beschreibung
-            </div>
+            <div className="pl-6 font-medium">Beschreibung</div>
         ),
         cell: ({ row }) => <div className="pl-6">{row.getValue("description")}</div>,
     },
     {
         accessorKey: "aiLevel",
         header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="pl-6 flex items-center gap-2"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
+            <Button variant="ghost" className="pl-6 flex items-center gap-2" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                 <span className="font-medium">AI-Analyse</span>
                 <Sparkles className="h-4 w-4" />
                 <ArrowUpDown className="h-4 w-4" />
             </Button>
         ),
-
         cell: ({ row }) => {
             const value = Number(row.getValue("aiLevel"));
-
-            const color = {
-                1: "bg-green-500",
-                2: "bg-yellow-400",
-                3: "bg-red-500",
-            }[value] ?? "bg-gray-400";
-
-            const description = {
-                1: "Ist einwandfrei",
-                2: "Sollte überprüft werden",
-                3: "Weist kritische Abweichungen auf",
-            }[value] ?? "Keine Daten";
+            const color = { 1: "bg-green-500", 2: "bg-yellow-400", 3: "bg-red-500" }[value] ?? "bg-gray-400";
+            const description = { 1: "Ist einwandfrei", 2: "Sollte überprüft werden", 3: "Weist kritische Abweichungen auf" }[value] ?? "Keine Daten";
 
             return (
                 <div className="w-full flex justify-center items-center">
@@ -147,18 +128,18 @@ const columns: ColumnDef<Contract>[] = [
     },
 ];
 
-export default function ContractTable() {
+type ContractTableProps = {
+    onSelectContract?: (contract: Contract) => void;
+};
+
+export default function ContractTable({ onSelectContract }: ContractTableProps) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    // Neue States
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [selectedContract, setSelectedContract] = React.useState<Contract | null>(null);
-
     const table = useReactTable({
-        data,
+        data: data,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -176,57 +157,56 @@ export default function ContractTable() {
             {/* Vertrag anlegen */}
             <div className="flex items-center py-4">
                 <div className="ml-auto">
-                    <Badge className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                           onClick={() => {
-                               setSelectedContract({
-                                   id: "",
-                                   title: "",
-                                   startDate: "",
-                                   endDate: "",
-                                   description: "",
-                                   aiLevel: 0,
-                               });
-                               setDialogOpen(true);
-                           }}
+                    <Badge
+                        className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
+                        onClick={() => onSelectContract?.({
+                            id: "",
+                            title: "",
+                            startDate: "",
+                            endDate: "",
+                            description: "",
+                            aiLevel: 0,
+                        })}
                     >
                         Neuen Vertrag anlegen
                     </Badge>
                 </div>
             </div>
 
-
             {/* Tabelle */}
             <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
+                        {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+                                {headerGroup.headers.map(header => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
                                 ))}
                             </TableRow>
                         ))}
                     </TableHeader>
-
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map(row => (
                                 <TableRow
                                     key={row.id}
                                     className="cursor-pointer hover:bg-muted/50"
-                                    onClick={() => {
-                                        setSelectedContract(row.original);
-                                        setDialogOpen(true);
-                                    }}
+                                    onClick={() => onSelectContract?.(row.original)}
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                                    {row.getVisibleCells().map(cell => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">Keine Ergebnisse.</TableCell>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    Keine Ergebnisse.
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
@@ -236,18 +216,14 @@ export default function ContractTable() {
             {/* Pagination */}
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>Zurück</Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>Weiter</Button>
+                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                        Zurück
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                        Weiter
+                    </Button>
                 </div>
             </div>
-
-            {/* DETAILS-DIALOG */}
-            <ContractDialog
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
-                contract={selectedContract}
-            />
-
         </div>
     );
 }
