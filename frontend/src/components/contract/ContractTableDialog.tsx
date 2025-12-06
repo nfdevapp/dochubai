@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { Sparkles } from "lucide-react";
 import type { Contract } from "@/types/Contract";
 
-interface ContractDialogProps {
+interface ContractTableDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     contract: Contract | null;
@@ -29,7 +29,7 @@ const aiDescriptionMap: Record<number, string> = {
     3: "Weist kritische Abweichungen auf",
 };
 
-export default function ContractDialog({ open, onOpenChange, contract }: ContractDialogProps) {
+export default function ContractTableDialog({ open, onOpenChange, contract }: ContractTableDialogProps) {
     if (!contract) return null;
 
     return (

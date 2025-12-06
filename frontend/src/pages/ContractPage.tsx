@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import ContractTable from "@/components/contract/ContractTable.tsx";
-import ContractDialog from "@/components/contract/ContractDialog.tsx";
+import ContractTableDialog from "@/components/contract/ContractTableDialog.tsx";
 import type { Contract } from "@/types/Contract.tsx";
 
 export default function ContractPage() {
@@ -18,7 +18,7 @@ export default function ContractPage() {
     return (
         <div className="space-y-6">
             <ContractTable onSelectContract={handleSelectContract} />
-            <ContractDialog
+            <ContractTableDialog
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 contract={selectedContract}
