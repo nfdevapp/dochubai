@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 
 import { ArrowUpDown, Sparkles } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -138,9 +139,39 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
         state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
 
+    //Ladevorgang
     if (loading) {
-        return <div className="text-center py-8">Lade Verträge...</div>;
+        // Anzahl der Spalten für Skeleton
+        const skeletonRows = columns.length;
+
+        return (
+            <div className="w-full overflow-hidden rounded-md border">
+                <table className="w-full border-collapse">
+                    <thead>
+                    <tr>
+                        {columns.map((_, i) => (
+                            <th key={i} className="p-2 border-b">
+                                <Skeleton className="h-4 w-24" />
+                            </th>
+                        ))}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
+                        <tr key={rowIdx}>
+                            {columns.map((_, colIdx) => (
+                                <td key={colIdx} className="p-2 border-b">
+                                    <Skeleton className="h-4 w-full" />
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
+
 
     return (
         <div className="w-full">
