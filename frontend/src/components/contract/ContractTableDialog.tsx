@@ -10,7 +10,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
-import type { Contract } from "@/model/Contract";
+import type { Contract } from "@/model/Contract.tsx";
+
+// Hilfsfunktion dd.MM.yyyy → Date
+const parseDate = (dateStr: string): Date | undefined => {
+    if (!dateStr) return undefined;
+    const [day, month, year] = dateStr.split(".").map(Number);
+    return new Date(year, month - 1, day);
+};
 
 interface ContractTableDialogProps {
     open: boolean;
@@ -31,7 +38,6 @@ const aiDescriptionMap: Record<number, string> = {
 };
 
 export default function ContractTableDialog({ open, onOpenChange, contract }: ContractTableDialogProps) {
-    // Lokale States für alle Formularfelder
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [startDate, setStartDate] = React.useState<Date | undefined>();
@@ -43,8 +49,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
         if (contract) {
             setTitle(contract.title);
             setDescription(contract.description);
-            setStartDate(contract.startDate ? new Date(contract.startDate) : undefined);
-            setEndDate(contract.endDate ? new Date(contract.endDate) : undefined);
+            setStartDate(contract.startDate ? parseDate(contract.startDate) : undefined);
+            setEndDate(contract.endDate ? parseDate(contract.endDate) : undefined);
         } else {
             setTitle("");
             setDescription("");
@@ -56,12 +62,12 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
     if (!contract) return null;
 
     const handleSubmit = (e: React.FormEvent) => {
-       e.preventDefault();
+        e.preventDefault();
         console.log({
             title,
             description,
-            startDate,
-            endDate,
+            startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
+            endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
         });
         onOpenChange(false);
     };
@@ -74,17 +80,11 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                 </DialogHeader>
 
                 <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
-                    {/* Titel */}
                     <div className="grid gap-3">
                         <Label htmlFor="title">Titel</Label>
-                        <Input
-                            id="title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
+                        <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
                     </div>
 
-                    {/* Startdatum */}
                     <div className="grid gap-3">
                         <Label>Startdatum</Label>
                         <Popover open={startOpen} onOpenChange={setStartOpen}>
@@ -95,19 +95,11 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    selected={startDate}
-                                    onSelect={(date) => {
-                                        setStartDate(date);
-                                        setStartOpen(false);
-                                    }}
-                                />
+                                <Calendar mode="single" selected={startDate} onSelect={(date) => { setStartDate(date); setStartOpen(false); }} />
                             </PopoverContent>
                         </Popover>
                     </div>
 
-                    {/* Enddatum */}
                     <div className="grid gap-3">
                         <Label>Enddatum</Label>
                         <Popover open={endOpen} onOpenChange={setEndOpen}>
@@ -118,47 +110,28 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    selected={endDate}
-                                    onSelect={(date) => {
-                                        setEndDate(date);
-                                        setEndOpen(false);
-                                    }}
-                                />
+                                <Calendar mode="single" selected={endDate} onSelect={(date) => { setEndDate(date); setEndOpen(false); }} />
                             </PopoverContent>
                         </Popover>
                     </div>
 
-                    {/* Beschreibung */}
                     <div className="grid gap-3">
                         <Label htmlFor="description">Beschreibung</Label>
-                        <Textarea
-                            id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            rows={4}
-                            className="resize-none"
-                        />
+                        <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="resize-none" />
                     </div>
 
-                    {/* AI Analyse */}
                     <p className="flex items-center gap-2 pt-2">
                         <strong className="flex items-center gap-1">
                             AI-Analyse
                             <Sparkles className="h-5 w-5 inline-block" />:
                         </strong>
-                        <span
-                            className={`${aiColorMap[Number(contract.aiLevel)] || "text-gray-500"} font-semibold`}
-                        >
+                        <span className={`${aiColorMap[Number(contract.aiLevel)] || "text-gray-500"} font-semibold`}>
               {aiDescriptionMap[Number(contract.aiLevel)] || "Keine Daten"}
             </span>
                     </p>
 
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Abbrechen
-                        </Button>
+                        <Button variant="outline" onClick={() => onOpenChange(false)}>Abbrechen</Button>
                         <Button type="submit">Speichern</Button>
                     </DialogFooter>
                 </form>

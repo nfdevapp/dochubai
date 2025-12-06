@@ -14,15 +14,11 @@ export default function ContractPage() {
         setDialogOpen(true);
     };
 
-
     return (
         <div className="space-y-6">
             <ContractTable onSelectContract={handleSelectContract} />
-            <ContractTableDialog
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
-                contract={selectedContract}
-            />
+            <ContractTableDialog open={dialogOpen} onOpenChange={setDialogOpen} contract={selectedContract} />
+
             {/* Platzhalter für andere Komponenten */}
             {/*
             1. Lokaler State pro Komponente: ContractTable holt sich selbst die Daten (Axios).
@@ -30,7 +26,6 @@ export default function ContractPage() {
             2. Daten von der Seite weiterreichen. ContractPage holt die Daten (axios) und gibt sie als Props an die Unterkomponenten
             <ContractTable data={contracts} />
            */}
-
         </div>
     );
 }
