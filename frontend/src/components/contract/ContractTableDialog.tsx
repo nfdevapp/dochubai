@@ -9,8 +9,8 @@ import { CalendarIcon, Sparkles } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import type { Contract } from "@/model/Contract";
 import { Textarea } from "@/components/ui/textarea";
+import type { Contract } from "@/model/Contract";
 
 interface ContractTableDialogProps {
     open: boolean;
@@ -31,13 +31,40 @@ const aiDescriptionMap: Record<number, string> = {
 };
 
 export default function ContractTableDialog({ open, onOpenChange, contract }: ContractTableDialogProps) {
-    // Hooks immer oben aufrufen
-    const [startDate, setStartDate] = React.useState<Date | undefined>(contract?.startDate ? new Date(contract.startDate) : undefined);
-    const [endDate, setEndDate] = React.useState<Date | undefined>(contract?.endDate ? new Date(contract.endDate) : undefined);
-    const [startOpen, setStartOpen] = React.useState(false); // Popover Startdatum
-    const [endOpen, setEndOpen] = React.useState(false);     // Popover Enddatum
+    // Lokale States für alle Formularfelder
+    const [title, setTitle] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [startDate, setStartDate] = React.useState<Date | undefined>();
+    const [endDate, setEndDate] = React.useState<Date | undefined>();
+    const [startOpen, setStartOpen] = React.useState(false);
+    const [endOpen, setEndOpen] = React.useState(false);
+
+    React.useEffect(() => {
+        if (contract) {
+            setTitle(contract.title);
+            setDescription(contract.description);
+            setStartDate(contract.startDate ? new Date(contract.startDate) : undefined);
+            setEndDate(contract.endDate ? new Date(contract.endDate) : undefined);
+        } else {
+            setTitle("");
+            setDescription("");
+            setStartDate(undefined);
+            setEndDate(undefined);
+        }
+    }, [contract]);
 
     if (!contract) return null;
+
+    const handleSubmit = (e: React.FormEvent) => {
+       e.preventDefault();
+        console.log({
+            title,
+            description,
+            startDate,
+            endDate,
+        });
+        onOpenChange(false);
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,10 +73,15 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     <DialogTitle className="text-center w-full">Vertrag bearbeiten</DialogTitle>
                 </DialogHeader>
 
-                <form className="space-y-5 mt-4" onSubmit={(e) => e.preventDefault()}>
+                <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
+                    {/* Titel */}
                     <div className="grid gap-3">
                         <Label htmlFor="title">Titel</Label>
-                        <Input id="title" name="title" defaultValue={contract.title} />
+                        <Input
+                            id="title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
                     </div>
 
                     {/* Startdatum */}
@@ -98,17 +130,19 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                         </Popover>
                     </div>
 
+                    {/* Beschreibung */}
                     <div className="grid gap-3">
                         <Label htmlFor="description">Beschreibung</Label>
                         <Textarea
                             id="description"
-                            name="description"
-                            defaultValue={contract.description}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             rows={4}
                             className="resize-none"
                         />
                     </div>
 
+                    {/* AI Analyse */}
                     <p className="flex items-center gap-2 pt-2">
                         <strong className="flex items-center gap-1">
                             AI-Analyse
@@ -117,8 +151,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                         <span
                             className={`${aiColorMap[Number(contract.aiLevel)] || "text-gray-500"} font-semibold`}
                         >
-                            {aiDescriptionMap[Number(contract.aiLevel)] || "Keine Daten"}
-                        </span>
+              {aiDescriptionMap[Number(contract.aiLevel)] || "Keine Daten"}
+            </span>
                     </p>
 
                     <DialogFooter>
