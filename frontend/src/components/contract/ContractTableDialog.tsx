@@ -244,11 +244,17 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                             <Button variant="outline" onClick={() => onOpenChange(false)}>
                                 Abbrechen
                             </Button>
-                            <Button type="submit">Speichern</Button>
+                            <Button type="submit" variant="outline">
+                                Speichern
+                            </Button>
                         </div>
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button variant="destructive" type="button">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="hover:bg-red-400"
+                                >
                                     Löschen
                                 </Button>
                             </AlertDialogTrigger>
