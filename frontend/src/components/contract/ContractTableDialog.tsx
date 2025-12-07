@@ -11,7 +11,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import type { Contract } from "@/model/Contract.ts";
-import {Card, CardContent} from "@/components/ui/card.tsx";
+import { Card, CardContent } from "@/components/ui/card.tsx";
+import { UploadButton } from "@/components/upload-button";
+import { useUploadFile } from "@better-upload/client";
+
 
 // Hilfsfunktion dd.MM.yyyy → Date
 const parseDate = (dateStr: string): Date | undefined => {
@@ -48,6 +51,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
     const [aiLevel, setAiLevel] = React.useState(0);
     const [aiAnalysisText, setAiAnalysisText] = React.useState("");
 
+    const { control, uploadedFile } = useUploadFile({ route: "D:/" });
+
     React.useEffect(() => {
         if (contract) {
             setTitle(contract.title);
@@ -60,7 +65,7 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setTitle("");
             setDescription("");
             setStartDate(undefined);
-            setEndDate(undefined)
+            setEndDate(undefined);
             setAiLevel(0);
             setAiAnalysisText("");
         }
@@ -76,8 +81,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
             endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
             aiLevel,
-            aiAnalysisText
-
+            aiAnalysisText,
+            uploadedFile: uploadedFile ? uploadedFile.name : null
         });
         onOpenChange(false);
     };
@@ -91,54 +96,100 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
 
                 <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
                     <div className="grid gap-3">
-                        <Label htmlFor="title" className="font-bold">Titel</Label>
-                        <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="title" className="font-bold whitespace-nowrap">
+                                Titel:
+                            </Label>
+
+                            <Input
+                                id="title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                className="w-[350px]"
+                            />
+                        </div>
                     </div>
 
                     <div className="grid gap-3">
-                        <Label htmlFor="startDate" className="font-bold">Startdatum</Label>
-                        <Popover open={startOpen} onOpenChange={setStartOpen}>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal">
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {startDate ? format(startDate, "dd.MM.yyyy") : "Datum wählen"}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar mode="single" selected={startDate} onSelect={(date) => { setStartDate(date); setStartOpen(false); }} />
-                            </PopoverContent>
-                        </Popover>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="startDate" className="font-bold">Startdatum:</Label>
+
+                            <Popover open={startOpen} onOpenChange={setStartOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-[350px] justify-start text-left font-normal"
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {startDate ? format(startDate, "dd.MM.yyyy") : "Datum wählen"}
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={startDate}
+                                        onSelect={(date) => {
+                                            setStartDate(date);
+                                            setStartOpen(false);
+                                        }}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    </div>
+
+
+                    <div className="grid gap-3">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="endDate" className="font-bold">Enddatum:</Label>
+
+                            <Popover open={endOpen} onOpenChange={setEndOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-[350px] justify-start text-left font-normal"
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {endDate ? format(endDate, "dd.MM.yyyy") : "Datum wählen"}
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={endDate}
+                                        onSelect={(date) => {
+                                            setEndDate(date);
+                                            setEndOpen(false);
+                                        }}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    </div>
+
+
+
+                    <div className="grid gap-3">
+                        <Label htmlFor="description" className="font-bold">Beschreibung:</Label>
+                        <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className="resize-none" />
                     </div>
 
                     <div className="grid gap-3">
-                        <Label htmlFor="endDate" className="font-bold">Enddatum</Label>
-                        <Popover open={endOpen} onOpenChange={setEndOpen}>
-                            <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full justify-start text-left font-normal">
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {endDate ? format(endDate, "dd.MM.yyyy") : "Datum wählen"}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar mode="single" selected={endDate} onSelect={(date) => { setEndDate(date); setEndOpen(false); }} />
-                            </PopoverContent>
-                        </Popover>
+                        <div className="flex items-center justify-between">
+                            <Label className="flex items-center gap-1 font-bold whitespace-nowrap">
+                                AI-Analyse <Sparkles className="h-5 w-5 inline-block" />:
+                            </Label>
+
+                            <div className="w-[330px] text-left">
+                                <span className={`${aiColorMap[Number(contract.aiLevel) || 0] || "text-gray-500"} font-semibold`}>
+                                    {aiDescriptionMap[Number(contract.aiLevel) || 0] || "Keine Daten"}
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="grid gap-3">
-                        <Label htmlFor="description" className="font-bold">Beschreibung</Label>
-                        <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="resize-none" />
-                    </div>
-
-                    <div className="grid gap-3">
-                        <Label className="flex items-center gap-1 font-bold">
-                            AI-Analyse
-                            <Sparkles className="h-5 w-5 inline-block" />:
-                            <span className={`${aiColorMap[Number(contract.aiLevel) || 0] || "text-gray-500"} font-semibold`}>
-                                {aiDescriptionMap[Number(contract.aiLevel) || 0] || "Keine Daten"}
-                            </span>
-                        </Label>
-                    </div>
 
                     <Card className="mt-2 border border-gray-200 bg-gray-50">
                         <CardContent className="p-3">
@@ -146,6 +197,20 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                         </CardContent>
                     </Card>
 
+                    {/* Upload-Button für genau eine Datei */}
+                    <div className="grid gap-3">
+                        <Label className="font-bold">Dokument für KI-Analyse hochladen (.pdf,.doc,.docx)</Label>
+                        <UploadButton control={control} accept=".pdf,.doc,.docx" />
+
+                        {/* Name der hochgeladenen Datei */}
+                        <Label className="font-bold">Datei:</Label>
+                        {uploadedFile && (
+                            <p className="mt-2 text-sm text-gray-700">
+                                Hochgeladen: {uploadedFile.name}
+                            </p>
+                        )}
+
+                    </div>
 
                     <DialogFooter>
                         <Button variant="outline" onClick={() => onOpenChange(false)}>Abbrechen</Button>
