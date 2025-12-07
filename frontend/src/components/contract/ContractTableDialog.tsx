@@ -13,6 +13,19 @@ import { Textarea } from "@/components/ui/textarea";
 import type { Contract } from "@/model/Contract.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { useUploadFile } from "@better-upload/client";
+import { deleteContract } from "@/api/ContractService";
+
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel
+} from "@/components/ui/alert-dialog";
+
 
 // Hilfsfunktion dd.MM.yyyy → Date
 const parseDate = (dateStr: string): Date | undefined => {
@@ -226,12 +239,53 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     </div>
 
                     {/* Buttons */}
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Abbrechen
-                        </Button>
-                        <Button type="submit">Speichern</Button>
+                    <DialogFooter className="flex justify-between">
+                        <div className="flex gap-2">
+                            <Button variant="outline" onClick={() => onOpenChange(false)}>
+                                Abbrechen
+                            </Button>
+                            <Button type="submit">Speichern</Button>
+                        </div>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive" type="button">
+                                    Löschen
+                                </Button>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Vertrag wirklich löschen?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Dieser Vorgang kann nicht rückgängig gemacht werden.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel asChild>
+                                        <Button variant="outline">Abbrechen</Button>
+                                    </AlertDialogCancel>
+                                    <Button
+                                        variant="destructive"
+                                        onClick={async () => {
+                                            if (!contract) return;
+                                            try {
+                                                await deleteContract(contract.id);
+                                                console.log("Vertrag gelöscht:", contract.id);
+                                                onOpenChange(false); // Dialog schließen
+                                            } catch (err) {
+                                                console.error("Fehler beim Löschen:", err);
+                                                alert(err instanceof Error ? err.message : "Unbekannter Fehler");
+                                            }
+                                        }}
+                                    >
+                                        Löschen bestätigen
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </DialogFooter>
+
                 </form>
             </DialogContent>
         </Dialog>
