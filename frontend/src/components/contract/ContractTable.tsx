@@ -179,7 +179,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                 <div className="ml-auto">
                     <Badge
                         className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                        onClick={() => onSelectContract?.({ id: "", title: "", startDate: "", endDate: "", description: "", aiLevel: 0 })}
+                        onClick={() => onSelectContract?.({ id: "", title: "", startDate: "", endDate: "", description: "", aiLevel: 0, aiAnalysisText: "" })}
                     >
                         Neuen Vertrag anlegen
                     </Badge>
