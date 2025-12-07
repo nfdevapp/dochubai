@@ -45,6 +45,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
     const [endDate, setEndDate] = React.useState<Date | undefined>();
     const [startOpen, setStartOpen] = React.useState(false);
     const [endOpen, setEndOpen] = React.useState(false);
+    const [aiLevel, setAiLevel] = React.useState(0);
+    const [aiAnalysisText, setAiAnalysisText] = React.useState("");
 
     React.useEffect(() => {
         if (contract) {
@@ -52,11 +54,15 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setDescription(contract.description);
             setStartDate(contract.startDate ? parseDate(contract.startDate) : undefined);
             setEndDate(contract.endDate ? parseDate(contract.endDate) : undefined);
+            setAiLevel(contract.aiLevel);
+            setAiAnalysisText(contract.aiAnalysisText);
         } else {
             setTitle("");
             setDescription("");
             setStartDate(undefined);
-            setEndDate(undefined);
+            setEndDate(undefined)
+            setAiLevel(0);
+            setAiAnalysisText("");
         }
     }, [contract]);
 
@@ -69,6 +75,9 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             description,
             startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
             endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
+            aiLevel,
+            aiAnalysisText
+
         });
         onOpenChange(false);
     };
