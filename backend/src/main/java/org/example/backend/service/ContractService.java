@@ -25,10 +25,10 @@ public class ContractService {
     public Contract updateContract(String id, Contract contract) {
         Contract oldData = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
-        contractRepo.save(
-                oldData.
-                        withTitle(contract.title()));
-        return  contract;
+
+        Contract updated = oldData.withTitle(contract.title());
+
+        return contractRepo.save(updated);
     }
 
     public void deleteContract(String id) {
@@ -38,6 +38,7 @@ public class ContractService {
     }
 
     public Contract createContract(Contract contract) {
+
         return contractRepo.save(contract);
     }
 
