@@ -15,13 +15,8 @@ public class GenerateTestData {
 
     private final ContractService contractService;
 
-
     @PostConstruct
     public void init() {
-        //if Testdata exist
-//        if (!contractService.getAllContracts().isEmpty()) {;
-//            return;
-//        }
         createContracts();
     }
 
@@ -33,6 +28,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 1, 15))
                         .endDate(LocalDate.of(2025, 1, 15))
                         .aiLevel(1)
+                        .aiAnalysisText("Klare Struktur und umfassende Bedingungen, keine Auffälligkeiten.")
                         .build(),
 
                 Contract.builder().title("Arbeitsvertrag")
@@ -40,6 +36,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 11, 3))
                         .endDate(LocalDate.of(2024, 11, 3))
                         .aiLevel(2)
+                        .aiAnalysisText("Enthält die Grundregeln, aber einige Kündigungsfristen könnten präziser sein.")
                         .build(),
 
                 Contract.builder().title("Dienstleistungsvertrag")
@@ -47,6 +44,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 2, 20))
                         .endDate(LocalDate.of(2025, 2, 20))
                         .aiLevel(1)
+                        .aiAnalysisText("Alles Wesentliche geregelt, klare Leistungsbeschreibung vorhanden.")
                         .build(),
 
                 Contract.builder().title("Kaufvertrag")
@@ -54,6 +52,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 8, 9))
                         .endDate(LocalDate.of(2023, 8, 9))
                         .aiLevel(3)
+                        .aiAnalysisText("Lieferbedingungen und Gewährleistungsregelungen unklar, Risiko für Streitfälle.")
                         .build(),
 
                 Contract.builder().title("Versicherungsvertrag")
@@ -61,6 +60,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 12, 11))
                         .endDate(LocalDate.of(2024, 12, 11))
                         .aiLevel(1)
+                        .aiAnalysisText("Alle Versicherungsbedingungen sind verständlich und korrekt formuliert.")
                         .build(),
 
                 Contract.builder().title("Leasingvertrag")
@@ -68,6 +68,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 6, 1))
                         .endDate(LocalDate.of(2025, 6, 1))
                         .aiLevel(2)
+                        .aiAnalysisText("Vertrag deckt die Grundpunkte ab, aber Restwertregelung könnte klarer sein.")
                         .build(),
 
                 Contract.builder().title("Wartungsvertrag")
@@ -75,6 +76,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 3, 1))
                         .endDate(LocalDate.of(2025, 3, 1))
                         .aiLevel(1)
+                        .aiAnalysisText("Klauseln verständlich, Leistungsumfang klar definiert.")
                         .build(),
 
                 Contract.builder().title("Hostingvertrag")
@@ -82,6 +84,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 9, 14))
                         .endDate(LocalDate.of(2024, 9, 14))
                         .aiLevel(1)
+                        .aiAnalysisText("Hosting-Leistungen gut beschrieben, SLAs nachvollziehbar.")
                         .build(),
 
                 Contract.builder().title("Supportvertrag")
@@ -89,6 +92,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 1, 1))
                         .endDate(LocalDate.of(2025, 1, 1))
                         .aiLevel(1)
+                        .aiAnalysisText("Supportzeiten und Verantwortlichkeiten klar definiert.")
                         .build(),
 
                 Contract.builder().title("Kooperationsvertrag")
@@ -96,6 +100,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 11, 22))
                         .endDate(LocalDate.of(2023, 11, 22))
                         .aiLevel(2)
+                        .aiAnalysisText("Grundlagen sind da, aber Verantwortlichkeiten könnten klarer sein.")
                         .build(),
 
                 Contract.builder().title("Liefervertrag")
@@ -103,6 +108,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 1, 10))
                         .endDate(LocalDate.of(2024, 1, 10))
                         .aiLevel(1)
+                        .aiAnalysisText("Lieferfristen und Mengenangaben klar geregelt.")
                         .build(),
 
                 Contract.builder().title("Agenturvertrag")
@@ -110,6 +116,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 2, 1))
                         .endDate(LocalDate.of(2025, 2, 1))
                         .aiLevel(1)
+                        .aiAnalysisText("Aufgaben und Vergütung transparent beschrieben.")
                         .build(),
 
                 Contract.builder().title("Lizenzvertrag")
@@ -117,6 +124,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 1, 20))
                         .endDate(LocalDate.of(2025, 1, 20))
                         .aiLevel(1)
+                        .aiAnalysisText("Nutzungsrechte klar definiert, keine offensichtlichen Lücken.")
                         .build(),
 
                 Contract.builder().title("Bauvertrag")
@@ -124,6 +132,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 5, 15))
                         .endDate(LocalDate.of(2024, 5, 15))
                         .aiLevel(3)
+                        .aiAnalysisText("Unklare Abnahmebedingungen und Haftungsregelungen, hohes Risiko für Streitigkeiten.")
                         .build(),
 
                 Contract.builder().title("Projektvertrag")
@@ -131,6 +140,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 3, 11))
                         .endDate(LocalDate.of(2024, 3, 11))
                         .aiLevel(1)
+                        .aiAnalysisText("Projektumfang und Fristen klar definiert, keine Probleme erkennbar.")
                         .build(),
 
                 Contract.builder().title("Beratungsvertrag")
@@ -138,6 +148,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 12, 2))
                         .endDate(LocalDate.of(2024, 12, 2))
                         .aiLevel(1)
+                        .aiAnalysisText("Vertrag deckt Beratungsumfang und Vergütung korrekt ab.")
                         .build(),
 
                 Contract.builder().title("Darlehensvertrag")
@@ -145,6 +156,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2021, 9, 30))
                         .endDate(LocalDate.of(2026, 9, 30))
                         .aiLevel(2)
+                        .aiAnalysisText("Zinsregelungen sind vorhanden, aber Rückzahlungsmodalitäten teilweise unklar.")
                         .build(),
 
                 Contract.builder().title("Schulungsvertrag")
@@ -152,6 +164,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 2, 22))
                         .endDate(LocalDate.of(2025, 2, 22))
                         .aiLevel(1)
+                        .aiAnalysisText("Leistungsumfang und Termine klar definiert, alles in Ordnung.")
                         .build(),
 
                 Contract.builder().title("Cloud-Service-Vertrag")
@@ -159,6 +172,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 10, 5))
                         .endDate(LocalDate.of(2024, 10, 5))
                         .aiLevel(1)
+                        .aiAnalysisText("Cloud-Dienste, SLAs und Supportbedingungen klar beschrieben.")
                         .build(),
 
                 Contract.builder().title("IT-Rahmenvertrag")
@@ -166,6 +180,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 1, 3))
                         .endDate(LocalDate.of(2026, 1, 3))
                         .aiLevel(1)
+                        .aiAnalysisText("Rahmenbedingungen für IT-Dienstleistungen umfassend und klar.")
                         .build(),
 
                 Contract.builder().title("Werkvertrag")
@@ -173,6 +188,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 12, 12))
                         .endDate(LocalDate.of(2024, 12, 12))
                         .aiLevel(2)
+                        .aiAnalysisText("Leistungsbeschreibung vorhanden, Qualitätsanforderungen könnten präziser sein.")
                         .build(),
 
                 Contract.builder().title("ADV-Vertrag")
@@ -180,6 +196,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 11, 22))
                         .endDate(LocalDate.of(2024, 11, 22))
                         .aiLevel(1)
+                        .aiAnalysisText("Datenschutz- und Verarbeitungspflichten klar geregelt, alles korrekt.")
                         .build(),
 
                 Contract.builder().title("Telekommunikationsvertrag")
@@ -187,6 +204,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 3, 9))
                         .endDate(LocalDate.of(2023, 3, 9))
                         .aiLevel(3)
+                        .aiAnalysisText("Vertragslaufzeiten und Kündigungsbedingungen unklar, potenzielles Risiko.")
                         .build(),
 
                 Contract.builder().title("Providervertrag")
@@ -194,6 +212,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 7, 12))
                         .endDate(LocalDate.of(2024, 7, 12))
                         .aiLevel(1)
+                        .aiAnalysisText("Leistungsumfang und Gebühren klar beschrieben, keine Auffälligkeiten.")
                         .build(),
 
                 Contract.builder().title("Abovertrag")
@@ -201,6 +220,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 2, 14))
                         .endDate(LocalDate.of(2025, 2, 14))
                         .aiLevel(1)
+                        .aiAnalysisText("Abo-Leistungen und Kündigungsfristen klar geregelt.")
                         .build(),
 
                 Contract.builder().title("Überlassungsvertrag")
@@ -208,6 +228,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2021, 11, 1))
                         .endDate(LocalDate.of(2024, 11, 1))
                         .aiLevel(2)
+                        .aiAnalysisText("Grundsätze der Überlassung vorhanden, Haftung könnte deutlicher sein.")
                         .build(),
 
                 Contract.builder().title("Forschungsvertrag")
@@ -215,6 +236,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 5, 18))
                         .endDate(LocalDate.of(2024, 5, 18))
                         .aiLevel(1)
+                        .aiAnalysisText("Forschungsziele und Verantwortlichkeiten klar definiert.")
                         .build(),
 
                 Contract.builder().title("Kreditvertrag")
@@ -222,6 +244,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 1, 28))
                         .endDate(LocalDate.of(2027, 1, 28))
                         .aiLevel(3)
+                        .aiAnalysisText("Zinsberechnung und Sicherheiten teilweise unklar, hohes Risiko für Streitigkeiten.")
                         .build(),
 
                 Contract.builder().title("Vertriebsvertrag")
@@ -229,6 +252,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 8, 30))
                         .endDate(LocalDate.of(2024, 8, 30))
                         .aiLevel(1)
+                        .aiAnalysisText("Vertriebsgebiete und Provisionen klar definiert.")
                         .build(),
 
                 Contract.builder().title("Lizenzverlängerung")
@@ -236,6 +260,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 2, 25))
                         .endDate(LocalDate.of(2025, 2, 25))
                         .aiLevel(1)
+                        .aiAnalysisText("Laufzeit und Nutzungsrechte der Lizenz korrekt geregelt.")
                         .build(),
 
                 Contract.builder().title("SaaS-Vertrag")
@@ -243,6 +268,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2023, 9, 1))
                         .endDate(LocalDate.of(2024, 9, 1))
                         .aiLevel(1)
+                        .aiAnalysisText("Nutzungsbedingungen und Support klar beschrieben.")
                         .build(),
 
                 Contract.builder().title("Partnerschaftsvertrag")
@@ -250,6 +276,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2024, 3, 12))
                         .endDate(LocalDate.of(2026, 3, 12))
                         .aiLevel(1)
+                        .aiAnalysisText("Partnerschaftsziele und Verantwortlichkeiten klar definiert.")
                         .build(),
 
                 Contract.builder().title("Wartungsvertrag Premium")
@@ -257,6 +284,7 @@ public class GenerateTestData {
                         .startDate(LocalDate.of(2022, 10, 10))
                         .endDate(LocalDate.of(2024, 10, 10))
                         .aiLevel(2)
+                        .aiAnalysisText("Leistungsumfang gut beschrieben, SLA-Klauseln könnten detaillierter sein.")
                         .build()
         );
 
@@ -264,6 +292,4 @@ public class GenerateTestData {
                 .map(contractService::createContract)
                 .toList();
     }
-
-
 }

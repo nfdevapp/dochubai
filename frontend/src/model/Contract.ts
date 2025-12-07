@@ -5,4 +5,5 @@ export type Contract = {
     endDate: string;
     description: string;
     aiLevel: number;
+    aiAnalysisText: string;
 };

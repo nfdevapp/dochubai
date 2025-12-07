@@ -11,6 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import type { Contract } from "@/model/Contract.ts";
+import {Card, CardContent} from "@/components/ui/card.tsx";
 
 // Hilfsfunktion dd.MM.yyyy → Date
 const parseDate = (dateStr: string): Date | undefined => {
@@ -123,12 +124,18 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     <div className="grid gap-3">
                         <Label className="flex items-center gap-1 font-bold">
                             AI-Analyse
-                            <Sparkles className="h-5 w-5 inline-block" />
-                        </Label>
-                        <span className={`${aiColorMap[Number(contract.aiLevel) || 0] || "text-gray-500"} font-semibold`}>
+                            <Sparkles className="h-5 w-5 inline-block" />:
+                            <span className={`${aiColorMap[Number(contract.aiLevel) || 0] || "text-gray-500"} font-semibold`}>
                                 {aiDescriptionMap[Number(contract.aiLevel) || 0] || "Keine Daten"}
-                        </span>
+                            </span>
+                        </Label>
                     </div>
+
+                    <Card className="mt-2 border border-gray-200 bg-gray-50">
+                        <CardContent className="p-3">
+                            {contract.aiAnalysisText || "Keine weiteren Informationen"}
+                        </CardContent>
+                    </Card>
 
 
                     <DialogFooter>
