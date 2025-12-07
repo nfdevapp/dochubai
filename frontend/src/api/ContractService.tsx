@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import type { Contract } from "@/model/Contract.ts";
-import type {ApiError} from "@/api/ApiError.tsx";
+import type { Contract } from "@/model/Contract";
+import type {ApiError} from "@/api/ApiError";
 
 const API_URL = "/api/contract";
 
