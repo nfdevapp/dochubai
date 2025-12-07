@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
-import type { Contract } from "@/model/Contract.tsx";
+import type { Contract } from "@/model/Contract.ts";
 
 // Hilfsfunktion dd.MM.yyyy → Date
 const parseDate = (dateStr: string): Date | undefined => {

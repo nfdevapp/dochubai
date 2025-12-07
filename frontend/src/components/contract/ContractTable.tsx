@@ -29,7 +29,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
 
-import type { Contract } from "@/model/Contract";
+import type { Contract } from "@/model/Contract.ts";
 import { getAllContracts } from "@/api/ContractService";
 
 // Spalten-Definition
