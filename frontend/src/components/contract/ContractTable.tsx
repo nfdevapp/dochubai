@@ -210,6 +210,8 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                                 description: "",
                                 aiLevel: 0,
                                 aiAnalysisText: "",
+                                fileName: "",
+                                file: null
                             })
                         }
                     >
