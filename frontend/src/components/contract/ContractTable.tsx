@@ -16,8 +16,7 @@ import {
 
 import { ArrowUpDown, Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableHeader,
@@ -25,19 +24,23 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/components/ui/table.tsx";
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-import type { Contract } from "@/model/Contract.ts";
+import type { Contract } from "@/model/Contract";
 import { getAllContracts } from "@/api/ContractService";
 
-// Spalten-Definition
+// Spalten
 const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "title",
         header: ({ column }) => (
-            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button
+                variant="ghost"
+                className="justify-start pl-6"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
                 Titel<ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
@@ -46,7 +49,11 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "startDate",
         header: ({ column }) => (
-            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button
+                variant="ghost"
+                className="justify-start pl-6"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
                 Vertragsbeginn<ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
@@ -55,7 +62,11 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "endDate",
         header: ({ column }) => (
-            <Button variant="ghost" className="justify-start pl-6" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button
+                variant="ghost"
+                className="justify-start pl-6"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
                 Vertragsende<ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
@@ -69,7 +80,11 @@ const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "aiLevel",
         header: ({ column }) => (
-            <Button variant="ghost" className="pl-6 flex items-center gap-2" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            <Button
+                variant="ghost"
+                className="pl-6 flex items-center gap-2"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
                 <span className="font-medium">AI-Analyse</span>
                 <Sparkles className="h-4 w-4" />
                 <ArrowUpDown className="h-4 w-4" />
@@ -78,7 +93,11 @@ const columns: ColumnDef<Contract>[] = [
         cell: ({ row }) => {
             const value = Number(row.getValue("aiLevel"));
             const color = { 1: "bg-green-500", 2: "bg-yellow-400", 3: "bg-red-500" }[value] ?? "bg-gray-400";
-            const description = { 1: "Ist einwandfrei", 2: "Sollte überprüft werden", 3: "Weist kritische Abweichungen auf" }[value] ?? "Keine Daten";
+            const description = {
+                1: "Ist einwandfrei",
+                2: "Sollte überprüft werden",
+                3: "Weist kritische Abweichungen auf",
+            }[value] ?? "Keine Daten";
 
             return (
                 <div className="w-full flex justify-center items-center">
@@ -139,11 +158,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
         state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
 
-    //Ladevorgang
     if (loading) {
-        // Anzahl der Spalten für Skeleton
-        const skeletonRows = columns.length;
-
         return (
             <div className="w-full overflow-hidden rounded-md border">
                 <table className="w-full border-collapse">
@@ -157,10 +172,10 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     </tr>
                     </thead>
                     <tbody>
-                    {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
-                        <tr key={rowIdx}>
-                            {columns.map((_, colIdx) => (
-                                <td key={colIdx} className="p-2 border-b">
+                    {Array.from({ length: columns.length }).map((_, idx) => (
+                        <tr key={idx}>
+                            {columns.map((_, i) => (
+                                <td key={i} className="p-2 border-b">
                                     <Skeleton className="h-4 w-full" />
                                 </td>
                             ))}
@@ -172,14 +187,31 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
         );
     }
 
-
     return (
         <div className="w-full">
-            <div className="flex items-center py-4">
+            <div className="flex items-center gap-4 py-4">
+                {/* Suchfeld links */}
+                <input
+                    placeholder="Suche..."
+                    className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                    onChange={(e) => table.getColumn("title")?.setFilterValue(e.target.value)}
+                />
+
                 <div className="ml-auto">
                     <Badge
                         className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                        onClick={() => onSelectContract?.({ id: "", title: "", startDate: "", endDate: "", description: "", aiLevel: 0, aiAnalysisText: "" })}
+                        onClick={() =>
+                            onSelectContract?.({
+                                id: "",
+                                title: "",
+                                startDate: "",
+                                endDate: "",
+                                description: "",
+                                aiLevel: 0,
+                                aiAnalysisText: "",
+                            })
+                        }
                     >
                         Neuen Vertrag anlegen
                     </Badge>
@@ -189,9 +221,9 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
             <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader>
-                        {table.getHeaderGroups().map(headerGroup => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map(header => (
+                        {table.getHeaderGroups().map((hg) => (
+                            <TableRow key={hg.id}>
+                                {hg.headers.map((header) => (
                                     <TableHead key={header.id}>
                                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
@@ -199,35 +231,25 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                             </TableRow>
                         ))}
                     </TableHeader>
+
                     <TableBody>
                         {table.getRowModel().rows.length ? (
-                            table.getRowModel().rows.map(row => (
+                            table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50" onClick={() => onSelectContract?.(row.original)}>
-                                    {row.getVisibleCells().map(cell => (
+                                    {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell colSpan={columns.length} className="text-center py-6">
                                     Keine Ergebnisse.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
-            </div>
-
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Zurück
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Weiter
-                    </Button>
-                </div>
             </div>
         </div>
     );
