@@ -63,6 +63,10 @@ export default function ContractTableDialog({
     const [aiAnalysisText, setAiAnalysisText] = React.useState("");
     const [fileName, setFileName] = React.useState("");
     const [file, setFile] = React.useState<File | null>(null);
+    //speichern
+    const [saving, setSaving] = React.useState(false);
+    //löschvorgang anzigen
+    const [deleting, setDeleting] = React.useState(false);
 
     const { control } = useUploadFile({ route: "D:/" }); // Datei-Upload Hook
 
@@ -116,14 +120,18 @@ export default function ContractTableDialog({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        setSaving(true); // Speichern beginnt
+
         let uploadedFileName = fileName;
+        let fileBytes: Uint8Array | null = null;
+
         if (file) {
             const result = await control.upload(file);
             uploadedFileName = result?.file?.name || file.name;
+            fileBytes = new Uint8Array(await file.arrayBuffer());
         }
 
-        const contractData: Contract = {
-            id: contractId || "neu", // "neu" als Platzhalter für neue Verträge
+        const contractData: Omit<Contract, "id"> = {
             title,
             description,
             startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
@@ -131,23 +139,24 @@ export default function ContractTableDialog({
             aiLevel,
             aiAnalysisText,
             fileName: uploadedFileName,
-            file: null
+            file: fileBytes
         };
 
         try {
             let savedContract: Contract;
-            if (!contractId || contractId === "") {
-                // Neue Vertrag
-                savedContract = await createContract(contractData);
+
+            if (!contractId) {
+                savedContract = await createContract(contractData as Contract);
             } else {
-                // Vetrag update
-                savedContract = await updateContract(contractId, contractData);
+                savedContract = await updateContract(contractId, { ...contractData, id: contractId } as Contract);
             }
 
             onSave?.(savedContract); // Parent Callback → Tabelle aktualisieren
             onOpenChange(false); // Dialog schließen
         } catch (err) {
             console.error("Fehler beim Speichern:", err);
+        } finally {
+            setSaving(false); // Speichern abgeschlossen
         }
     };
 
@@ -160,6 +169,7 @@ export default function ContractTableDialog({
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {contractId ? "Vertrag bearbeiten" : "Neuen Vertrag anlegen"}
+                        {saving && <div className="text-center py-2 text-sm">Daten werden gespeichert...</div>}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -283,7 +293,9 @@ export default function ContractTableDialog({
                         <DialogFooter className="flex justify-between">
                             <div className="flex gap-2">
                                 <Button variant="outline" onClick={() => onOpenChange(false)}>Abbrechen</Button>
-                                <Button type="submit" variant="outline">Speichern</Button>
+                                <Button type="submit" variant="outline" disabled={saving}>
+                                    {saving ? "Speichern..." : "Speichern"}
+                                </Button>
                             </div>
 
                             {/* Löschen-Dialog */}
@@ -299,26 +311,36 @@ export default function ContractTableDialog({
                                         <AlertDialogHeader>
                                             <AlertDialogTitle>Vertrag löschen?</AlertDialogTitle>
                                             <AlertDialogDescription>
-                                                Dieser Vorgang kann nicht rückgängig gemacht werden.
+                                                {deleting ? "Daten werden gelöscht..." : "Dieser Vorgang kann nicht rückgängig gemacht werden."}
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
 
                                         <AlertDialogFooter>
                                             <AlertDialogCancel asChild>
-                                                <Button variant="outline">Abbrechen</Button>
+                                                <Button variant="outline" disabled={deleting}>Abbrechen</Button>
                                             </AlertDialogCancel>
                                             <Button
                                                 variant="destructive"
+                                                disabled={deleting}
                                                 onClick={async () => {
                                                     if (!contractId) return;
-                                                    await deleteContract(contractId);
-                                                    onDelete?.(contractId); // Parent Callback aufrufen
+                                                    setDeleting(true);
+                                                    try {
+                                                        await deleteContract(contractId);
+                                                        onDelete?.(contractId); // Parent Callback aufrufen
+                                                        onOpenChange(false);    // Dialog schließen
+                                                    } catch (err) {
+                                                        console.error("Fehler beim Löschen:", err);
+                                                    } finally {
+                                                        setDeleting(false);
+                                                    }
                                                 }}
                                             >
-                                                Löschen bestätigen
+                                                {deleting ? "Löschen..." : "Löschen bestätigen"}
                                             </Button>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
+
                                 </AlertDialog>
                             )}
                         </DialogFooter>

@@ -3,8 +3,8 @@
 import * as React from "react";
 import ContractTable from "@/components/contract/ContractTable";
 import ContractTableDialog from "@/components/contract/ContractTableDialog";
-import type {Contract} from "@/model/Contract.ts";
-import {getAllContracts} from "@/api/ContractService.tsx";
+import type {Contract} from "@/model/Contract";
+import {getAllContracts} from "@/api/ContractService";
 
 export default function ContractPage() {
     const [dialogOpen, setDialogOpen] = React.useState(false); // Dialog öffnen/schließen
@@ -45,14 +45,15 @@ export default function ContractPage() {
             const index = prev.findIndex((c) => c.id === updatedContract.id);
             if (index !== -1) {
                 const newArr = [...prev];
-                newArr[index] = updatedContract; // bestehender Vertrag aktualisiert
+                newArr[index] = updatedContract;
                 return newArr;
             } else {
-                return [...prev, updatedContract]; // neuer Vertrag hinzugefügt
+                return [updatedContract, ...prev]; // neuer Vertrag oben
             }
         });
         setDialogOpen(false);
     };
+
 
     return (
         <div className="space-y-6">

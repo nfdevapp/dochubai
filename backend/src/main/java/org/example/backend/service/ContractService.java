@@ -1,11 +1,13 @@
 package org.example.backend.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.repository.ContractRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,8 +28,15 @@ public class ContractService {
         Contract oldData = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
 
-        Contract updated = oldData.withTitle(contract.title());
-
+        Contract updated = oldData
+                .withTitle(contract.title())
+                .withDescription(contract.description())
+                .withStartDate(contract.startDate())
+                .withEndDate(contract.endDate())
+                .withAiLevel(contract.aiLevel())
+                .withAiAnalysisText(contract.aiAnalysisText())
+                .withFileName(contract.fileName())
+                .withFile(contract.file());
         return contractRepo.save(updated);
     }
 
@@ -38,7 +47,6 @@ public class ContractService {
     }
 
     public Contract createContract(Contract contract) {
-
         return contractRepo.save(contract);
     }
 
