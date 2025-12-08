@@ -74,15 +74,17 @@ function UploadButton({ accept, onFileSelect }: { accept?: string; onFileSelect?
 }
 
 export default function ContractTableDialog({ open, onOpenChange, contract }: ContractTableDialogProps) {
+    const [startOpen, setStartOpen] = React.useState(false);
+    const [endOpen, setEndOpen] = React.useState(false);
+
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [startDate, setStartDate] = React.useState<Date | undefined>();
     const [endDate, setEndDate] = React.useState<Date | undefined>();
-    const [startOpen, setStartOpen] = React.useState(false);
-    const [endOpen, setEndOpen] = React.useState(false);
     const [aiLevel, setAiLevel] = React.useState(0);
     const [aiAnalysisText, setAiAnalysisText] = React.useState("");
-    const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+    const [fileName, setFileName] = React.useState("");
+    const [file, setFile] = React.useState<File | null>(null);
 
     const { control } = useUploadFile({ route: "D:/" });
 
@@ -94,7 +96,8 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setEndDate(contract.endDate ? parseDate(contract.endDate) : undefined);
             setAiLevel(contract.aiLevel);
             setAiAnalysisText(contract.aiAnalysisText);
-            setSelectedFile(null); // ← Reset beim Öffnen eines neuen Vertrags
+            setFile(null);                  // Reset Datei
+            setFileName(contract.fileName || ""); // Aktuellen Dateinamen setzen
         } else {
             setTitle("");
             setDescription("");
@@ -102,9 +105,11 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setEndDate(undefined);
             setAiLevel(0);
             setAiAnalysisText("");
-            setSelectedFile(null); // ← Reset auch hier
+            setFile(null);
+            setFileName("");
         }
     }, [contract]);
+
 
 
     if (!contract) return null;
@@ -112,12 +117,12 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        let uploadedFileName = null;
+        let uploadedFileName = fileName;
 
-        if (selectedFile) {
-            // Datei erst jetzt hochladen
-            const result = await control.upload(selectedFile);
-            uploadedFileName = result?.file?.name || selectedFile.name;
+        if (file) {
+            const result = await control.upload(file);
+            uploadedFileName = result?.file?.name || file.name;
+            setFileName(uploadedFileName); // State aktualisieren
         }
 
         console.log({
@@ -127,11 +132,12 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
             aiLevel,
             aiAnalysisText,
-            uploadedFile: uploadedFileName
+            fileName: uploadedFileName,
         });
 
         onOpenChange(false);
     };
+
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -237,11 +243,17 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                             Dokument für KI-Analyse hochladen (.pdf, .doc, .docx)
                         </Label>
 
-                        <UploadButton accept=".pdf,.doc,.docx" onFileSelect={setSelectedFile} />
+                        <UploadButton
+                            accept=".pdf,.doc,.docx"
+                            onFileSelect={(file) => {
+                                setFile(file);            // Datei speichern
+                                setFileName(file.name);   // Dateiname für Anzeige setzen
+                            }}
+                        />
 
                         <p className="mt-2 text-sm text-gray-700">
-                            {selectedFile
-                                ? `Ausgewählt: ${selectedFile.name}`
+                            {file
+                                ? `Ausgewählt: ${file.name}`
                                 : contract.fileName
                                     ? `Aktuell gespeichert: ${contract.fileName}`
                                     : "Kein Dokument vorhanden"}

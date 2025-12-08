@@ -6,6 +6,6 @@ export type Contract = {
     endDate: string;       // kommt als dd.MM.yyyy vom Backend
     aiLevel: number;
     aiAnalysisText: string;
-    fileName: string | null;
+    fileName: string;
     file: Uint8Array | null;   // Backend: byte[]  → Frontend: Uint8Array
 };
