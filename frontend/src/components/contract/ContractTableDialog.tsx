@@ -28,23 +28,25 @@ import {
     AlertDialogCancel
 } from "@/components/ui/alert-dialog";
 
-// Hilfsfunktion dd.MM.yyyy → Date
+// Hilfsfunktion: Konvertiert dd.MM.yyyy → Date
 const parseDate = (dateStr: string): Date | undefined => {
     if (!dateStr) return undefined;
     const [day, month, year] = dateStr.split(".").map(Number);
     return new Date(year, month - 1, day);
 };
 
+// Props der Haupt-Komponente
 interface ContractTableDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    contractId?: string | null;  // optional
+    contractId?: string | null;  // optional: Wenn null → neuer Vertrag
 }
 
+// Haupt-Komponente für Vertrags-Dialog
 export default function ContractTableDialog({ open, onOpenChange, contractId }: ContractTableDialogProps) {
 
+    // STATES: Formularfelder, Upload-Datei, Ladezustand
     const [loading, setLoading] = React.useState(false);
-
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [startDate, setStartDate] = React.useState<Date | undefined>();
@@ -54,17 +56,19 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
     const [fileName, setFileName] = React.useState("");
     const [file, setFile] = React.useState<File | null>(null);
 
-    const { control } = useUploadFile({ route: "D:/" });
+    const { control } = useUploadFile({ route: "D:/" }); // Datei-Upload Hook
 
+    // STATES für Popover (Kalender öffnen/schließen)
     const [startPopoverOpen, setStartPopoverOpen] = React.useState(false);
     const [endPopoverOpen, setEndPopoverOpen] = React.useState(false);
 
-    // Laden der Vertragsdaten, wenn ID != ""
+    // Lade Vertragsdaten, wenn ID gesetzt und Dialog geöffnet
     React.useEffect(() => {
         const loadContract = async () => {
             if (!open) return;
 
             if (!contractId) {
+                // Neues Formular leeren
                 setTitle("");
                 setDescription("");
                 setStartDate(undefined);
@@ -79,6 +83,7 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
             setLoading(true);
             try {
                 const contract: Contract = await getContractById(contractId);
+                // Felder füllen
                 setTitle(contract.title);
                 setDescription(contract.description);
                 setStartDate(parseDate(contract.startDate));
@@ -96,8 +101,10 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
         loadContract();
     }, [contractId, open]);
 
+    // Wenn Dialog geschlossen → nichts rendern
     if (!open) return null;
 
+    // Formular-Submit: Datei hochladen
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -118,18 +125,22 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
             fileName: uploadedFileName
         });
 
-        onOpenChange(false);
+        onOpenChange(false); // Dialog schließen
     };
 
+    // RENDER
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[500px]">
+
+                {/* Dialog Header */}
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {contractId ? "Vertrag bearbeiten" : "Neuen Vertrag anlegen"}
                     </DialogTitle>
                 </DialogHeader>
 
+                {/* Ladeanzeige */}
                 {loading ? (
                     <div className="text-center py-10">Lade Daten...</div>
                 ) : (
@@ -252,6 +263,7 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
                                 <Button type="submit" variant="outline">Speichern</Button>
                             </div>
 
+                            {/* Löschen-Dialog */}
                             {contractId && (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>

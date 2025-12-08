@@ -31,7 +31,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import type { Contract } from "@/model/Contract";
 import { getAllContracts } from "@/api/ContractService";
 
-// Spalten
+// -------------------------
+// Spalten Definition
+// -------------------------
 const columns: ColumnDef<Contract>[] = [
     {
         accessorKey: "title",
@@ -90,6 +92,7 @@ const columns: ColumnDef<Contract>[] = [
                 <ArrowUpDown className="h-4 w-4" />
             </Button>
         ),
+        // Zeige farbige Punkte + Tooltip je nach AI-Level
         cell: ({ row }) => {
             const value = Number(row.getValue("aiLevel"));
             const color = { 1: "bg-green-500", 2: "bg-yellow-400", 3: "bg-red-500" }[value] ?? "bg-gray-400";
@@ -117,10 +120,16 @@ const columns: ColumnDef<Contract>[] = [
     },
 ];
 
+// -------------------------
+// Props
+// -------------------------
 type ContractTableProps = {
-    onSelectContract?: (id: string) => void;
+    onSelectContract?: (id: string) => void; // Callback für Klick auf eine Zeile
 };
 
+// -------------------------
+// Haupt-Komponente
+// -------------------------
 export default function ContractTable({ onSelectContract }: ContractTableProps) {
     const [contracts, setContracts] = React.useState<Contract[]>([]);
     const [loading, setLoading] = React.useState(true);
@@ -129,6 +138,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
+    // Daten laden
     React.useEffect(() => {
         const fetchContracts = async () => {
             try {
@@ -140,10 +150,10 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                 setLoading(false);
             }
         };
-
         fetchContracts();
     }, []);
 
+    // React Table Setup
     const table = useReactTable({
         data: contracts,
         columns,
@@ -158,6 +168,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
         state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
 
+    // Lade-Placeholder anzeigen
     if (loading) {
         return (
             <div className="w-full overflow-hidden rounded-md border">
@@ -172,7 +183,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     </tr>
                     </thead>
                     <tbody>
-                    {Array.from({ length: columns.length }).map((_, idx) => (
+                    {Array.from({ length:3 }).map((_, idx) => (
                         <tr key={idx}>
                             {columns.map((_, i) => (
                                 <td key={i} className="p-2 border-b">
@@ -189,26 +200,25 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
 
     return (
         <div className="w-full">
+            {/* Suche + Neuer Vertrag Button */}
             <div className="flex items-center gap-4 py-4">
-                {/* Suchfeld */}
                 <input
                     placeholder="Suche..."
                     className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
                     value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
                     onChange={(e) => table.getColumn("title")?.setFilterValue(e.target.value)}
                 />
-
                 <div className="ml-auto">
                     <Badge
                         className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                        //NEUER VERTRAG → ID = ""
-                        onClick={() => onSelectContract?.("")}
+                        onClick={() => onSelectContract?.("")} // Neuer Vertrag
                     >
                         Neuen Vertrag anlegen
                     </Badge>
                 </div>
             </div>
 
+            {/* Tabelle */}
             <div className="rounded-md border overflow-hidden">
                 <Table>
                     <TableHeader>
@@ -224,7 +234,6 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                             </TableRow>
                         ))}
                     </TableHeader>
-
                     <TableBody>
                         {table.getRowModel().rows.length ? (
                             table.getRowModel().rows.map((row) => (
@@ -250,31 +259,15 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     </TableBody>
                 </Table>
             </div>
-            <div className="w-full mt-2 flex items-center">
-                <div className="text-sm text-muted-foreground flex-1 text-center">
-                    Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}
-                </div>
 
-                {/* Buttons rechts */}
-                <div className="flex justify-end space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Zurück
-                    </Button>
-
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Weiter
-                    </Button>
-                </div>
+            {/* Pagination */}
+            <div className="w-full mt-2 flex items-center justify-end space-x-2">
+                <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                    Zurück
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                    Weiter
+                </Button>
             </div>
         </div>
     );
