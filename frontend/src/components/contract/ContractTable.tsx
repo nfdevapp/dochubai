@@ -118,7 +118,7 @@ const columns: ColumnDef<Contract>[] = [
 ];
 
 type ContractTableProps = {
-    onSelectContract?: (contract: Contract) => void;
+    onSelectContract?: (id: string) => void;
 };
 
 export default function ContractTable({ onSelectContract }: ContractTableProps) {
@@ -190,7 +190,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
     return (
         <div className="w-full">
             <div className="flex items-center gap-4 py-4">
-                {/* Suchfeld links */}
+                {/* Suchfeld */}
                 <input
                     placeholder="Suche..."
                     className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
@@ -201,19 +201,8 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                 <div className="ml-auto">
                     <Badge
                         className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                        onClick={() =>
-                            onSelectContract?.({
-                                id: "",
-                                title: "",
-                                startDate: "",
-                                endDate: "",
-                                description: "",
-                                aiLevel: 0,
-                                aiAnalysisText: "",
-                                fileName: "",
-                                file: null
-                            })
-                        }
+                        //NEUER VERTRAG → ID = ""
+                        onClick={() => onSelectContract?.("")}
                     >
                         Neuen Vertrag anlegen
                     </Badge>
@@ -227,7 +216,9 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                             <TableRow key={hg.id}>
                                 {hg.headers.map((header) => (
                                     <TableHead key={header.id}>
-                                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -237,9 +228,15 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     <TableBody>
                         {table.getRowModel().rows.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id} className="cursor-pointer hover:bg-muted/50" onClick={() => onSelectContract?.(row.original)}>
+                                <TableRow
+                                    key={row.id}
+                                    className="cursor-pointer hover:bg-muted/50"
+                                    onClick={() => onSelectContract?.(row.original.id)}
+                                >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                                        <TableCell key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
                                     ))}
                                 </TableRow>
                             ))

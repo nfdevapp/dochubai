@@ -3,21 +3,25 @@
 import * as React from "react";
 import ContractTable from "@/components/contract/ContractTable";
 import ContractTableDialog from "@/components/contract/ContractTableDialog";
-import type { Contract } from "@/model/Contract.ts";
 
 export default function ContractPage() {
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [selectedContract, setSelectedContract] = React.useState<Contract | null>(null);
+    const [selectedContractId, setSelectedContractId] = React.useState<string | null>(null);
 
-    const handleSelectContract = (contract: Contract) => {
-        setSelectedContract(contract);
+    const handleSelectContract = (id: string) => {
+        setSelectedContractId(id);
         setDialogOpen(true);
     };
 
     return (
         <div className="space-y-6">
             <ContractTable onSelectContract={handleSelectContract} />
-            <ContractTableDialog open={dialogOpen} onOpenChange={setDialogOpen} contract={selectedContract} />
+
+            <ContractTableDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                contractId={selectedContractId}
+            />
 
             {/* Platzhalter für andere Komponenten */}
             {/*
