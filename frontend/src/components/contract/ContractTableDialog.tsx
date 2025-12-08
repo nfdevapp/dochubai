@@ -94,6 +94,7 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setEndDate(contract.endDate ? parseDate(contract.endDate) : undefined);
             setAiLevel(contract.aiLevel);
             setAiAnalysisText(contract.aiAnalysisText);
+            setSelectedFile(null); // ← Reset beim Öffnen eines neuen Vertrags
         } else {
             setTitle("");
             setDescription("");
@@ -101,8 +102,10 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
             setEndDate(undefined);
             setAiLevel(0);
             setAiAnalysisText("");
+            setSelectedFile(null); // ← Reset auch hier
         }
     }, [contract]);
+
 
     if (!contract) return null;
 
