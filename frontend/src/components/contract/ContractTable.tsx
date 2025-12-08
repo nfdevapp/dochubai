@@ -29,7 +29,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { Contract } from "@/model/Contract";
-import { getAllContracts } from "@/api/ContractService";
 
 // -------------------------
 // Spalten Definition
@@ -92,7 +91,6 @@ const columns: ColumnDef<Contract>[] = [
                 <ArrowUpDown className="h-4 w-4" />
             </Button>
         ),
-        // Zeige farbige Punkte + Tooltip je nach AI-Level
         cell: ({ row }) => {
             const value = Number(row.getValue("aiLevel"));
             const color = { 1: "bg-green-500", 2: "bg-yellow-400", 3: "bg-red-500" }[value] ?? "bg-gray-400";
@@ -124,51 +122,34 @@ const columns: ColumnDef<Contract>[] = [
 // Props
 // -------------------------
 type ContractTableProps = {
-    onSelectContract?: (id: string) => void; // Callback für Klick auf eine Zeile
+    contracts: Contract[];
+    loading: boolean;
+    onSelectContract?: (id: string) => void;
 };
 
 // -------------------------
 // Haupt-Komponente
 // -------------------------
-export default function ContractTable({ onSelectContract }: ContractTableProps) {
-    const [contracts, setContracts] = React.useState<Contract[]>([]);
-    const [loading, setLoading] = React.useState(true);
+export default function ContractTable({ contracts, loading, onSelectContract }: ContractTableProps) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    // Daten laden
-    React.useEffect(() => {
-        const fetchContracts = async () => {
-            try {
-                const data = await getAllContracts();
-                setContracts(data);
-            } catch (error) {
-                console.error("Fehler beim Laden der Verträge:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchContracts();
-    }, []);
-
-    // React Table Setup
     const table = useReactTable({
         data: contracts,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
         state: { sorting, columnFilters, columnVisibility, rowSelection },
     });
 
-    // Lade-Placeholder anzeigen
     if (loading) {
         return (
             <div className="w-full overflow-hidden rounded-md border">
@@ -183,7 +164,7 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     </tr>
                     </thead>
                     <tbody>
-                    {Array.from({ length:3 }).map((_, idx) => (
+                    {Array.from({ length: 3 }).map((_, idx) => (
                         <tr key={idx}>
                             {columns.map((_, i) => (
                                 <td key={i} className="p-2 border-b">
@@ -262,12 +243,9 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
 
             {/* Pagination */}
             <div className="w-full mt-2 flex items-center">
-                {/* Seitenanzeige */}
                 <div className="text-sm text-muted-foreground flex-1 text-center">
                     Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}
                 </div>
-
-                {/* Buttons rechts */}
                 <div className="flex justify-end space-x-2">
                     <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         Zurück
@@ -277,7 +255,6 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
                     </Button>
                 </div>
             </div>
-
         </div>
     );
 }

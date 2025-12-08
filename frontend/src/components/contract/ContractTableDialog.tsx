@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { useUploadFile } from "@better-upload/client";
-import { deleteContract, getContractById } from "@/api/ContractService";
+import { deleteContract, getContractById, createContract, updateContract } from "@/api/ContractService";
 import type { Contract } from "@/model/Contract";
 
 import {
@@ -40,10 +40,18 @@ interface ContractTableDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     contractId?: string | null;  // optional: Wenn null → neuer Vertrag
+    onDelete?: (id: string) => void; // neu
+    onSave?: (contract: Contract) => void; // neu
 }
 
 // Haupt-Komponente für Vertrags-Dialog
-export default function ContractTableDialog({ open, onOpenChange, contractId }: ContractTableDialogProps) {
+export default function ContractTableDialog({
+                                                open,
+                                                onOpenChange,
+                                                contractId,
+                                                onSave,
+                                                onDelete
+                                            }: ContractTableDialogProps) {
 
     // STATES: Formularfelder, Upload-Datei, Ladezustand
     const [loading, setLoading] = React.useState(false);
@@ -101,7 +109,7 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
         loadContract();
     }, [contractId, open]);
 
-    // Wenn Dialog geschlossen → nichts rendern
+    // Wenn Dialog geschlossen => nichts rendern
     if (!open) return null;
 
     // Formular-Submit: Datei hochladen
@@ -114,18 +122,33 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
             uploadedFileName = result?.file?.name || file.name;
         }
 
-        console.log("SAVE:", {
-            id: contractId,
+        const contractData: Contract = {
+            id: contractId || "neu", // "neu" als Platzhalter für neue Verträge
             title,
             description,
             startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
             endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
             aiLevel,
             aiAnalysisText,
-            fileName: uploadedFileName
-        });
+            fileName: uploadedFileName,
+            file: null
+        };
 
-        onOpenChange(false); // Dialog schließen
+        try {
+            let savedContract: Contract;
+            if (!contractId || contractId === "") {
+                // Neue Vertrag
+                savedContract = await createContract(contractData);
+            } else {
+                // Vetrag update
+                savedContract = await updateContract(contractId, contractData);
+            }
+
+            onSave?.(savedContract); // Parent Callback → Tabelle aktualisieren
+            onOpenChange(false); // Dialog schließen
+        } catch (err) {
+            console.error("Fehler beim Speichern:", err);
+        }
     };
 
     // RENDER
@@ -287,8 +310,9 @@ export default function ContractTableDialog({ open, onOpenChange, contractId }: 
                                             <Button
                                                 variant="destructive"
                                                 onClick={async () => {
+                                                    if (!contractId) return;
                                                     await deleteContract(contractId);
-                                                    onOpenChange(false);
+                                                    onDelete?.(contractId); // Parent Callback aufrufen
                                                 }}
                                             >
                                                 Löschen bestätigen
