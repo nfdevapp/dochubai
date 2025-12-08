@@ -261,14 +261,23 @@ export default function ContractTable({ onSelectContract }: ContractTableProps) 
             </div>
 
             {/* Pagination */}
-            <div className="w-full mt-2 flex items-center justify-end space-x-2">
-                <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                    Zurück
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                    Weiter
-                </Button>
+            <div className="w-full mt-2 flex items-center">
+                {/* Seitenanzeige */}
+                <div className="text-sm text-muted-foreground flex-1 text-center">
+                    Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}
+                </div>
+
+                {/* Buttons rechts */}
+                <div className="flex justify-end space-x-2">
+                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                        Zurück
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                        Weiter
+                    </Button>
+                </div>
             </div>
+
         </div>
     );
 }
