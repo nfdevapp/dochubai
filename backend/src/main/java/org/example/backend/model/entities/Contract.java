@@ -21,7 +21,8 @@ public record Contract(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
         LocalDate endDate,
         int aiLevel,
-        String aiAnalysisText
-//        ObjectId fileId // Referenz auf die Datei in GridFS
+        String aiAnalysisText,
+        String fileName,
+        byte[] file
 ) {
 }
