@@ -228,15 +228,23 @@ export default function ContractTableDialog({ open, onOpenChange, contract }: Co
                     <Card className="mt-2 border border-gray-200 bg-gray-50">
                         <CardContent className="p-3">{contract.aiAnalysisText || "Keine weiteren Informationen"}</CardContent>
                     </Card>
-
                     {/* Upload */}
                     <div className="grid gap-3">
-                        <Label className="font-bold">Dokument für KI-Analyse hochladen (.pdf,.doc,.docx)</Label>
+                        <Label className="font-bold">
+                            Dokument für KI-Analyse hochladen (.pdf, .doc, .docx)
+                        </Label>
+
                         <UploadButton accept=".pdf,.doc,.docx" onFileSelect={setSelectedFile} />
-                        {selectedFile && (
-                            <p className="mt-2 text-sm text-gray-700">Ausgewählt: {selectedFile.name}</p>
-                        )}
+
+                        <p className="mt-2 text-sm text-gray-700">
+                            {selectedFile
+                                ? `Ausgewählt: ${selectedFile.name}`
+                                : contract.fileName
+                                    ? `Aktuell gespeichert: ${contract.fileName}`
+                                    : "Kein Dokument vorhanden"}
+                        </p>
                     </div>
+
 
                     {/* Buttons */}
                     <DialogFooter className="flex justify-between">
