@@ -1,13 +1,11 @@
 package org.example.backend.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.repository.ContractRepo;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
