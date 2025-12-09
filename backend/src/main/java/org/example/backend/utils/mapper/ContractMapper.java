@@ -5,8 +5,7 @@ import org.example.backend.model.dto.ContractDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Base64;
 
 public class ContractMapper {
 
@@ -14,13 +13,11 @@ public class ContractMapper {
 
     // Contract => ContractDto
     public static ContractDto toDto(Contract contract) {
-        List<Integer> fileList = null;
+        //JSON unterstützt fileBase64 und mongo db verlangt byte[]
+        //byte[] to Base64
+        String fileBase = null;
         if (contract.file() != null) {
-            fileList = new ArrayList<>(contract.file().length);
-            for (byte b : contract.file()) {
-                // & 0xFF sorgt dafür, dass Bytes korrekt als positive Integer dargestellt werden
-                fileList.add((int) b & 0xFF);
-            }
+            fileBase = Base64.getEncoder().encodeToString(contract.file());
         }
 
         return ContractDto.builder()
@@ -31,21 +28,22 @@ public class ContractMapper {
                 .aiLevel(contract.aiLevel())
                 .aiAnalysisText(contract.aiAnalysisText())
                 .fileName(contract.fileName())
-                .file(fileList)
+                .fileBase64(fileBase)
                 .build();
     }
 
     // ContractDto => Contract
     public static Contract fromDto(ContractDto dto) {
         byte[] fileBytes = null;
-        if (dto.file() != null) {
-            fileBytes = new byte[dto.file().size()];
-            for (int i = 0; i < dto.file().size(); i++) {
-                fileBytes[i] = dto.file().get(i).byteValue();
-            }
+
+        // Base64-String in byte[] umwandeln für Mongo DB
+        // Base64 to byte[]
+        if (dto.fileBase64() != null) {
+            fileBytes = Base64.getDecoder().decode(dto.fileBase64());
         }
 
         return Contract.builder()
+                .id(dto.id())
                 .title(dto.title())
                 .description(dto.description())
                 .startDate(dto.startDate() != null ? LocalDate.parse(dto.startDate(), FORMATTER) : null)
@@ -56,4 +54,17 @@ public class ContractMapper {
                 .file(fileBytes)
                 .build();
     }
+
+    // getAllContracts => without file and fileName
+    public static ContractDto toDtoForAllContracts(Contract contract) {
+        return ContractDto.builder()
+                .id(contract.id())
+                .title(contract.title())
+                .description(contract.description())
+                .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
+                .endDate(contract.endDate() != null ? contract.endDate().format(FORMATTER) : null)
+                .aiLevel(contract.aiLevel())
+                .build();
+    }
+
 }

@@ -132,7 +132,7 @@ public class GenerateTestData {
     }
 
     private ContractDto createDto(String title, String description, String startDate, String endDate, int aiLevel,
-                                  String aiAnalysisText, String fileName, List<Integer> file) {
+                                  String aiAnalysisText, String fileName, String file) {
         return ContractDto.builder()
                 .title(title)
                 .description(description)
@@ -141,7 +141,7 @@ public class GenerateTestData {
                 .aiLevel(aiLevel)
                 .aiAnalysisText(aiAnalysisText)
                 .fileName(fileName)
-                .file(file)
+                .fileBase64(file)
                 .build();
     }
 }

@@ -9,22 +9,28 @@ import org.example.backend.utils.mapper.ContractMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContractService {
     private final ContractRepo contractRepo;
 
-    public Contract getContractById(String id) {
-        return contractRepo.findById(id)
+    public ContractDto getContractById(String id) {
+        Contract contract = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
+        return ContractMapper.toDto(contract);
     }
 
-    public List<Contract> getAllContracts() {
-        return contractRepo.findAll();
+    public List<ContractDto> getAllContracts() {
+        List<Contract> contracts = contractRepo.findAll();
+        List<ContractDto> contractDtos = contracts.stream()
+                .map(ContractMapper::toDtoForAllContracts)
+                .collect(Collectors.toList());
+        return contractDtos;
     }
 
-    public Contract updateContract(String id, ContractDto contractDto) {
+    public ContractDto updateContract(String id, ContractDto contractDto) {
         Contract oldData = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
 
@@ -41,7 +47,8 @@ public class ContractService {
                 .withFileName(mapped.fileName())
                 .withFile(mapped.file());
 
-        return contractRepo.save(updated);
+        contractRepo.save(updated);
+        return ContractMapper.toDto(updated);
     }
 
 
@@ -51,10 +58,11 @@ public class ContractService {
         contractRepo.delete(contract);
     }
 
-    public Contract createContract(ContractDto contractDto) {
+    public ContractDto createContract(ContractDto contractDto) {
         // Mapping
         Contract newContract = ContractMapper.fromDto(contractDto);
-        return contractRepo.save(newContract);
+        contractRepo.save(newContract);
+        return ContractMapper.toDto(newContract);
     }
 
 
