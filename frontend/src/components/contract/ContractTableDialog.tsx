@@ -265,7 +265,7 @@ export default function ContractTableDialog({
 
                         {/* UPLOAD */}
                         <div className="grid gap-3">
-                            <Label className="font-bold">Dokument hochladen:</Label>
+                            <Label className="font-bold">Dokument für AI-Analyse hochladen:</Label>
                             <Button asChild>
                                 <label className="cursor-pointer flex gap-2 items-center">
                                     <Upload className="size-4" />
