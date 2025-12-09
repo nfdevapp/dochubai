@@ -2,11 +2,10 @@ package org.example.backend.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.model.entities.Contract;
+import org.example.backend.model.dto.ContractDto;
 import org.example.backend.service.ContractService;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -20,344 +19,129 @@ public class GenerateTestData {
         createContracts();
     }
 
-    private List<Contract> createContracts() {
+    private void createContracts() {
+        // Vorhandene Contracts löschen
         contractService.deleteAllContracts();
 
-        List<Contract> contracts = List.of(
-                Contract.builder().title("Mietvertrag")
-                        .description("Mietvertrag für Büro- oder Wohnräume.")
-                        .startDate(LocalDate.of(2024, 1, 15))
-                        .endDate(LocalDate.of(2025, 1, 15))
-                        .aiLevel(1)
-                        .aiAnalysisText("Klare Struktur und umfassende Bedingungen, keine Auffälligkeiten.")
-                        .fileName("Mietvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Arbeitsvertrag")
-                        .description("Unbefristeter Arbeitsvertrag mit Standardklauseln.")
-                        .startDate(LocalDate.of(2023, 11, 3))
-                        .endDate(LocalDate.of(2024, 11, 3))
-                        .aiLevel(2)
-                        .aiAnalysisText("Enthält die Grundregeln, aber einige Kündigungsfristen könnten präziser sein.")
-                        .fileName("Arbeitsvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Dienstleistungsvertrag")
-                        .description("Vertrag über externe Dienstleistungen.")
-                        .startDate(LocalDate.of(2024, 2, 20))
-                        .endDate(LocalDate.of(2025, 2, 20))
-                        .aiLevel(1)
-                        .aiAnalysisText("Alles Wesentliche geregelt, klare Leistungsbeschreibung vorhanden.")
-                        .fileName("Dienstleistungsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Kaufvertrag")
-                        .description("Einmaliger Kaufvertrag für Waren oder Geräte.")
-                        .startDate(LocalDate.of(2022, 8, 9))
-                        .endDate(LocalDate.of(2023, 8, 9))
-                        .aiLevel(3)
-                        .aiAnalysisText("Lieferbedingungen und Gewährleistungsregelungen unklar, Risiko für Streitfälle.")
-                        .fileName("Kaufvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Versicherungsvertrag")
-                        .description("Standard-Versicherungspolice mit jährlicher Laufzeit.")
-                        .startDate(LocalDate.of(2023, 12, 11))
-                        .endDate(LocalDate.of(2024, 12, 11))
-                        .aiLevel(1)
-                        .aiAnalysisText("Alle Versicherungsbedingungen sind verständlich und korrekt formuliert.")
-                        .fileName("Versicherungsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Leasingvertrag")
-                        .description("Leasingvertrag für technische Geräte oder Fahrzeuge.")
-                        .startDate(LocalDate.of(2022, 6, 1))
-                        .endDate(LocalDate.of(2025, 6, 1))
-                        .aiLevel(2)
-                        .aiAnalysisText("Vertrag deckt die Grundpunkte ab, aber Restwertregelung könnte klarer sein.")
-                        .fileName("Leasingvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Wartungsvertrag")
-                        .description("Regelmäßige Wartung von IT-Systemen.")
-                        .startDate(LocalDate.of(2024, 3, 1))
-                        .endDate(LocalDate.of(2025, 3, 1))
-                        .aiLevel(1)
-                        .aiAnalysisText("Klauseln verständlich, Leistungsumfang klar definiert.")
-                        .fileName("Wartungsvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Hostingvertrag")
-                        .description("Webhosting oder Serverhosting-Leistungen.")
-                        .startDate(LocalDate.of(2023, 9, 14))
-                        .endDate(LocalDate.of(2024, 9, 14))
-                        .aiLevel(1)
-                        .aiAnalysisText("Hosting-Leistungen gut beschrieben, SLAs nachvollziehbar.")
-                        .fileName("Hostingvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Supportvertrag")
-                        .description("Technischer Support und Helpdesk.")
-                        .startDate(LocalDate.of(2024, 1, 1))
-                        .endDate(LocalDate.of(2025, 1, 1))
-                        .aiLevel(1)
-                        .aiAnalysisText("Supportzeiten und Verantwortlichkeiten klar definiert.")
-                        .fileName("Supportvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Kooperationsvertrag")
-                        .description("Partnerschaft für gemeinsame Projekte.")
-                        .startDate(LocalDate.of(2022, 11, 22))
-                        .endDate(LocalDate.of(2023, 11, 22))
-                        .aiLevel(2)
-                        .aiAnalysisText("Grundlagen sind da, aber Verantwortlichkeiten könnten klarer sein.")
-                        .fileName("Kooperationsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Liefervertrag")
-                        .description("Regelmäßige Lieferung von Waren.")
-                        .startDate(LocalDate.of(2023, 1, 10))
-                        .endDate(LocalDate.of(2024, 1, 10))
-                        .aiLevel(1)
-                        .aiAnalysisText("Lieferfristen und Mengenangaben klar geregelt.")
-                        .fileName("Liefervertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Agenturvertrag")
-                        .description("Marketing- oder Vermittlungsagenturvertrag.")
-                        .startDate(LocalDate.of(2024, 2, 1))
-                        .endDate(LocalDate.of(2025, 2, 1))
-                        .aiLevel(1)
-                        .aiAnalysisText("Aufgaben und Vergütung transparent beschrieben.")
-                        .fileName("Agenturvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Lizenzvertrag")
-                        .description("Lizenz zur Nutzung geistigen Eigentums.")
-                        .startDate(LocalDate.of(2024, 1, 20))
-                        .endDate(LocalDate.of(2025, 1, 20))
-                        .aiLevel(1)
-                        .aiAnalysisText("Nutzungsrechte klar definiert, keine offensichtlichen Lücken.")
-                        .fileName("Lizenzvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Bauvertrag")
-                        .description("Vertrag über Bauleistungen.")
-                        .startDate(LocalDate.of(2022, 5, 15))
-                        .endDate(LocalDate.of(2024, 5, 15))
-                        .aiLevel(3)
-                        .aiAnalysisText("Unklare Abnahmebedingungen und Haftungsregelungen, hohes Risiko für Streitigkeiten.")
-                        .fileName("Bauvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Projektvertrag")
-                        .description("Befristeter Projektvertrag mit definiertem Umfang.")
-                        .startDate(LocalDate.of(2023, 3, 11))
-                        .endDate(LocalDate.of(2024, 3, 11))
-                        .aiLevel(1)
-                        .aiAnalysisText("Projektumfang und Fristen klar definiert, keine Probleme erkennbar.")
-                        .fileName("Projektvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Beratungsvertrag")
-                        .description("Externe Unternehmensberatung.")
-                        .startDate(LocalDate.of(2023, 12, 2))
-                        .endDate(LocalDate.of(2024, 12, 2))
-                        .aiLevel(1)
-                        .aiAnalysisText("Vertrag deckt Beratungsumfang und Vergütung korrekt ab.")
-                        .fileName("Beratungsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Darlehensvertrag")
-                        .description("Kreditvereinbarung mit langfristiger Laufzeit.")
-                        .startDate(LocalDate.of(2021, 9, 30))
-                        .endDate(LocalDate.of(2026, 9, 30))
-                        .aiLevel(2)
-                        .aiAnalysisText("Zinsregelungen sind vorhanden, aber Rückzahlungsmodalitäten teilweise unklar.")
-                        .fileName("Darlehensvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Schulungsvertrag")
-                        .description("Vertrag über Weiterbildungs- oder Schulungsleistungen.")
-                        .startDate(LocalDate.of(2024, 2, 22))
-                        .endDate(LocalDate.of(2025, 2, 22))
-                        .aiLevel(1)
-                        .aiAnalysisText("Leistungsumfang und Termine klar definiert, alles in Ordnung.")
-                        .fileName("Schulungsvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Cloud-Service-Vertrag")
-                        .description("Cloud-basierte IT-Services.")
-                        .startDate(LocalDate.of(2023, 10, 5))
-                        .endDate(LocalDate.of(2024, 10, 5))
-                        .aiLevel(1)
-                        .aiAnalysisText("Cloud-Dienste, SLAs und Supportbedingungen klar beschrieben.")
-                        .fileName("Cloud-Service-Vertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("IT-Rahmenvertrag")
-                        .description("Übergeordneter Vertrag über IT-Dienstleistungen.")
-                        .startDate(LocalDate.of(2024, 1, 3))
-                        .endDate(LocalDate.of(2026, 1, 3))
-                        .aiLevel(1)
-                        .aiAnalysisText("Rahmenbedingungen für IT-Dienstleistungen umfassend und klar.")
-                        .fileName("IT-Rahmenvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Werkvertrag")
-                        .description("Herstellung eines bestimmten Werkergebnisses.")
-                        .startDate(LocalDate.of(2022, 12, 12))
-                        .endDate(LocalDate.of(2024, 12, 12))
-                        .aiLevel(2)
-                        .aiAnalysisText("Leistungsbeschreibung vorhanden, Qualitätsanforderungen könnten präziser sein.")
-                        .fileName("Werkvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("ADV-Vertrag")
-                        .description("Vertrag zur Auftragsdatenverarbeitung gemäß DSGVO.")
-                        .startDate(LocalDate.of(2023, 11, 22))
-                        .endDate(LocalDate.of(2024, 11, 22))
-                        .aiLevel(1)
-                        .aiAnalysisText("Datenschutz- und Verarbeitungspflichten klar geregelt, alles korrekt.")
-                        .fileName("ADV-Vertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Telekommunikationsvertrag")
-                        .description("Mobilfunk oder Internet-Vertrag.")
-                        .startDate(LocalDate.of(2022, 3, 9))
-                        .endDate(LocalDate.of(2023, 3, 9))
-                        .aiLevel(3)
-                        .aiAnalysisText("Vertragslaufzeiten und Kündigungsbedingungen unklar, potenzielles Risiko.")
-                        .fileName("Telekommunikationsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Providervertrag")
-                        .description("Vertrag mit Internet- oder Service-Provider.")
-                        .startDate(LocalDate.of(2023, 7, 12))
-                        .endDate(LocalDate.of(2024, 7, 12))
-                        .aiLevel(1)
-                        .aiAnalysisText("Leistungsumfang und Gebühren klar beschrieben, keine Auffälligkeiten.")
-                        .fileName("Providervertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Abovertrag")
-                        .description("Wiederkehrendes Abonnement für Dienstleistungen.")
-                        .startDate(LocalDate.of(2024, 2, 14))
-                        .endDate(LocalDate.of(2025, 2, 14))
-                        .aiLevel(1)
-                        .aiAnalysisText("Abo-Leistungen und Kündigungsfristen klar geregelt.")
-                        .fileName("Abovertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Überlassungsvertrag")
-                        .description("Überlassung von Personal oder Gegenständen.")
-                        .startDate(LocalDate.of(2021, 11, 1))
-                        .endDate(LocalDate.of(2024, 11, 1))
-                        .aiLevel(2)
-                        .aiAnalysisText("Grundsätze der Überlassung vorhanden, Haftung könnte deutlicher sein.")
-                        .fileName("Überlassungsvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Forschungsvertrag")
-                        .description("Kooperative Forschungstätigkeiten.")
-                        .startDate(LocalDate.of(2023, 5, 18))
-                        .endDate(LocalDate.of(2024, 5, 18))
-                        .aiLevel(1)
-                        .aiAnalysisText("Forschungsziele und Verantwortlichkeiten klar definiert.")
-                        .fileName("Forschungsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Kreditvertrag")
-                        .description("Langfristiger Kreditvertrag mit festen Konditionen.")
-                        .startDate(LocalDate.of(2022, 1, 28))
-                        .endDate(LocalDate.of(2027, 1, 28))
-                        .aiLevel(3)
-                        .aiAnalysisText("Zinsberechnung und Sicherheiten teilweise unklar, hohes Risiko für Streitigkeiten.")
-                        .fileName("Kreditvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Vertriebsvertrag")
-                        .description("Vertrieb von Produkten oder Dienstleistungen.")
-                        .startDate(LocalDate.of(2023, 8, 30))
-                        .endDate(LocalDate.of(2024, 8, 30))
-                        .aiLevel(1)
-                        .aiAnalysisText("Vertriebsgebiete und Provisionen klar definiert.")
-                        .fileName("Vertriebsvertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Lizenzverlängerung")
-                        .description("Verlängerung einer bestehenden Lizenz.")
-                        .startDate(LocalDate.of(2024, 2, 25))
-                        .endDate(LocalDate.of(2025, 2, 25))
-                        .aiLevel(1)
-                        .aiAnalysisText("Laufzeit und Nutzungsrechte der Lizenz korrekt geregelt.")
-                        .fileName("Lizenzverlängerung.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("SaaS-Vertrag")
-                        .description("Software-as-a-Service-Nutzungslizenz.")
-                        .startDate(LocalDate.of(2023, 9, 1))
-                        .endDate(LocalDate.of(2024, 9, 1))
-                        .aiLevel(1)
-                        .aiAnalysisText("Nutzungsbedingungen und Support klar beschrieben.")
-                        .fileName("SaaS-Vertrag.pdf")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Partnerschaftsvertrag")
-                        .description("Langfristige Partnerschaft zwischen Unternehmen.")
-                        .startDate(LocalDate.of(2024, 3, 12))
-                        .endDate(LocalDate.of(2026, 3, 12))
-                        .aiLevel(1)
-                        .aiAnalysisText("Partnerschaftsziele und Verantwortlichkeiten klar definiert.")
-                        .fileName("Partnerschaftsvertrag.docx")
-                        .file(null)
-                        .build(),
-
-                Contract.builder().title("Wartungsvertrag Premium")
-                        .description("Erweiterter Wartungs- und Servicevertrag.")
-                        .startDate(LocalDate.of(2022, 10, 10))
-                        .endDate(LocalDate.of(2024, 10, 10))
-                        .aiLevel(2)
-                        .aiAnalysisText("Leistungsumfang gut beschrieben, SLA-Klauseln könnten detaillierter sein.")
-                        .fileName("Wartungsvertrag-Premium.pdf")
-                        .file(null)
-                        .build()
-        );
-
-        return contracts.stream()
-                .map(contractService::createContract)
-                .toList();
+        //Testdaten als ContractDto erstellen
+        List<ContractDto> contractDtos = createContractDtos();
+        contractDtos.forEach(contractService::createContract);
     }
 
+    private List<ContractDto> createContractDtos() {
+        return List.of(
+                createDto("Mietvertrag", "Mietvertrag für Büro- oder Wohnräume.", "15.01.2024", "15.01.2025", 1,
+                        "Klare Struktur und umfassende Bedingungen, keine Auffälligkeiten.", "Mietvertrag.pdf", null),
+
+                createDto("Arbeitsvertrag", "Unbefristeter Arbeitsvertrag mit Standardklauseln.", "03.11.2023", "03.11.2024", 2,
+                        "Enthält die Grundregeln, aber einige Kündigungsfristen könnten präziser sein.", "Arbeitsvertrag.docx", null),
+
+                createDto("Dienstleistungsvertrag", "Vertrag über externe Dienstleistungen.", "20.02.2024", "20.02.2025", 1,
+                        "Alles Wesentliche geregelt, klare Leistungsbeschreibung vorhanden.", "Dienstleistungsvertrag.pdf", null),
+
+                createDto("Kaufvertrag", "Einmaliger Kaufvertrag für Waren oder Geräte.", "09.08.2022", "09.08.2023", 3,
+                        "Lieferbedingungen und Gewährleistungsregelungen unklar, Risiko für Streitfälle.", "Kaufvertrag.docx", null),
+
+                createDto("Versicherungsvertrag", "Standard-Versicherungspolice mit jährlicher Laufzeit.", "11.12.2023", "11.12.2024", 1,
+                        "Alle Versicherungsbedingungen sind verständlich und korrekt formuliert.", "Versicherungsvertrag.pdf", null),
+
+                createDto("Leasingvertrag", "Leasingvertrag für technische Geräte oder Fahrzeuge.", "01.06.2022", "01.06.2025", 2,
+                        "Vertrag deckt die Grundpunkte ab, aber Restwertregelung könnte klarer sein.", "Leasingvertrag.pdf", null),
+
+                createDto("Wartungsvertrag", "Regelmäßige Wartung von IT-Systemen.", "01.03.2024", "01.03.2025", 1,
+                        "Klauseln verständlich, Leistungsumfang klar definiert.", "Wartungsvertrag.docx", null),
+
+                createDto("Hostingvertrag", "Webhosting oder Serverhosting-Leistungen.", "14.09.2023", "14.09.2024", 1,
+                        "Hosting-Leistungen gut beschrieben, SLAs nachvollziehbar.", "Hostingvertrag.pdf", null),
+
+                createDto("Supportvertrag", "Technischer Support und Helpdesk.", "01.01.2024", "01.01.2025", 1,
+                        "Supportzeiten und Verantwortlichkeiten klar definiert.", "Supportvertrag.docx", null),
+
+                createDto("Kooperationsvertrag", "Partnerschaft für gemeinsame Projekte.", "22.11.2022", "22.11.2023", 2,
+                        "Grundlagen sind da, aber Verantwortlichkeiten könnten klarer sein.", "Kooperationsvertrag.pdf", null),
+
+                createDto("Liefervertrag", "Regelmäßige Lieferung von Waren.", "10.01.2023", "10.01.2024", 1,
+                        "Lieferfristen und Mengenangaben klar geregelt.", "Liefervertrag.docx", null),
+
+                createDto("Agenturvertrag", "Marketing- oder Vermittlungsagenturvertrag.", "01.02.2024", "01.02.2025", 1,
+                        "Aufgaben und Vergütung transparent beschrieben.", "Agenturvertrag.pdf", null),
+
+                createDto("Lizenzvertrag", "Lizenz zur Nutzung geistigen Eigentums.", "20.01.2024", "20.01.2025", 1,
+                        "Nutzungsrechte klar definiert, keine offensichtlichen Lücken.", "Lizenzvertrag.docx", null),
+
+                createDto("Bauvertrag", "Vertrag über Bauleistungen.", "15.05.2022", "15.05.2024", 3,
+                        "Unklare Abnahmebedingungen und Haftungsregelungen, hohes Risiko für Streitigkeiten.", "Bauvertrag.pdf", null),
+
+                createDto("Projektvertrag", "Befristeter Projektvertrag mit definiertem Umfang.", "11.03.2023", "11.03.2024", 1,
+                        "Projektumfang und Fristen klar definiert, keine Probleme erkennbar.", "Projektvertrag.docx", null),
+
+                createDto("Beratungsvertrag", "Externe Unternehmensberatung.", "02.12.2023", "02.12.2024", 1,
+                        "Vertrag deckt Beratungsumfang und Vergütung korrekt ab.", "Beratungsvertrag.pdf", null),
+
+                createDto("Darlehensvertrag", "Kreditvereinbarung mit langfristiger Laufzeit.", "30.09.2021", "30.09.2026", 2,
+                        "Zinsregelungen sind vorhanden, aber Rückzahlungsmodalitäten teilweise unklar.", "Darlehensvertrag.pdf", null),
+
+                createDto("Schulungsvertrag", "Vertrag über Weiterbildungs- oder Schulungsleistungen.", "22.02.2024", "22.02.2025", 1,
+                        "Leistungsumfang und Termine klar definiert, alles in Ordnung.", "Schulungsvertrag.docx", null),
+
+                createDto("Cloud-Service-Vertrag", "Cloud-basierte IT-Services.", "05.10.2023", "05.10.2024", 1,
+                        "Cloud-Dienste, SLAs und Supportbedingungen klar beschrieben.", "Cloud-Service-Vertrag.pdf", null),
+
+                createDto("IT-Rahmenvertrag", "Übergeordneter Vertrag über IT-Dienstleistungen.", "03.01.2024", "03.01.2026", 1,
+                        "Rahmenbedingungen für IT-Dienstleistungen umfassend und klar.", "IT-Rahmenvertrag.docx", null),
+
+                createDto("Werkvertrag", "Herstellung eines bestimmten Werkergebnisses.", "12.12.2022", "12.12.2024", 2,
+                        "Leistungsbeschreibung vorhanden, Qualitätsanforderungen könnten präziser sein.", "Werkvertrag.pdf", null),
+
+                createDto("ADV-Vertrag", "Vertrag zur Auftragsdatenverarbeitung gemäß DSGVO.", "22.11.2023", "22.11.2024", 1,
+                        "Datenschutz- und Verarbeitungspflichten klar geregelt, alles korrekt.", "ADV-Vertrag.docx", null),
+
+                createDto("Telekommunikationsvertrag", "Mobilfunk oder Internet-Vertrag.", "09.03.2022", "09.03.2023", 3,
+                        "Vertragslaufzeiten und Kündigungsbedingungen unklar, potenzielles Risiko.", "Telekommunikationsvertrag.pdf", null),
+
+                createDto("Providervertrag", "Vertrag mit Internet- oder Service-Provider.", "12.07.2023", "12.07.2024", 1,
+                        "Leistungsumfang und Gebühren klar beschrieben, keine Auffälligkeiten.", "Providervertrag.docx", null),
+
+                createDto("Abovertrag", "Wiederkehrendes Abonnement für Dienstleistungen.", "14.02.2024", "14.02.2025", 1,
+                        "Abo-Leistungen und Kündigungsfristen klar geregelt.", "Abovertrag.pdf", null),
+
+                createDto("Überlassungsvertrag", "Überlassung von Personal oder Gegenständen.", "01.11.2021", "01.11.2024", 2,
+                        "Grundsätze der Überlassung vorhanden, Haftung könnte deutlicher sein.", "Überlassungsvertrag.docx", null),
+
+                createDto("Forschungsvertrag", "Kooperative Forschungstätigkeiten.", "18.05.2023", "18.05.2024", 1,
+                        "Forschungsziele und Verantwortlichkeiten klar definiert.", "Forschungsvertrag.pdf", null),
+
+                createDto("Kreditvertrag", "Langfristiger Kreditvertrag mit festen Konditionen.", "28.01.2022", "28.01.2027", 3,
+                        "Zinsberechnung und Sicherheiten teilweise unklar, hohes Risiko für Streitigkeiten.", "Kreditvertrag.docx", null),
+
+                createDto("Vertriebsvertrag", "Vertrieb von Produkten oder Dienstleistungen.", "30.08.2023", "30.08.2024", 1,
+                        "Vertriebsgebiete und Provisionen klar definiert.", "Vertriebsvertrag.pdf", null),
+
+                createDto("Lizenzverlängerung", "Verlängerung einer bestehenden Lizenz.", "25.02.2024", "25.02.2025", 1,
+                        "Laufzeit und Nutzungsrechte der Lizenz korrekt geregelt.", "Lizenzverlängerung.docx", null),
+
+                createDto("SaaS-Vertrag", "Software-as-a-Service-Nutzungslizenz.", "01.09.2023", "01.09.2024", 1,
+                        "Nutzungsbedingungen und Support klar beschrieben.", "SaaS-Vertrag.pdf", null),
+
+                createDto("Partnerschaftsvertrag", "Langfristige Partnerschaft zwischen Unternehmen.", "12.03.2024", "12.03.2026", 1,
+                        "Partnerschaftsziele und Verantwortlichkeiten klar definiert.", "Partnerschaftsvertrag.docx", null),
+
+                createDto("Wartungsvertrag Premium", "Erweiterter Wartungs- und Servicevertrag.", "10.10.2022", "10.10.2024", 2,
+                        "Leistungsumfang gut beschrieben, SLA-Klauseln könnten detaillierter sein.", "Wartungsvertrag-Premium.pdf", null)
+        );
+    }
+
+    private ContractDto createDto(String title, String description, String startDate, String endDate, int aiLevel,
+                                  String aiAnalysisText, String fileName, List<Integer> file) {
+        return ContractDto.builder()
+                .title(title)
+                .description(description)
+                .startDate(startDate)
+                .endDate(endDate)
+                .aiLevel(aiLevel)
+                .aiAnalysisText(aiAnalysisText)
+                .fileName(fileName)
+                .file(file)
+                .build();
+    }
 }

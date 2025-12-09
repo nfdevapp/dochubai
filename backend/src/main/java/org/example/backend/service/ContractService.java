@@ -2,8 +2,10 @@ package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
+import org.example.backend.model.dto.ContractDto;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.repository.ContractRepo;
+import org.example.backend.utils.mapper.ContractMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,31 +24,39 @@ public class ContractService {
         return contractRepo.findAll();
     }
 
-    public Contract updateContract(String id, Contract contract) {
+    public Contract updateContract(String id, ContractDto contractDto) {
         Contract oldData = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
 
+        // Mapping
+        Contract mapped = ContractMapper.fromDto(contractDto);
+
         Contract updated = oldData
-                .withTitle(contract.title())
-                .withDescription(contract.description())
-                .withStartDate(contract.startDate())
-                .withEndDate(contract.endDate())
-                .withAiLevel(contract.aiLevel())
-                .withAiAnalysisText(contract.aiAnalysisText())
-                .withFileName(contract.fileName())
-                .withFile(contract.file());
+                .withTitle(mapped.title())
+                .withDescription(mapped.description())
+                .withStartDate(mapped.startDate())
+                .withEndDate(mapped.endDate())
+                .withAiLevel(mapped.aiLevel())
+                .withAiAnalysisText(mapped.aiAnalysisText())
+                .withFileName(mapped.fileName())
+                .withFile(mapped.file());
+
         return contractRepo.save(updated);
     }
 
+
     public void deleteContract(String id) {
-        Contract Contract = contractRepo.findById(id)
+        Contract contract = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
-        contractRepo.delete(Contract);
+        contractRepo.delete(contract);
     }
 
-    public Contract createContract(Contract contract) {
-        return contractRepo.save(contract);
+    public Contract createContract(ContractDto contractDto) {
+        // Mapping
+        Contract newContract = ContractMapper.fromDto(contractDto);
+        return contractRepo.save(newContract);
     }
+
 
     public void deleteAllContracts() {
         contractRepo.deleteAll();

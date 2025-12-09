@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.model.dto.ContractDto;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.service.ContractService;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,13 @@ public class ContractController {
     }
 
     @PostMapping
-    public ResponseEntity<Contract> createContract(@RequestBody Contract contract) {
-        return ResponseEntity.ok(contractService.createContract(contract));
+    public ResponseEntity<Contract> createContract(@RequestBody ContractDto contractDto) {
+        return ResponseEntity.ok(contractService.createContract(contractDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contract> updateContract(@PathVariable String id, @RequestBody Contract contract) {
-        return ResponseEntity.ok(contractService.updateContract(id, contract));
+    public ResponseEntity<Contract> updateContract(@PathVariable String id, @RequestBody ContractDto contractDto) {
+        return ResponseEntity.ok(contractService.updateContract(id, contractDto));
     }
 
     @DeleteMapping("/{id}")
