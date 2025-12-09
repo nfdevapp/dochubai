@@ -119,46 +119,57 @@ export default function ContractTableDialog({
     // Formular-Submit: Datei hochladen
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        setSaving(true); // Speichern beginnt
-
-        let uploadedFileName = fileName;
-        let fileBytes: Uint8Array | null = null;
-
-        if (file) {
-            const result = await control.upload(file);
-            uploadedFileName = result?.file?.name || file.name;
-            fileBytes = new Uint8Array(await file.arrayBuffer());
-        }
-
-        const contractData: Omit<Contract, "id"> = {
-            title,
-            description,
-            startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
-            endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
-            aiLevel,
-            aiAnalysisText,
-            fileName: uploadedFileName,
-            file: fileBytes
-        };
+        setSaving(true);
 
         try {
+            let uploadedFileName = fileName;
+            let fileBytes: Uint8Array | null = null;
+
+            if (file) {
+                const result = await control.upload(file);
+
+                uploadedFileName = result?.file?.name || file.name;
+
+                // Datei in Uint8Array laden
+                fileBytes = new Uint8Array(await file.arrayBuffer());
+            }
+
+            // Uint8Array → number[] (Backend verlangt: List<Integer>)
+            const fileList: number[] | null =
+                fileBytes ? Array.from(fileBytes) : null;
+
+            const contract: Contract = {
+                id: contractId ?? "", // bei Create leer
+                title,
+                description,
+                startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
+                endDate: endDate ? format(endDate, "dd.MM.yyyy") : "",
+                aiLevel,
+                aiAnalysisText,
+                fileName: uploadedFileName,
+                file: fileList
+            };
+
             let savedContract: Contract;
 
             if (!contractId) {
-                savedContract = await createContract(contractData as Contract);
+                // create braucht DTO
+                savedContract = await createContract(contract);
             } else {
-                savedContract = await updateContract(contractId, { ...contractData, id: contractId } as Contract);
+                // update braucht DTO + id
+                savedContract = await updateContract(contractId, contract);
             }
 
-            onSave?.(savedContract); // Parent Callback → Tabelle aktualisieren
-            onOpenChange(false); // Dialog schließen
+            onSave?.(savedContract);
+            onOpenChange(false);
         } catch (err) {
             console.error("Fehler beim Speichern:", err);
         } finally {
-            setSaving(false); // Speichern abgeschlossen
+            setSaving(false);
         }
     };
+
+
 
     // RENDER
     return (

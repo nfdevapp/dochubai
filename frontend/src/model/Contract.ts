@@ -7,5 +7,5 @@ export type Contract = {
     aiLevel: number;
     aiAnalysisText: string;
     fileName: string;
-    file: Uint8Array | null;   // Backend: byte[]  → Frontend: Uint8Array
+    file: number[] | null;   // Backend: byte[]  → Frontend: Uint8Array
 };
