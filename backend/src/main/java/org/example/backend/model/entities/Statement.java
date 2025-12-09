@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
  */
 @With
 @Builder
-public record Invoice(
+public record Statement(
         @Id
         String id
 ) {

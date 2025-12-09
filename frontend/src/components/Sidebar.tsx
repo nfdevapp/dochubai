@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Receipt, FileSpreadsheet, Sparkles, Settings } from "lucide-react";
+import { FileText, Receipt, Sparkles, Settings } from "lucide-react";
 import ContractPage from "@/pages/ContractPage";
 
 interface SidebarProps {
@@ -29,22 +29,12 @@ export default function Sidebar({ setTitle, setPage }: SidebarProps) {
 
                 <button
                     onClick={() => {
-                        setTitle("Zahlungsbelege");
-                        setPage(<div>Zahlungsbelege…</div>);
+                        setTitle("Abrechnungen");
+                        setPage(<div>TODO Abrechnungen…</div>);
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
                 >
-                    <Receipt size={18} /> Zahlungsbelege
-                </button>
-
-                <button
-                    onClick={() => {
-                        setTitle("Rechnungen");
-                        setPage(<div>Rechnungen…</div>);
-                    }}
-                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
-                >
-                    <FileSpreadsheet size={18} /> Rechnungen
+                    <Receipt size={18} /> Abrechnungen
                 </button>
 
                 <button
