@@ -16,9 +16,7 @@ public record Contract(
         String id,
         String title,
         String description,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
         LocalDate startDate,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
         LocalDate endDate,
         int aiLevel,
         String aiAnalysisText,

@@ -25,7 +25,7 @@ public class ContractService {
     public List<ContractDto> getAllContracts() {
         List<Contract> contracts = contractRepo.findAll();
         List<ContractDto> contractDtos = contracts.stream()
-                .map(ContractMapper::toDtoForAllContracts)
+                .map(ContractMapper::toDtoWithoutFile)
                 .collect(Collectors.toList());
         return contractDtos;
     }
@@ -48,7 +48,7 @@ public class ContractService {
                 .withFile(mapped.file());
 
         contractRepo.save(updated);
-        return ContractMapper.toDto(updated);
+        return ContractMapper.toDtoWithoutFile(updated);
     }
 
 
@@ -62,7 +62,7 @@ public class ContractService {
         // Mapping
         Contract newContract = ContractMapper.fromDto(contractDto);
         contractRepo.save(newContract);
-        return ContractMapper.toDto(newContract);
+        return ContractMapper.toDtoWithoutFile(newContract);
     }
 
 

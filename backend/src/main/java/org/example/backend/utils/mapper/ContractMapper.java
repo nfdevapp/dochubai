@@ -9,6 +9,7 @@ import java.util.Base64;
 
 public class ContractMapper {
 
+    //String to LocalDatetime or LocalDate to String
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     // Contract => ContractDto
@@ -21,6 +22,7 @@ public class ContractMapper {
         }
 
         return ContractDto.builder()
+                .id(contract.id())
                 .title(contract.title())
                 .description(contract.description())
                 .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
@@ -43,7 +45,6 @@ public class ContractMapper {
         }
 
         return Contract.builder()
-                .id(dto.id())
                 .title(dto.title())
                 .description(dto.description())
                 .startDate(dto.startDate() != null ? LocalDate.parse(dto.startDate(), FORMATTER) : null)
@@ -56,7 +57,7 @@ public class ContractMapper {
     }
 
     // getAllContracts => without file and fileName
-    public static ContractDto toDtoForAllContracts(Contract contract) {
+    public static ContractDto toDtoWithoutFile(Contract contract) {
         return ContractDto.builder()
                 .id(contract.id())
                 .title(contract.title())
