@@ -16,7 +16,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useUploadFile } from "@better-upload/client";
 import { deleteContract, getContractById, createContract, updateContract } from "@/api/ContractService";
 import type { Contract } from "@/model/Contract";
-
 import {
     AlertDialog,
     AlertDialogTrigger,
@@ -39,12 +38,12 @@ const parseDate = (dateStr: string): Date | undefined => {
 interface ContractTableDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    contractId?: string | null;  // optional: Wenn null → neuer Vertrag
-    onDelete?: (id: string) => void; // neu
-    onSave?: (contract: Contract) => void; // neu
+    contractId?: string | null;
+    onDelete?: (id: string) => void;
+    onSave?: (contract: Contract) => void;
 }
 
-// Haupt-Komponente für Vertrags-Dialog
+// Haupt-Komponente
 export default function ContractTableDialog({
                                                 open,
                                                 onOpenChange,
@@ -53,7 +52,6 @@ export default function ContractTableDialog({
                                                 onDelete
                                             }: ContractTableDialogProps) {
 
-    // STATES: Formularfelder, Upload-Datei, Ladezustand
     const [loading, setLoading] = React.useState(false);
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
@@ -63,24 +61,20 @@ export default function ContractTableDialog({
     const [aiAnalysisText, setAiAnalysisText] = React.useState("");
     const [fileName, setFileName] = React.useState("");
     const [file, setFile] = React.useState<File | null>(null);
-    //speichern
     const [saving, setSaving] = React.useState(false);
-    //löschvorgang anzigen
     const [deleting, setDeleting] = React.useState(false);
 
-    const { control } = useUploadFile({ route: "D:/" }); // Datei-Upload Hook
+    const { control } = useUploadFile({ route: "D:/" });
 
-    // STATES für Popover (Kalender öffnen/schließen)
     const [startPopoverOpen, setStartPopoverOpen] = React.useState(false);
     const [endPopoverOpen, setEndPopoverOpen] = React.useState(false);
 
-    // Lade Vertragsdaten, wenn ID gesetzt und Dialog geöffnet
+    // Lade Vertragsdaten
     React.useEffect(() => {
         const loadContract = async () => {
             if (!open) return;
 
             if (!contractId) {
-                // Neues Formular leeren
                 setTitle("");
                 setDescription("");
                 setStartDate(undefined);
@@ -95,7 +89,6 @@ export default function ContractTableDialog({
             setLoading(true);
             try {
                 const contract: Contract = await getContractById(contractId);
-                // Felder füllen
                 setTitle(contract.title);
                 setDescription(contract.description);
                 setStartDate(parseDate(contract.startDate));
@@ -113,33 +106,36 @@ export default function ContractTableDialog({
         loadContract();
     }, [contractId, open]);
 
-    // Wenn Dialog geschlossen => nichts rendern
     if (!open) return null;
 
-    // Formular-Submit: Datei hochladen
+    // Base64-Konvertierung
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (err) => reject(err);
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // Formular-Submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
 
         try {
             let uploadedFileName = fileName;
-            let fileBytes: Uint8Array | null = null;
+            let fileBase64: string | null = null;
 
             if (file) {
                 const result = await control.upload(file);
-
                 uploadedFileName = result?.file?.name || file.name;
 
-                // Datei in Uint8Array laden
-                fileBytes = new Uint8Array(await file.arrayBuffer());
+                fileBase64 = (await fileToBase64(file)).split(",")[1];
             }
 
-            // Uint8Array → number[] (Backend verlangt: List<Integer>)
-            const fileList: number[] | null =
-                fileBytes ? Array.from(fileBytes) : null;
-
             const contract: Contract = {
-                id: contractId ?? "", // bei Create leer
+                id: contractId ?? "",
                 title,
                 description,
                 startDate: startDate ? format(startDate, "dd.MM.yyyy") : "",
@@ -147,16 +143,13 @@ export default function ContractTableDialog({
                 aiLevel,
                 aiAnalysisText,
                 fileName: uploadedFileName,
-                file: fileList
+                fileBase64: fileBase64
             };
 
             let savedContract: Contract;
-
             if (!contractId) {
-                // create braucht DTO
                 savedContract = await createContract(contract);
             } else {
-                // update braucht DTO + id
                 savedContract = await updateContract(contractId, contract);
             }
 
@@ -169,14 +162,10 @@ export default function ContractTableDialog({
         }
     };
 
-
-
     // RENDER
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[500px]">
-
-                {/* Dialog Header */}
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {contractId ? "Vertrag bearbeiten" : "Neuen Vertrag anlegen"}
@@ -184,19 +173,18 @@ export default function ContractTableDialog({
                     </DialogTitle>
                 </DialogHeader>
 
-                {/* Ladeanzeige */}
                 {loading ? (
                     <div className="text-center py-10">Lade Daten...</div>
                 ) : (
                     <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
 
-                        {/* TITEL */}
+                        {/* Titel */}
                         <div className="flex items-center justify-between gap-4">
                             <Label className="font-bold">Titel:</Label>
                             <Input value={title} onChange={(e) => setTitle(e.target.value)} className="w-[350px]" />
                         </div>
 
-                        {/* STARTDATUM */}
+                        {/* Startdatum */}
                         <div className="flex items-center justify-between gap-4">
                             <Label className="font-bold">Startdatum:</Label>
                             <Popover open={startPopoverOpen} onOpenChange={setStartPopoverOpen}>
@@ -212,14 +200,14 @@ export default function ContractTableDialog({
                                         selected={startDate}
                                         onSelect={(date) => {
                                             setStartDate(date);
-                                            setStartPopoverOpen(false); // Popover schließen
+                                            setStartPopoverOpen(false);
                                         }}
                                     />
                                 </PopoverContent>
                             </Popover>
                         </div>
 
-                        {/* ENDDATUM */}
+                        {/* Enddatum */}
                         <div className="flex items-center justify-between gap-4">
                             <Label className="font-bold">Enddatum:</Label>
                             <Popover open={endPopoverOpen} onOpenChange={setEndPopoverOpen}>
@@ -235,20 +223,20 @@ export default function ContractTableDialog({
                                         selected={endDate}
                                         onSelect={(date) => {
                                             setEndDate(date);
-                                            setEndPopoverOpen(false); // Popover schließen
+                                            setEndPopoverOpen(false);
                                         }}
                                     />
                                 </PopoverContent>
                             </Popover>
                         </div>
 
-                        {/* BESCHREIBUNG */}
+                        {/* Beschreibung */}
                         <div className="grid gap-3">
                             <Label className="font-bold">Beschreibung:</Label>
                             <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
                         </div>
 
-                        {/* AI ANALYSE */}
+                        {/* AI Analyse */}
                         <div className="flex items-center justify-between gap-4">
                             <Label className="flex items-center gap-1 font-bold whitespace-nowrap">
                                 AI-Analyse <Sparkles className="h-5 w-5 inline-block" />:
@@ -274,7 +262,7 @@ export default function ContractTableDialog({
                             </CardContent>
                         </Card>
 
-                        {/* UPLOAD */}
+                        {/* Upload */}
                         <div className="grid gap-3">
                             <Label className="font-bold">Dokument für AI-Analyse hochladen:</Label>
                             <Button asChild>
@@ -300,7 +288,7 @@ export default function ContractTableDialog({
                             </p>
                         </div>
 
-                        {/* BUTTONS */}
+                        {/* Buttons */}
                         <DialogFooter className="flex justify-between">
                             <div className="flex gap-2">
                                 <Button variant="outline" onClick={() => onOpenChange(false)}>Abbrechen</Button>
@@ -309,13 +297,11 @@ export default function ContractTableDialog({
                                 </Button>
                             </div>
 
-                            {/* Löschen-Dialog */}
+                            {/* Löschen */}
                             {contractId && (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button type="button" variant="outline" className="hover:bg-red-400">
-                                            Löschen
-                                        </Button>
+                                        <Button type="button" variant="outline" className="hover:bg-red-400">Löschen</Button>
                                     </AlertDialogTrigger>
 
                                     <AlertDialogContent>
@@ -338,8 +324,8 @@ export default function ContractTableDialog({
                                                     setDeleting(true);
                                                     try {
                                                         await deleteContract(contractId);
-                                                        onDelete?.(contractId); // Parent Callback aufrufen
-                                                        onOpenChange(false);    // Dialog schließen
+                                                        onDelete?.(contractId);
+                                                        onOpenChange(false);
                                                     } catch (err) {
                                                         console.error("Fehler beim Löschen:", err);
                                                     } finally {
@@ -351,7 +337,6 @@ export default function ContractTableDialog({
                                             </Button>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
-
                                 </AlertDialog>
                             )}
                         </DialogFooter>
