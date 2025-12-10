@@ -3,6 +3,7 @@ package org.example.backend.service;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.dto.InvoiceDto;
+import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.repository.InvoiceRepo;
 import org.example.backend.utils.mapper.ContractMapper;
@@ -60,9 +61,9 @@ public class InvoiceService {
 
     public InvoiceDto createInvoice(InvoiceDto invoiceDto) {
         // Mapping
-        Invoice newInvoice = InvoiceMapper.fromDto(invoiceDto);
-        invoiceRepo.save(newInvoice);
-        return InvoiceMapper.toDtoWithoutFile(newInvoice);
+        Invoice mapped = InvoiceMapper.fromDto(invoiceDto);
+        Invoice created = invoiceRepo.save(mapped);
+        return InvoiceMapper.toDtoWithoutFile(created);
     }
 
 

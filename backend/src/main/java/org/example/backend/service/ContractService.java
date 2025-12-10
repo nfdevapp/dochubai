@@ -60,9 +60,9 @@ public class ContractService {
 
     public ContractDto createContract(ContractDto contractDto) {
         // Mapping
-        Contract newContract = ContractMapper.fromDto(contractDto);
-        contractRepo.save(newContract);
-        return ContractMapper.toDtoWithoutFile(newContract);
+        Contract mapped = ContractMapper.fromDto(contractDto);
+        Contract created = contractRepo.save(mapped);
+        return ContractMapper.toDtoWithoutFile(created);
     }
 
 
