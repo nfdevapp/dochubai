@@ -130,7 +130,7 @@ export default function ContractTableDialog({
             if (file) {
                 const result = await control.upload(file);
                 uploadedFileName = result?.file?.name || file.name;
-
+                //ohne prefix
                 fileBase64 = (await fileToBase64(file)).split(",")[1];
             }
 
