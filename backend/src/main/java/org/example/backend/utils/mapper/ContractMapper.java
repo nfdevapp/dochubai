@@ -75,15 +75,15 @@ public class ContractMapper {
 
             //TODO
             // AI analysis
-            String analyzedText = "some analyze text";
-//            String analyzedText = null;
-//            try {
-//                if (extractedText != null && !extractedText.isEmpty()) {
-//                    analyzedText = textAnalyzer.analyzeContract(extractedText);
-//                }
-//            } catch (Exception e) {
-//                throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
-//            }
+//            String analyzedText = "some analyze text";
+            String analyzedText = null;
+            try {
+                if (extractedText != null && !extractedText.isEmpty()) {
+                    analyzedText = textAnalyzer.analyzeContract(extractedText);
+                }
+            } catch (Exception e) {
+                throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
+            }
 
             LocalDate start;
             LocalDate end;
