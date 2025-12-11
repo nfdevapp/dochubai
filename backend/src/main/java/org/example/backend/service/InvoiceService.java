@@ -3,10 +3,8 @@ package org.example.backend.service;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.dto.InvoiceDto;
-import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.repository.InvoiceRepo;
-import org.example.backend.utils.mapper.ContractMapper;
 import org.example.backend.utils.mapper.InvoiceMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,17 +16,18 @@ import java.util.stream.Collectors;
 public class InvoiceService {
 
     private final InvoiceRepo invoiceRepo;
+    private final InvoiceMapper invoiceMapper;
 
     public InvoiceDto getInvoiceById(String id) {
         Invoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Invoice not found: " + id));
-        return InvoiceMapper.toDto(invoice);
+        return invoiceMapper.toDto(invoice);
     }
 
     public List<InvoiceDto> getAllInvoices() {
         List<Invoice> invoices = invoiceRepo.findAll();
         List<InvoiceDto> invoiceDtos = invoices.stream()
-                .map(InvoiceMapper::toDtoWithoutFile)
+                .map(invoiceMapper::toDtoWithoutFile)
                 .collect(Collectors.toList());
         return invoiceDtos;
     }
@@ -38,7 +37,7 @@ public class InvoiceService {
                 .orElseThrow(() -> new DocHubAiException("Invoice not found: " + id));
 
         // Mapping
-        Invoice mapped = InvoiceMapper.fromDto(invoiceDto);
+        Invoice mapped = invoiceMapper.fromDto(invoiceDto);
 
         Invoice updated = oldData
                 .withDocNumber(mapped.docNumber())
@@ -50,7 +49,7 @@ public class InvoiceService {
                 .withFile(mapped.file());
 
         invoiceRepo.save(updated);
-        return InvoiceMapper.toDtoWithoutFile(updated);
+        return invoiceMapper.toDtoWithoutFile(updated);
     }
 
     public void deleteInvoice(String id) {
@@ -61,9 +60,9 @@ public class InvoiceService {
 
     public InvoiceDto createInvoice(InvoiceDto invoiceDto) {
         // Mapping
-        Invoice mapped = InvoiceMapper.fromDto(invoiceDto);
+        Invoice mapped = invoiceMapper.fromDto(invoiceDto);
         Invoice created = invoiceRepo.save(mapped);
-        return InvoiceMapper.toDtoWithoutFile(created);
+        return invoiceMapper.toDtoWithoutFile(created);
     }
 
 

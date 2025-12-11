@@ -1,71 +1,130 @@
 package org.example.backend.utils.mapper;
 
+import org.example.backend.ai.FileTextExtractor;
+import org.example.backend.ai.TextAnalyzer;
+import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.dto.ContractDto;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Base64;
 
+@Component
 public class ContractMapper {
 
-    //String to LocalDatetime or LocalDate to String
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final FileTextExtractor fileTextExtractor;
+    private final TextAnalyzer textAnalyzer;
+
+    public ContractMapper(FileTextExtractor fileTextExtractor, TextAnalyzer textAnalyzer) {
+        this.fileTextExtractor = fileTextExtractor;
+        this.textAnalyzer = textAnalyzer;
+    }
 
     // Contract => ContractDto
-    public static ContractDto toDto(Contract contract) {
-        //JSON unterstützt fileBase64 und mongo db verlangt byte[]
-        //byte[] to Base64
-        String fileBase = null;
-        if (contract.file() != null) {
-            fileBase = Base64.getEncoder().encodeToString(contract.file());
-        }
+    public ContractDto toDto(Contract contract) {
+        try {
+            String fileBase = null;
+            if (contract.file() != null) {
+                fileBase = Base64.getEncoder().encodeToString(contract.file());
+            }
 
-        return ContractDto.builder()
-                .id(contract.id())
-                .title(contract.title())
-                .description(contract.description())
-                .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
-                .endDate(contract.endDate() != null ? contract.endDate().format(FORMATTER) : null)
-                .aiLevel(contract.aiLevel())
-                .aiAnalysisText(contract.aiAnalysisText())
-                .fileName(contract.fileName())
-                .fileBase64(fileBase)
-                .build();
+            return ContractDto.builder()
+                    .id(contract.id())
+                    .title(contract.title())
+                    .description(contract.description())
+                    .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
+                    .endDate(contract.endDate() != null ? contract.endDate().format(FORMATTER) : null)
+                    .aiLevel(contract.aiLevel())
+                    .aiAnalysisText(contract.aiAnalysisText())
+                    .fileName(contract.fileName())
+                    .fileBase64(fileBase)
+                    .build();
+
+        } catch (IllegalArgumentException e) {
+            throw new DocHubAiException("Error encoding file to Base64: " + e.getMessage());
+        } catch (Exception e) {
+            throw new DocHubAiException("Unexpected error while mapping Contract to DTO: " + e.getMessage());
+        }
     }
 
     // ContractDto => Contract
-    public static Contract fromDto(ContractDto dto) {
-        byte[] fileBytes = null;
+    public Contract fromDto(ContractDto dto) {
+        try {
+            byte[] fileBytes = null;
 
-        // Base64-String in byte[] umwandeln für Mongo DB
-        // Base64 to byte[]
-        if (dto.fileBase64() != null) {
-            fileBytes = Base64.getDecoder().decode(dto.fileBase64());
+            if (dto.fileBase64() != null) {
+                try {
+                    fileBytes = Base64.getDecoder().decode(dto.fileBase64());
+                } catch (IllegalArgumentException e) {
+                    throw new DocHubAiException("Error decoding file from Base64: " + e.getMessage());
+                }
+            }
+
+            //TODO
+            // Text extraction
+            String extractedText;
+            try {
+                extractedText = fileTextExtractor.extractText(fileBytes);
+            } catch (Exception e) {
+                throw new DocHubAiException("Error extracting text from file: " + e.getMessage());
+            }
+
+            //TODO
+            // AI analysis
+            String analyzedText = "some analyze text";
+//            String analyzedText = null;
+//            try {
+//                if (extractedText != null && !extractedText.isEmpty()) {
+//                    analyzedText = textAnalyzer.analyzeContract(extractedText);
+//                }
+//            } catch (Exception e) {
+//                throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
+//            }
+
+            LocalDate start;
+            LocalDate end;
+            try {
+                start = dto.startDate() != null ? LocalDate.parse(dto.startDate(), FORMATTER) : null;
+                end = dto.endDate() != null ? LocalDate.parse(dto.endDate(), FORMATTER) : null;
+            } catch (DateTimeParseException e) {
+                throw new DocHubAiException("Error parsing date: " + e.getMessage());
+            }
+
+            return Contract.builder()
+                    .title(dto.title())
+                    .description(dto.description())
+                    .startDate(start)
+                    .endDate(end)
+                    .aiLevel(dto.aiLevel())
+                    .aiAnalysisText(analyzedText)
+                    .fileName(dto.fileName())
+                    .file(fileBytes)
+                    .build();
+
+        } catch (DocHubAiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DocHubAiException("Unexpected error while mapping DTO to Contract: " + e.getMessage());
         }
-
-        return Contract.builder()
-                .title(dto.title())
-                .description(dto.description())
-                .startDate(dto.startDate() != null ? LocalDate.parse(dto.startDate(), FORMATTER) : null)
-                .endDate(dto.endDate() != null ? LocalDate.parse(dto.endDate(), FORMATTER) : null)
-                .aiLevel(dto.aiLevel())
-                .aiAnalysisText(dto.aiAnalysisText())
-                .fileName(dto.fileName())
-                .file(fileBytes)
-                .build();
     }
 
-    // getAllContracts => without file and fileName
-    public static ContractDto toDtoWithoutFile(Contract contract) {
-        return ContractDto.builder()
-                .id(contract.id())
-                .title(contract.title())
-                .description(contract.description())
-                .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
-                .endDate(contract.endDate() != null ? contract.endDate().format(FORMATTER) : null)
-                .aiLevel(contract.aiLevel())
-                .build();
+    // getAllContracts: without file and fileName
+    public ContractDto toDtoWithoutFile(Contract contract) {
+        try {
+            return ContractDto.builder()
+                    .id(contract.id())
+                    .title(contract.title())
+                    .description(contract.description())
+                    .startDate(contract.startDate() != null ? contract.startDate().format(FORMATTER) : null)
+                    .endDate(contract.endDate() != null ? contract.endDate().format(FORMATTER) : null)
+                    .aiLevel(contract.aiLevel())
+                    .build();
+        } catch (Exception e) {
+            throw new DocHubAiException("Error mapping Contract to DTO without file: " + e.getMessage());
+        }
     }
-
 }

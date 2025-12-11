@@ -15,17 +15,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ContractService {
     private final ContractRepo contractRepo;
+    private final ContractMapper contractMapper;
 
     public ContractDto getContractById(String id) {
         Contract contract = contractRepo.findById(id)
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
-        return ContractMapper.toDto(contract);
+        return contractMapper.toDto(contract);
     }
 
     public List<ContractDto> getAllContracts() {
         List<Contract> contracts = contractRepo.findAll();
         List<ContractDto> contractDtos = contracts.stream()
-                .map(ContractMapper::toDtoWithoutFile)
+                .map(contractMapper::toDtoWithoutFile)
                 .collect(Collectors.toList());
         return contractDtos;
     }
@@ -35,7 +36,7 @@ public class ContractService {
                 .orElseThrow(() -> new DocHubAiException("Contract not found: " + id));
 
         // Mapping
-        Contract mapped = ContractMapper.fromDto(contractDto);
+        Contract mapped = contractMapper.fromDto(contractDto);
 
         Contract updated = oldData
                 .withTitle(mapped.title())
@@ -48,7 +49,7 @@ public class ContractService {
                 .withFile(mapped.file());
 
         contractRepo.save(updated);
-        return ContractMapper.toDtoWithoutFile(updated);
+        return contractMapper.toDtoWithoutFile(updated);
     }
 
 
@@ -60,9 +61,9 @@ public class ContractService {
 
     public ContractDto createContract(ContractDto contractDto) {
         // Mapping
-        Contract mapped = ContractMapper.fromDto(contractDto);
+        Contract mapped = contractMapper.fromDto(contractDto);
         Contract created = contractRepo.save(mapped);
-        return ContractMapper.toDtoWithoutFile(created);
+        return contractMapper.toDtoWithoutFile(created);
     }
 
 
