@@ -315,9 +315,12 @@ export default function ContractTableDialog({
                             <Label className="font-bold">Dokument für KI-Analyse:</Label>
                             <div className="flex gap-4">
                                 {/* Upload */}
-                                <Button asChild className="flex-1">
-                                    <label className="cursor-pointer flex gap-2 items-center justify-center w-full">
-                                        <Upload className="size-4" />
+                                <Button
+                                    asChild
+                                    className="flex-1 justify-center"
+                                    variant="outline"
+                                >
+                                    <label className="cursor-pointer flex items-center justify-center gap-2 w-full">
                                         Datei wählen
                                         <input
                                             type="file"
