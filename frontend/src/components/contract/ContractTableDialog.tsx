@@ -97,6 +97,8 @@ export default function ContractTableDialog({
                 setAiAnalysisText(contract.aiAnalysisText);
                 setFile(null);
                 setFileName(contract.fileName);
+                // Base64 sichern für Download
+                (window as { __currentFileBase64?: string }).__currentFileBase64 = contract.fileBase64 ?? undefined;
             } catch (err) {
                 console.error("Fehler beim Laden des Vertrags:", err);
             } finally {
@@ -116,6 +118,51 @@ export default function ContractTableDialog({
             reader.onerror = (err) => reject(err);
             reader.readAsDataURL(file);
         });
+    };
+
+    const handleDownload = () => {
+        if (!fileName) return;
+
+        let blob: Blob;
+
+        // Falls neue Datei hochgeladen → direkt File nutzen
+        if (file) {
+            blob = new Blob([file], { type: file.type });
+        }
+        // Falls Vertrag aus Backend → Base64 → Blob
+        else {
+            const base64 = (window as { __currentFileBase64?: string }).__currentFileBase64;
+            if (!base64) {
+                console.error("Keine Base64 Datei vorhanden");
+                return;
+            }
+
+            // BASE64 → Bytearray
+            const byteChars = atob(base64);
+            const byteNumbers = new Array(byteChars.length);
+            for (let i = 0; i < byteChars.length; i++) {
+                byteNumbers[i] = byteChars.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+
+            const ext = fileName.split(".").pop()?.toLowerCase();
+
+            const mime =
+                ext === "pdf" ? "application/pdf" :
+                    ext === "doc" ? "application/msword" :
+                        ext === "docx" ? "application/vnd.openxmlformats-officedocument.wordprocessingml.document" :
+                            "application/octet-stream";
+
+            blob = new Blob([byteArray], { type: mime });
+        }
+
+        // Browser zeigt Speichern-unter-Dialog an
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     // Formular-Submit
@@ -262,31 +309,48 @@ export default function ContractTableDialog({
                             </CardContent>
                         </Card>
 
-                        {/* Upload */}
+
+                        {/* Upload + Download */}
                         <div className="grid gap-3">
-                            <Label className="font-bold">Dokument für AI-Analyse hochladen:</Label>
-                            <Button asChild>
-                                <label className="cursor-pointer flex gap-2 items-center">
-                                    <Upload className="size-4" />
-                                    Datei wählen
-                                    <input
-                                        type="file"
-                                        accept=".pdf,.doc,.docx"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            const f = e.target.files?.[0];
-                                            if (!f) return;
-                                            setFile(f);
-                                            setFileName(f.name);
-                                        }}
-                                    />
-                                </label>
-                            </Button>
+                            <Label className="font-bold">Dokument für AI-Analyse:</Label>
+                            <div className="flex gap-4">
+                                {/* Upload */}
+                                <Button asChild className="flex-1">
+                                    <label className="cursor-pointer flex gap-2 items-center justify-center w-full">
+                                        <Upload className="size-4" />
+                                        Datei wählen
+                                        <input
+                                            type="file"
+                                            accept=".pdf,.doc,.docx"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const f = e.target.files?.[0];
+                                                if (!f) return;
+                                                setFile(f);
+                                                setFileName(f.name);
+                                            }}
+                                        />
+                                    </label>
+                                </Button>
+                                {/* Download */}
+                                <Button
+                                    className="flex-1 justify-center"
+                                    variant="outline"
+                                    disabled={!fileName}
+                                    onClick={handleDownload}
+                                >
+                                    <Upload className="rotate-180 size-4" />
+                                    Herunterladen
+                                </Button>
+
+                            </div>
+                            {/* Dateinamen unter Buttons */}
                             <p className="text-sm text-gray-700">
                                 {file ? `Ausgewählt: ${file.name}` :
                                     fileName ? `Aktuelle Datei: ${fileName}` : "Keine Datei vorhanden"}
                             </p>
                         </div>
+
 
                         {/* Buttons */}
                         <DialogFooter className="flex justify-between">
