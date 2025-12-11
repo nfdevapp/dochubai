@@ -335,10 +335,13 @@ export default function ContractTableDialog({
                                 {/* Download */}
                                 <Button
                                     className="flex-1 justify-center"
-                                    type="button" // wichtig beim submitHandle wird nicht berücksichtigt
+                                    type="button" // verhindert, dass das Formular abgeschickt wird
                                     variant="outline"
                                     disabled={!fileName}
-                                    onClick={handleDownload}
+                                    onClick={() => {
+                                        handleDownload();
+                                        onOpenChange(false);
+                                    }}
                                 >
                                     <Upload className="rotate-180 size-4" />
                                     Herunterladen
