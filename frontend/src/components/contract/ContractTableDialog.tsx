@@ -216,7 +216,7 @@ export default function ContractTableDialog({
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {contractId ? "Vertrag bearbeiten" : "Neuen Vertrag anlegen"}
-                        {saving && <div className="text-center py-2 text-sm">Daten werden gespeichert...</div>}
+                        {saving && <div className="text-center py-2 text-sm">Daten werden gespeichert und durch KI analysiert...</div>}
                     </DialogTitle>
                 </DialogHeader>
 
