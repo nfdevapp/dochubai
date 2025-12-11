@@ -335,6 +335,7 @@ export default function ContractTableDialog({
                                 {/* Download */}
                                 <Button
                                     className="flex-1 justify-center"
+                                    type="button" // wichtig beim submitHandle wird nicht berücksichtigt
                                     variant="outline"
                                     disabled={!fileName}
                                     onClick={handleDownload}
