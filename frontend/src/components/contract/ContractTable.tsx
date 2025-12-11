@@ -29,6 +29,190 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { Contract } from "@/model/Contract";
+import ContractTableDialog from "@/components/contract/ContractTableDialog";
+import { getAllContracts } from "@/api/ContractService";
+
+// -------------------------
+// Haupt-Komponente
+// -------------------------
+export default function ContractTable() {
+    const [contracts, setContracts] = React.useState<Contract[]>([]);
+    const [loading, setLoading] = React.useState(true);
+
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = React.useState({});
+
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    const [selectedContract, setSelectedContract] = React.useState<string | null>(null);
+
+    // Contracts laden
+    React.useEffect(() => {
+        const fetchContracts = async () => {
+            try {
+                const data = await getAllContracts();
+                setContracts(data);
+            } catch (err) {
+                console.error("Fehler beim Laden der Verträge:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchContracts();
+    }, []);
+
+    const openNewContract = () => {
+        setSelectedContract(null);
+        setDialogOpen(true);
+    };
+
+    const openEditContract = (id: string) => {
+        setSelectedContract(id);
+        setDialogOpen(true);
+    };
+
+    const handleSave = (contract: Contract) => {
+        setContracts((prev) => {
+            const exists = prev.some((c) => c.id === contract.id);
+            if (exists) return prev.map((c) => (c.id === contract.id ? contract : c));
+            return [contract, ...prev];
+        });
+        setDialogOpen(false);
+    };
+
+    const handleDelete = (id: string) => {
+        setContracts((prev) => prev.filter((c) => c.id !== id));
+        setDialogOpen(false);
+    };
+
+    const table = useReactTable({
+        data: contracts,
+        columns,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        state: { sorting, columnFilters, columnVisibility, rowSelection },
+    });
+
+    if (loading) {
+        return (
+            <div className="w-full overflow-hidden rounded-md border">
+                <table className="w-full border-collapse">
+                    <thead>
+                    <tr>
+                        {columns.map((_, i) => (
+                            <th key={i} className="p-2 border-b">
+                                <Skeleton className="h-4 w-24" />
+                            </th>
+                        ))}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Array.from({ length: 3 }).map((_, idx) => (
+                        <tr key={idx}>
+                            {columns.map((_, i) => (
+                                <td key={i} className="p-2 border-b">
+                                    <Skeleton className="h-4 w-full" />
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full">
+            <div className="flex items-center gap-4 py-4">
+                <input
+                    placeholder="Suche..."
+                    className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                    onChange={(e) => table.getColumn("title")?.setFilterValue(e.target.value)}
+                />
+                <div className="ml-auto">
+                    <Badge
+                        className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
+                        onClick={openNewContract}
+                    >
+                        Neuen Vertrag anlegen
+                    </Badge>
+                </div>
+            </div>
+
+            <div className="rounded-md border overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((hg) => (
+                            <TableRow key={hg.id}>
+                                {hg.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {table.getRowModel().rows.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    className="cursor-pointer hover:bg-muted/50"
+                                    onClick={() => openEditContract(row.original.id)}
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className="text-center py-6">
+                                    Keine Ergebnisse.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+
+            <div className="w-full mt-2 flex items-center">
+                <div className="text-sm text-muted-foreground flex-1 text-center">
+                    Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}
+                </div>
+                <div className="flex justify-end space-x-2">
+                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+                        Zurück
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+                        Weiter
+                    </Button>
+                </div>
+            </div>
+
+            <ContractTableDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                contractId={selectedContract}
+                onSave={handleSave}
+                onDelete={handleDelete}
+            />
+        </div>
+    );
+}
 
 // -------------------------
 // Spalten Definition
@@ -91,170 +275,37 @@ const columns: ColumnDef<Contract>[] = [
                 <ArrowUpDown className="h-4 w-4" />
             </Button>
         ),
-        cell: ({ row }) => {
-            const value = Number(row.getValue("aiLevel"));
-            const color = { 1: "bg-green-500", 2: "bg-yellow-400", 3: "bg-red-500" }[value] ?? "bg-gray-400";
-            const description = {
-                1: "Ist einwandfrei",
-                2: "Sollte überprüft werden",
-                3: "Weist kritische Abweichungen auf",
-            }[value] ?? "Keine Daten";
-
-            return (
-                <div className="w-full flex justify-center items-center">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className={`h-3 w-3 rounded-full ${color}`} />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>{description}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
-            );
-        },
+        cell: ({ row }) => <AICell value={Number(row.getValue("aiLevel"))} />,
     },
 ];
 
 // -------------------------
-// Props
+// AI-Level Hilfsdaten
 // -------------------------
-type ContractTableProps = {
-    contracts: Contract[];
-    loading: boolean;
-    onSelectContract?: (id: string) => void;
-};
+const AI_LEVELS = {
+    1: { color: "bg-green-500", label: "Ist einwandfrei" },
+    2: { color: "bg-yellow-400", label: "Sollte überprüft werden" },
+    3: { color: "bg-red-500", label: "Weist kritische Abweichungen auf" },
+} as const;
 
-// -------------------------
-// Haupt-Komponente
-// -------------------------
-export default function ContractTable({ contracts, loading, onSelectContract }: ContractTableProps) {
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
-
-    const table = useReactTable({
-        data: contracts,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        state: { sorting, columnFilters, columnVisibility, rowSelection },
-    });
-
-    if (loading) {
-        return (
-            <div className="w-full overflow-hidden rounded-md border">
-                <table className="w-full border-collapse">
-                    <thead>
-                    <tr>
-                        {columns.map((_, i) => (
-                            <th key={i} className="p-2 border-b">
-                                <Skeleton className="h-4 w-24" />
-                            </th>
-                        ))}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {Array.from({ length: 3 }).map((_, idx) => (
-                        <tr key={idx}>
-                            {columns.map((_, i) => (
-                                <td key={i} className="p-2 border-b">
-                                    <Skeleton className="h-4 w-full" />
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
-
+// Hilfskomponente für AI-Level-Zelle
+const AICell = ({ value }: { value: number }) => {
+    // Typ casten, damit TypeScript weiß, dass value ein gültiger Schlüssel ist
+    const level = AI_LEVELS[value as keyof typeof AI_LEVELS] ?? { color: "bg-gray-400", label: "Keine Daten" };
     return (
-        <div className="w-full">
-            {/* Suche + Neuer Vertrag Button */}
-            <div className="flex items-center gap-4 py-4">
-                <input
-                    placeholder="Suche..."
-                    className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                    onChange={(e) => table.getColumn("title")?.setFilterValue(e.target.value)}
-                />
-                <div className="ml-auto">
-                    <Badge
-                        className="cursor-pointer bg-blue-500 text-white rounded-full px-4 py-1"
-                        onClick={() => onSelectContract?.("")} // Neuer Vertrag
-                    >
-                        Neuen Vertrag anlegen
-                    </Badge>
-                </div>
-            </div>
-
-            {/* Tabelle */}
-            <div className="rounded-md border overflow-hidden">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((hg) => (
-                            <TableRow key={hg.id}>
-                                {hg.headers.map((header) => (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(header.column.columnDef.header, header.getContext())}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    className="cursor-pointer hover:bg-muted/50"
-                                    onClick={() => onSelectContract?.(row.original.id)}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="text-center py-6">
-                                    Keine Ergebnisse.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-
-            {/* Pagination */}
-            <div className="w-full mt-2 flex items-center">
-                <div className="text-sm text-muted-foreground flex-1 text-center">
-                    Seite {table.getState().pagination.pageIndex + 1} von {table.getPageCount()}
-                </div>
-                <div className="flex justify-end space-x-2">
-                    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                        Zurück
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                        Weiter
-                    </Button>
-                </div>
-            </div>
+        <div className="w-full flex justify-center items-center">
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <div className={`h-3 w-3 rounded-full ${level.color}`} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{level.label}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         </div>
     );
-}
+};
+
+
