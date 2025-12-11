@@ -86,7 +86,7 @@ const columns: ColumnDef<Contract>[] = [
                 className="pl-6 flex items-center gap-2"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-                <span className="font-medium">AI-Analyse</span>
+                <span className="font-medium">KI-Analyse</span>
                 <Sparkles className="h-4 w-4" />
                 <ArrowUpDown className="h-4 w-4" />
             </Button>

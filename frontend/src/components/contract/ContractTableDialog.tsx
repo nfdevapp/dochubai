@@ -286,7 +286,7 @@ export default function ContractTableDialog({
                         {/* AI Analyse */}
                         <div className="flex items-center justify-between gap-4">
                             <Label className="flex items-center gap-1 font-bold whitespace-nowrap">
-                                AI-Analyse <Sparkles className="h-5 w-5 inline-block" />:
+                                KI-Analyse <Sparkles className="h-5 w-5 inline-block" />:
                             </Label>
                             <div className="w-[330px] text-left">
                                 <span className={`${
@@ -312,7 +312,7 @@ export default function ContractTableDialog({
 
                         {/* Upload + Download */}
                         <div className="grid gap-3">
-                            <Label className="font-bold">Dokument für AI-Analyse:</Label>
+                            <Label className="font-bold">Dokument für KI-Analyse:</Label>
                             <div className="flex gap-4">
                                 {/* Upload */}
                                 <Button asChild className="flex-1">
