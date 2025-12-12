@@ -40,7 +40,7 @@ export default function Sidebar({ setTitle, setPage }: SidebarProps) {
                 <button
                     onClick={() => {
                         setTitle("Einstellungen");
-                        setPage(<div>Einstellungen…</div>);
+                        setPage(<div>TODO Einstellungen…</div>);
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
                 >
