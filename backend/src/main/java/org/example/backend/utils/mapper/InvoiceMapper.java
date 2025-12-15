@@ -1,7 +1,5 @@
 package org.example.backend.utils.mapper;
 
-import org.example.backend.ai.FileTextExtractor;
-import org.example.backend.ai.TextAnalyzer;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.dto.InvoiceDto;
 import org.example.backend.model.entities.Invoice;
@@ -15,13 +13,6 @@ import java.util.Base64;
 @Component
 public class InvoiceMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private final FileTextExtractor fileTextExtractor;
-    private final TextAnalyzer textAnalyzer;
-
-    public InvoiceMapper(FileTextExtractor fileTextExtractor, TextAnalyzer textAnalyzer) {
-        this.fileTextExtractor = fileTextExtractor;
-        this.textAnalyzer = textAnalyzer;
-    }
 
     // Invoice => InvoiceDto
     public InvoiceDto toDto(Invoice invoice) {
@@ -39,6 +30,7 @@ public class InvoiceMapper {
                     .purpose(invoice.purpose())
                     .isInvoice(invoice.isInvoice())
                     .fileName(invoice.fileName())
+                    .fileType(invoice.fileType())
                     .fileBase64(fileBase)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -60,23 +52,6 @@ public class InvoiceMapper {
                     throw new DocHubAiException("Error decoding file from Base64: " + e.getMessage());
                 }
             }
-            // AI TODO
-            // Text extraction
-//            String extractedText;
-//            try {
-//                extractedText = fileTextExtractor.extractText(fileBytes);
-//            } catch (Exception e) {
-//                throw new DocHubAiException("Error extracting text from file: " + e.getMessage());
-//            }
-
-//            String analyzedText = null;
-//            try {
-//                if (extractedText != null && !extractedText.isEmpty()) {
-//                    analyzedText = textAnalyzer.analyzeContract(extractedText);
-//                }
-//            } catch (Exception e) {
-//                throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
-//            }
 
             LocalDate date;
             try {
@@ -92,6 +67,7 @@ public class InvoiceMapper {
                     .purpose(dto.purpose())
                     .isInvoice(dto.isInvoice())
                     .fileName(dto.fileName())
+                    .fileType(dto.fileType())
                     .file(fileBytes)
                     .build();
 
@@ -102,7 +78,7 @@ public class InvoiceMapper {
         }
     }
 
-    // getAllInvoices: without file and fileName
+    // getAllInvoices: without file
     public InvoiceDto toDtoWithoutFile(Invoice invoice) {
         try {
             return InvoiceDto.builder()
@@ -111,6 +87,8 @@ public class InvoiceMapper {
                     .amount(invoice.amount())
                     .purpose(invoice.purpose())
                     .isInvoice(invoice.isInvoice())
+                    .fileName(invoice.fileName())
+                    .fileType(invoice.fileType())
                     .build();
         } catch (Exception e) {
             throw new DocHubAiException("Error mapping Invoice to DTO without file: " + e.getMessage());

@@ -12,6 +12,7 @@ public record InvoiceDto(
         double amount,
         String purpose,
         boolean isInvoice,
+        String fileType,
         String fileName,
         //Muss umgewandelt werden: JSON = Base64, MongoDB = byte[]
         String fileBase64
