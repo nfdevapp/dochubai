@@ -7,13 +7,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CalendarIcon, Upload } from "lucide-react";
+import { CalendarIcon, Upload, Check, ChevronsUpDown } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { useUploadFile } from "@better-upload/client";
 import { deleteInvoice, getInvoiceById, createInvoice, updateInvoice } from "@/api/InvoiceService";
+import { cn } from "@/lib/utils"
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command"
 import type { Invoice } from "@/model/Invoice";
 import {
     AlertDialog,
@@ -64,6 +72,10 @@ export default function InvoiceTableDialog({
     // Betrag states => Eingaben double werte
     const [amount, setAmount] = React.useState<number | undefined>(undefined);
     const [amountInput, setAmountInput] = React.useState<string>("");
+
+    // Abrechnung
+    const [invoiceType, setInvoiceType] = React.useState<string>("Rechnung");
+    const [invoiceTypeOpen, setInvoiceTypeOpen] = React.useState(false);
 
     const { control } = useUploadFile({ route: "D:/" });
 
@@ -284,6 +296,51 @@ export default function InvoiceTableDialog({
                                             setStartPopoverOpen(false);
                                         }}
                                     />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+
+                        {/* Abrechnungsart */}
+                        <div className="flex items-center justify-between gap-4">
+                            <Label className="font-bold">Abrechnung:</Label>
+                            <Popover open={invoiceTypeOpen} onOpenChange={setInvoiceTypeOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        role="combobox"
+                                        aria-expanded={invoiceTypeOpen}
+                                        className="w-[350px] justify-between"
+                                    >
+                                        {invoiceType} {}
+                                        <ChevronsUpDown className="opacity-50" />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[350px] p-0">
+                                    <Command>
+                                        <CommandList>
+                                            <CommandEmpty>Keine Option gefunden.</CommandEmpty>
+                                            <CommandGroup>
+                                                {["Rechnung", "Zahlungsbeleg"].map((type) => (
+                                                    <CommandItem
+                                                        key={type}
+                                                        value={type}
+                                                        onSelect={(currentValue) => {
+                                                            setInvoiceType(currentValue === invoiceType ? "" : currentValue);
+                                                            setInvoiceTypeOpen(false);
+                                                        }}
+                                                    >
+                                                        {type}
+                                                        <Check
+                                                            className={cn(
+                                                                "ml-auto",
+                                                                invoiceType === type ? "opacity-100" : "opacity-0"
+                                                            )}
+                                                        />
+                                                    </CommandItem>
+                                                ))}
+                                            </CommandGroup>
+                                        </CommandList>
+                                    </Command>
                                 </PopoverContent>
                             </Popover>
                         </div>
