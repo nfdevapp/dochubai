@@ -2,6 +2,7 @@
 
 import { FileText, Receipt, Sparkles, Settings } from "lucide-react";
 import ContractPage from "@/pages/ContractPage";
+import InvoicePage from "@/pages/InvoicePage.tsx";
 
 interface SidebarProps {
     setTitle: (title: string) => void;
@@ -30,7 +31,7 @@ export default function Sidebar({ setTitle, setPage }: SidebarProps) {
                 <button
                     onClick={() => {
                         setTitle("Abrechnungen");
-                        setPage(<div>TODO Abrechnungen…</div>);
+                        setPage(<InvoicePage />);
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
                 >

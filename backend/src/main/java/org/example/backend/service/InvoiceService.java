@@ -45,6 +45,7 @@ public class InvoiceService {
                 .withAmount(mapped.amount())
                 .withPurpose(mapped.purpose())
                 .withInvoice(mapped.isInvoice())
+                .withFileType(mapped.fileType())
                 .withFileName(mapped.fileName())
                 .withFile(mapped.file());
 
