@@ -91,6 +91,7 @@ export default function InvoiceTableDialog({
                 setPurpose("");
                 setDate(undefined);
                 setAmount(0);
+                setAmountInput("");
                 setIsInvoice(undefined);
                 setFyleType("");
                 setFile(null);
