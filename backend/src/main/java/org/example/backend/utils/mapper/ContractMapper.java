@@ -64,7 +64,6 @@ public class ContractMapper {
                 }
             }
 
-            //TODO
             // Text extraction
             String extractedText;
             try {
@@ -73,13 +72,11 @@ public class ContractMapper {
                 throw new DocHubAiException("Error extracting text from file: " + e.getMessage());
             }
 
-            //TODO
             // AI analysis
-//            String analyzedText = "some analyze text";
-            String analyzedText = null;
+            String analysisResult = null;
             try {
-                if (extractedText != null && !extractedText.isEmpty()) {
-                    analyzedText = textAnalyzer.analyzeContract(extractedText);
+                if (extractedText != null && !extractedText.isBlank()) {
+                    analysisResult = textAnalyzer.analyzeText(extractedText);
                 }
             } catch (Exception e) {
                 throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
@@ -100,7 +97,7 @@ public class ContractMapper {
                     .startDate(start)
                     .endDate(end)
                     .aiLevel(dto.aiLevel())
-                    .aiAnalysisText(analyzedText)
+                    .aiAnalysisText(analysisResult)
                     .fileName(dto.fileName())
                     .file(fileBytes)
                     .build();

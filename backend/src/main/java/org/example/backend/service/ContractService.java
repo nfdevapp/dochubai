@@ -66,6 +66,10 @@ public class ContractService {
         return contractMapper.toDtoWithoutFile(created);
     }
 
+    public void createTestDataContract(Contract contract) {
+        contractRepo.save(contract);
+    }
+
 
     public void deleteAllContracts() {
         contractRepo.deleteAll();

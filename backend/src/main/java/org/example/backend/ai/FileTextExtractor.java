@@ -19,7 +19,6 @@ public class FileTextExtractor {
 
     /**
      * Extrahiert Text aus einer Datei, die als byte[] übergeben wird.
-     * Unterstützt PDF, Word, Bilder usw.
      */
     public String extractText(byte[] fileBytes) {
         if (fileBytes == null) return null;
