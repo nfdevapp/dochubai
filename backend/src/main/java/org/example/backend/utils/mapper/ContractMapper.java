@@ -1,5 +1,6 @@
 package org.example.backend.utils.mapper;
 
+import org.example.backend.ai.AiAnalysisResult;
 import org.example.backend.ai.FileTextExtractor;
 import org.example.backend.ai.TextAnalyzer;
 import org.example.backend.exeptions.DocHubAiException;
@@ -73,7 +74,7 @@ public class ContractMapper {
             }
 
             // AI analysis
-            String analysisResult = null;
+            AiAnalysisResult analysisResult = null;
             try {
                 if (extractedText != null && !extractedText.isBlank()) {
                     analysisResult = textAnalyzer.analyzeText(extractedText);
@@ -96,8 +97,8 @@ public class ContractMapper {
                     .description(dto.description())
                     .startDate(start)
                     .endDate(end)
-                    .aiLevel(dto.aiLevel())
-                    .aiAnalysisText(analysisResult)
+                    .aiLevel(analysisResult != null ? analysisResult.aiLevel() : null)
+                    .aiAnalysisText(analysisResult != null ? analysisResult.aiAnalysisText() : null)
                     .fileName(dto.fileName())
                     .file(fileBytes)
                     .build();

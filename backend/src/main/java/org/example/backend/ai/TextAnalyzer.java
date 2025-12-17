@@ -11,8 +11,7 @@ public class TextAnalyzer {
         this.chatGPTService = chatGPTService;
     }
 
-    public String analyzeText(String extractedText) {
-        String text = chatGPTService.analyzeText(extractedText);
-        return text;
+    public AiAnalysisResult analyzeText(String extractedText) {
+        return chatGPTService.analyzeText(extractedText);
     }
 }
