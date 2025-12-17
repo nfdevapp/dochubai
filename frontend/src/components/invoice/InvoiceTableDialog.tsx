@@ -104,6 +104,11 @@ export default function InvoiceTableDialog({
                 setPurpose(invoice.purpose);
                 setDate(parseDate(invoice.date));
                 setAmount(invoice.amount);
+                setAmountInput(
+                    invoice.amount !== undefined
+                        ? invoice.amount.toFixed(2).replace(".", ",")
+                        : ""
+                );
                 setIsInvoice(invoice.isInvoice);
                 setFile(null);
                 setFileName(invoice.fileName);
