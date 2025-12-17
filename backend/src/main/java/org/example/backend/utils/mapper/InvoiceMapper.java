@@ -30,7 +30,6 @@ public class InvoiceMapper {
                     .purpose(invoice.purpose())
                     .isInvoice(invoice.isInvoice())
                     .fileName(invoice.fileName())
-                    .fileType(invoice.fileType())
                     .fileBase64(fileBase)
                     .build();
         } catch (IllegalArgumentException e) {
@@ -67,7 +66,6 @@ public class InvoiceMapper {
                     .purpose(dto.purpose())
                     .isInvoice(dto.isInvoice())
                     .fileName(dto.fileName())
-                    .fileType(dto.fileType())
                     .file(fileBytes)
                     .build();
 
@@ -88,7 +86,6 @@ public class InvoiceMapper {
                     .purpose(invoice.purpose())
                     .isInvoice(invoice.isInvoice())
                     .fileName(invoice.fileName())
-                    .fileType(invoice.fileType())
                     .build();
         } catch (Exception e) {
             throw new DocHubAiException("Error mapping Invoice to DTO without file: " + e.getMessage());

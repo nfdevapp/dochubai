@@ -3,6 +3,7 @@ package org.example.backend.utils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.model.entities.Contract;
+import org.example.backend.model.entities.Invoice;
 import org.example.backend.service.ContractService;
 import org.example.backend.service.InvoiceService;
 import org.springframework.stereotype.Component;
@@ -35,8 +36,64 @@ public class GenerateTestData {
         contracts.forEach(contractService::createTestDataContract);
 
         //Testdaten als InvoiceDto erstellen
-        //TODO
+        List<Invoice> invoices = createTestDataInvoices();
+        invoices.forEach(invoiceService::createTestDataInvoice);
     }
+
+    private List<Invoice> createTestDataInvoices() {
+        return List.of(
+                createInvoice("RE-2024-001", "15.01.2024", 1250.00,
+                        "Miete Büroräume Januar 2024", true, "Miete_Jan_2024.pdf"),
+
+                createInvoice("RE-2024-002", "01.02.2024", 320.50,
+                        "IT-Wartung Februar", true, "IT_Wartung_Feb.pdf"),
+
+                createInvoice("RE-2024-003", "10.02.2024", 89.99,
+                        "Software-Abonnement", true, "SaaS_Abo_Feb.pdf"),
+
+                createInvoice("ZA-2024-004", "12.02.2024", 500.00,
+                        "Anzahlung Projekt Alpha", false, "Zahlungsbeleg_Alpha.pdf"),
+
+                createInvoice("RE-2024-005", "20.02.2024", 2450.75,
+                        "Beratungsleistung Februar", true, "Beratung_Februar.docx"),
+
+                createInvoice("RE-2024-006", "01.03.2024", 159.00,
+                        "Cloud-Hosting März", true, "Cloud_Hosting_Maerz.pdf"),
+
+                createInvoice("ZA-2024-007", "05.03.2024", 1200.00,
+                        "Leasingrate Fahrzeug", false, "Leasingrate_Maerz.pdf"),
+
+                createInvoice("RE-2024-008", "10.03.2024", 980.40,
+                        "Marketing Agenturleistung", true, "Agentur_Marketing.pdf"),
+
+                createInvoice("RE-2024-009", "18.03.2024", 75.00,
+                        "Domain- und Hostinggebühren", true, "Domain_Hosting.pdf"),
+
+                createInvoice("RE-2024-010", "25.03.2024", 4300.00,
+                        "Bauabschlagsrechnung", true, "Bau_Abschlag_03_2024.pdf")
+        );
+    }
+
+
+    private Invoice createInvoice(
+            String docNumber,
+            String date,
+            double amount,
+            String purpose,
+            boolean isInvoice,
+            String fileName
+    ) {
+        return Invoice.builder()
+                .docNumber(docNumber)
+                .date(LocalDate.parse(date, formatter))
+                .amount(amount)
+                .purpose(purpose)
+                .isInvoice(isInvoice)
+                .fileName(fileName)
+                .file(null) // keine Datei für Testdaten
+                .build();
+    }
+
 
     private List<Contract> createTestDataContracts() {
         return List.of(
@@ -142,16 +199,16 @@ public class GenerateTestData {
     }
 
     private Contract createContract(String title, String description, String startDate, String endDate, int aiLevel,
-                                  String aiAnalysisText, String fileName, String file) {
+                                  String aiAnalysisText, String fileName, byte[] file) {
         return Contract.builder()
                 .title(title)
                 .description(description)
                 .startDate(LocalDate.parse(startDate, formatter))
                 .endDate(LocalDate.parse(endDate, formatter))
                 .aiLevel(aiLevel)
-                .aiAnalysisText("aiAnalysisText")
+                .aiAnalysisText(aiAnalysisText)
                 .fileName(fileName)
-                .file(null)
+                .file(file)
                 .build();
     }
 }

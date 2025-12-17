@@ -45,7 +45,6 @@ public class InvoiceService {
                 .withAmount(mapped.amount())
                 .withPurpose(mapped.purpose())
                 .withInvoice(mapped.isInvoice())
-                .withFileType(mapped.fileType())
                 .withFileName(mapped.fileName())
                 .withFile(mapped.file());
 
@@ -64,6 +63,10 @@ public class InvoiceService {
         Invoice mapped = invoiceMapper.fromDto(invoiceDto);
         Invoice created = invoiceRepo.save(mapped);
         return invoiceMapper.toDtoWithoutFile(created);
+    }
+
+    public void createTestDataInvoice(Invoice invoice) {
+        invoiceRepo.save(invoice);
     }
 
 

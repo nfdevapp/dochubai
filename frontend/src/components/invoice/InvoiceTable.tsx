@@ -26,7 +26,6 @@ import {
     TableCell,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { Invoice } from "@/model/Invoice";
 import InvoiceTableDialog from "@/components/invoice/InvoiceTableDialog";
@@ -262,49 +261,6 @@ const columns: ColumnDef<Invoice>[] = [
         ),
         cell: ({ row }) => <div className="pl-6">{row.getValue("amount")}</div>,
     },
-    {
-        accessorKey: "fileType",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                className="pl-6 flex items-center gap-2"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                <span className="font-medium">Dateityp</span>
-                <ArrowUpDown className="h-4 w-4" />
-            </Button>
-        ),
-        cell: ({ row }) => <FileTypeCell value={Number(row.getValue("fileType"))} />,
-    },
 ];
-
-// -------------------------
-// Dateityp Hilfsdaten
-// -------------------------
-const FILE_TYPE = {
-    1: { color: "bg-green-500", label: "Ist einwandfrei" },
-    2: { color: "bg-yellow-400", label: "Sollte überprüft werden" },
-    3: { color: "bg-red-500", label: "Weist kritische Abweichungen auf" },
-} as const;
-
-// Hilfskomponente für Dateityp-Zelle
-const FileTypeCell = ({ value }: { value: number }) => {
-    // Typ casten, damit TypeScript weiß, dass value ein gültiger Schlüssel ist
-    const fileType = FILE_TYPE[value as keyof typeof FILE_TYPE] ?? { color: "bg-gray-400", label: "Keine Daten" };
-    return (
-        <div className="w-full flex justify-center items-center">
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger>
-                        <div className={`h-3 w-3 rounded-full ${fileType.color}`} />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>{fileType.label}</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-        </div>
-    );
-};
 
 

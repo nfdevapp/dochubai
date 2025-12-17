@@ -64,7 +64,6 @@ export default function InvoiceTableDialog({
     const [purpose, setPurpose] = React.useState("");
     const [date, setDate] = React.useState<Date | undefined>();
     const [isInvoice, setIsInvoice] = React.useState<boolean>();
-    const [fileType, setFyleType] = React.useState("");
     const [fileName, setFileName] = React.useState("");
     const [file, setFile] = React.useState<File | null>(null);
     const [saving, setSaving] = React.useState(false);
@@ -93,7 +92,6 @@ export default function InvoiceTableDialog({
                 setAmount(0);
                 setAmountInput("");
                 setIsInvoice(undefined);
-                setFyleType("");
                 setFile(null);
                 setFileName("");
                 return;
@@ -107,7 +105,6 @@ export default function InvoiceTableDialog({
                 setDate(parseDate(invoice.date));
                 setAmount(invoice.amount);
                 setIsInvoice(invoice.isInvoice);
-                setFyleType(invoice.fileType);
                 setFile(null);
                 setFileName(invoice.fileName);
                 // Base64 sichern für Download
@@ -201,7 +198,6 @@ export default function InvoiceTableDialog({
                 date: date ? format(date, "dd.MM.yyyy") : "",
                 amount: amount ?? 0,
                 isInvoice: isInvoice ?? false,
-                fileType: fileType,
                 fileName: uploadedFileName,
                 fileBase64: fileBase64
             };
