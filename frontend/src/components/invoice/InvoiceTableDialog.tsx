@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CalendarIcon, Upload, Check, ChevronsUpDown } from "lucide-react";
+import {CalendarIcon, Upload, Check, ChevronsUpDown} from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -229,7 +229,14 @@ export default function InvoiceTableDialog({
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {invoiceId ? "Abrechnung bearbeiten" : "Neue Abrechnung anlegen"}
-                        {saving && <div className="text-center py-2 text-sm">Daten werden gespeichert...</div>}
+                        {saving && (
+                            <div className="flex items-center justify-center gap-3 mt-3 p-3 rounded-lg
+                                bg-blue-50 border border-blue-200 text-blue-700 text-sm">
+                                <span className="font-medium">
+                                    Daten werden gespeichert…
+                                </span>
+                            </div>
+                        )}
                     </DialogTitle>
                 </DialogHeader>
 
