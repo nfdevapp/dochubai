@@ -22,13 +22,13 @@ public class ChatGPTService {
         try {
             String prompt = "Analysiere den folgenden Vertrag. " +
                     "Bewerte ihn nach diesem Schema:\n" +
-                    "1 = einwandfrei\n" +
+                    "1 = ist einwandfrei\n" +
                     "2 = sollte überprüft werden\n" +
                     "3 = weist kritische Abweichungen auf\n\n" +
                     "Antworte AUSSCHLIESSLICH im JSON-Format:\n" +
                     "{\n" +
                     "  \"aiLevel\": 1,\n" +
-                    "  \"aiAnalysisText\": \"Text mit maximal 300 Zeichen\"\n" +
+                    "  \"aiAnalysisText\": \"Text mit maximal 500 Zeichen\"\n" +
                     "}\n\n" +
                     "Vertragstext:\n" + description;
 

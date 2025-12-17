@@ -216,7 +216,15 @@ export default function ContractTableDialog({
                 <DialogHeader>
                     <DialogTitle className="text-center w-full">
                         {contractId ? "Vertrag bearbeiten" : "Neuen Vertrag anlegen"}
-                        {saving && <div className="text-center py-2 text-sm">Daten werden gespeichert und durch KI analysiert...</div>}
+                        {saving && (
+                            <div className="flex items-center justify-center gap-3 mt-3 p-3 rounded-lg
+                                bg-blue-50 border border-blue-200 text-blue-700 text-sm">
+                                <Sparkles className="h-5 w-5 animate-pulse" />
+                                <span className="font-medium">
+                                    Daten werden gespeichert und durch KI analysiert…
+                                </span>
+                            </div>
+                        )}
                     </DialogTitle>
                 </DialogHeader>
 
@@ -304,7 +312,7 @@ export default function ContractTableDialog({
 
                         {/* AI Analyse Text */}
                         <Card className="mt-2 border border-gray-200 bg-gray-50">
-                            <CardContent className="p-3">
+                            <CardContent className="p-3 h-32 overflow-y-auto">
                                 {aiAnalysisText || "Keine weiteren Informationen"}
                             </CardContent>
                         </Card>
