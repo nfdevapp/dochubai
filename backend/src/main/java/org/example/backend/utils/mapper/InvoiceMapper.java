@@ -82,6 +82,7 @@ public class InvoiceMapper {
             return InvoiceDto.builder()
                     .id(invoice.id())
                     .docNumber(invoice.docNumber())
+                    .date(invoice.date() != null ? invoice.date().format(FORMATTER) : null)
                     .amount(invoice.amount())
                     .purpose(invoice.purpose())
                     .isInvoice(invoice.isInvoice())
