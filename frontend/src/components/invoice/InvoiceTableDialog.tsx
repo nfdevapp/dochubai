@@ -52,18 +52,18 @@ interface InvoiceTableDialogProps {
 
 // Haupt-Komponente
 export default function InvoiceTableDialog({
-                                                open,
-                                                onOpenChange,
-                                                invoiceId,
-                                                onSave,
-                                                onDelete
-                                            }: InvoiceTableDialogProps) {
+                                               open,
+                                               onOpenChange,
+                                               invoiceId,
+                                               onSave,
+                                               onDelete
+                                           }: InvoiceTableDialogProps) {
 
     const [loading, setLoading] = React.useState(false);
     const [docNumber, setDocNumber] = React.useState("");
     const [purpose, setPurpose] = React.useState("");
     const [date, setDate] = React.useState<Date | undefined>();
-    const [isInvoice, setIsInvoice] = React.useState<boolean>();
+    const [isInvoice, setIsInvoice] = React.useState<boolean>(false);
     const [fileName, setFileName] = React.useState("");
     const [file, setFile] = React.useState<File | null>(null);
     const [saving, setSaving] = React.useState(false);
@@ -72,15 +72,13 @@ export default function InvoiceTableDialog({
     const [amount, setAmount] = React.useState<number | undefined>(undefined);
     const [amountInput, setAmountInput] = React.useState<string>("");
 
-    // Abrechnung
-    const [invoiceType, setInvoiceType] = React.useState<string>("Rechnung");
     const [invoiceTypeOpen, setInvoiceTypeOpen] = React.useState(false);
 
     const { control } = useUploadFile({ route: "D:/" });
 
     const [startPopoverOpen, setStartPopoverOpen] = React.useState(false);
 
-    // Lade Vertragsdaten
+    // Lade Abrechnungsdaten
     React.useEffect(() => {
         const loadInvoice = async () => {
             if (!open) return;
@@ -91,7 +89,7 @@ export default function InvoiceTableDialog({
                 setDate(undefined);
                 setAmount(0);
                 setAmountInput("");
-                setIsInvoice(undefined);
+                setIsInvoice(false);
                 setFile(null);
                 setFileName("");
                 return;
@@ -109,19 +107,21 @@ export default function InvoiceTableDialog({
                         ? invoice.amount.toFixed(2).replace(".", ",")
                         : ""
                 );
-                setIsInvoice(invoice.isInvoice);
+                setIsInvoice(invoice.isInvoice ?? false);
+
                 setFile(null);
                 setFileName(invoice.fileName);
                 // Base64 sichern für Download
                 (window as { __currentFileBase64?: string }).__currentFileBase64 = invoice.fileBase64 ?? undefined;
             } catch (err) {
-                console.error("Fehler beim Laden des Vertrags:", err);
+                console.error("Fehler beim Laden des Abrechnungs:", err);
             } finally {
                 setLoading(false);
             }
         };
         loadInvoice();
     }, [invoiceId, open]);
+
 
     if (!open) return null;
 
@@ -140,19 +140,15 @@ export default function InvoiceTableDialog({
 
         let blob: Blob;
 
-        // Falls neue Datei hochgeladen → direkt File nutzen
         if (file) {
             blob = new Blob([file], { type: file.type });
-        }
-        // Falls Vertrag aus Backend → Base64 → Blob
-        else {
+        } else {
             const base64 = (window as { __currentFileBase64?: string }).__currentFileBase64;
             if (!base64) {
                 console.error("Keine Base64 Datei vorhanden");
                 return;
             }
 
-            // BASE64 → Bytearray
             const byteChars = atob(base64);
             const byteNumbers = new Array(byteChars.length);
             for (let i = 0; i < byteChars.length; i++) {
@@ -171,7 +167,6 @@ export default function InvoiceTableDialog({
             blob = new Blob([byteArray], { type: mime });
         }
 
-        // Browser zeigt Speichern-unter-Dialog an
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -180,7 +175,6 @@ export default function InvoiceTableDialog({
         URL.revokeObjectURL(url);
     };
 
-    // Formular-Submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
@@ -192,7 +186,6 @@ export default function InvoiceTableDialog({
             if (file) {
                 const result = await control.upload(file);
                 uploadedFileName = result?.file?.name || file.name;
-                //ohne prefix
                 fileBase64 = (await fileToBase64(file)).split(",")[1];
             }
 
@@ -202,7 +195,7 @@ export default function InvoiceTableDialog({
                 purpose: purpose,
                 date: date ? format(date, "dd.MM.yyyy") : "",
                 amount: amount ?? 0,
-                isInvoice: isInvoice ?? false,
+                isInvoice: isInvoice,
                 fileName: uploadedFileName,
                 fileBase64: fileBase64
             };
@@ -223,7 +216,6 @@ export default function InvoiceTableDialog({
         }
     };
 
-    // RENDER
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[500px]">
@@ -259,32 +251,22 @@ export default function InvoiceTableDialog({
                                 type="text"
                                 value={amountInput}
                                 onChange={(e) => {
-                                    // Nur Zahlen, Punkt oder Komma erlauben
                                     const val = e.target.value.replace(/[^0-9.,]/g, "");
-
-                                    // Maximal ein Komma oder Punkt erlauben
                                     const parts = val.split(/[.,]/);
                                     let formatted = parts[0];
-                                    if (parts.length > 1) {
-                                        formatted += "," + parts[1];
-                                    }
-
+                                    if (parts.length > 1) formatted += "," + parts[1];
                                     setAmountInput(formatted);
                                 }}
                                 onBlur={() => {
-                                    // Beim Verlassen des Felds in number umwandeln
                                     if (amountInput) {
                                         const numeric = parseFloat(amountInput.replace(",", "."));
                                         setAmount(numeric);
-                                    } else {
-                                        setAmount(undefined);
-                                    }
+                                    } else setAmount(undefined);
                                 }}
                                 className="w-[350px]"
                                 placeholder="0,00"
                             />
                         </div>
-
 
                         {/* Datum */}
                         <div className="flex items-center justify-between gap-4">
@@ -320,7 +302,7 @@ export default function InvoiceTableDialog({
                                         aria-expanded={invoiceTypeOpen}
                                         className="w-[350px] justify-between"
                                     >
-                                        {invoiceType} {}
+                                        {isInvoice ? "Zahlungsbeleg" : "Rechnung"}
                                         <ChevronsUpDown className="opacity-50" />
                                     </Button>
                                 </PopoverTrigger>
@@ -333,8 +315,8 @@ export default function InvoiceTableDialog({
                                                     <CommandItem
                                                         key={type}
                                                         value={type}
-                                                        onSelect={(currentValue) => {
-                                                            setInvoiceType(currentValue === invoiceType ? "" : currentValue);
+                                                        onSelect={() => {
+                                                            setIsInvoice(type === "Zahlungsbeleg");
                                                             setInvoiceTypeOpen(false);
                                                         }}
                                                     >
@@ -342,7 +324,7 @@ export default function InvoiceTableDialog({
                                                         <Check
                                                             className={cn(
                                                                 "ml-auto",
-                                                                invoiceType === type ? "opacity-100" : "opacity-0"
+                                                                (isInvoice && type === "Zahlungsbeleg") || (!isInvoice && type === "Rechnung") ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
                                                     </CommandItem>
@@ -364,12 +346,7 @@ export default function InvoiceTableDialog({
                         <div className="grid gap-3">
                             <Label className="font-bold">Zahlungsbeleg/Rechnung anhängen:</Label>
                             <div className="flex gap-4">
-                                {/* Upload */}
-                                <Button
-                                    asChild
-                                    className="flex-1 justify-center"
-                                    variant="outline"
-                                >
+                                <Button asChild className="flex-1 justify-center" variant="outline">
                                     <label className="cursor-pointer flex items-center justify-center gap-2 w-full">
                                         Datei wählen
                                         <input
@@ -385,10 +362,9 @@ export default function InvoiceTableDialog({
                                         />
                                     </label>
                                 </Button>
-                                {/* Download */}
                                 <Button
                                     className="flex-1 justify-center"
-                                    type="button" // verhindert, dass das Formular abgeschickt wird
+                                    type="button"
                                     variant="outline"
                                     disabled={!fileName}
                                     onClick={() => {
@@ -399,15 +375,12 @@ export default function InvoiceTableDialog({
                                     <Upload className="rotate-180 size-4" />
                                     Herunterladen
                                 </Button>
-
                             </div>
-                            {/* Dateinamen unter Buttons */}
                             <p className="text-sm text-gray-700">
                                 {file ? `Ausgewählt: ${file.name}` :
                                     fileName ? `Aktuelle Datei: ${fileName}` : "Keine Datei vorhanden"}
                             </p>
                         </div>
-
 
                         {/* Buttons */}
                         <DialogFooter className="flex justify-between">
@@ -427,7 +400,7 @@ export default function InvoiceTableDialog({
 
                                     <AlertDialogContent>
                                         <AlertDialogHeader>
-                                            <AlertDialogTitle>Vertrag löschen?</AlertDialogTitle>
+                                            <AlertDialogTitle>Abrechnung löschen?</AlertDialogTitle>
                                             <AlertDialogDescription>
                                                 {deleting ? "Daten werden gelöscht..." : "Dieser Vorgang kann nicht rückgängig gemacht werden."}
                                             </AlertDialogDescription>

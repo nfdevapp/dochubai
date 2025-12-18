@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
+import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import {
@@ -256,10 +257,25 @@ const columns: ColumnDef<Invoice>[] = [
                 className="justify-start pl-6"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-                Betrag<ArrowUpDown className="ml-2 h-4 w-4" />
+                Betrag <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
-        cell: ({ row }) => <div className="pl-6">{row.getValue("amount")}</div>,
+        cell: ({ row }) => {
+            const amount = row.getValue<number>("amount");
+            const isInvoice = row.original.isInvoice;
+
+            return (
+                <div
+                    className={cn(
+                        "pl-6 font-medium",
+                        isInvoice === true && "text-green-600", // Zahlungsbeleg
+                        isInvoice === false && "text-red-600"  // Rechnung
+                    )}
+                >
+                    {amount.toFixed(2).replace(".", ",")} €
+                </div>
+            );
+        },
     },
 ];
 
