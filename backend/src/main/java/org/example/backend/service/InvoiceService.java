@@ -2,12 +2,14 @@ package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.exeptions.DocHubAiException;
+import org.example.backend.model.dto.InvoiceAiDto;
 import org.example.backend.model.dto.InvoiceDto;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.repository.InvoiceRepo;
 import org.example.backend.utils.mapper.InvoiceMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +65,23 @@ public class InvoiceService {
         Invoice mapped = invoiceMapper.fromDto(invoiceDto);
         Invoice created = invoiceRepo.save(mapped);
         return invoiceMapper.toDtoWithoutFile(created);
+    }
+
+    public List<InvoiceDto> getInvoiceChart() {
+        // Zahlungsbelege nur von den letzten drei Monaten
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+        List<Invoice> invoices = invoiceRepo.findInvoicesFrom(threeMonthsAgo);
+        List<InvoiceDto> invoiceDtos = invoices.stream()
+                .map(invoiceMapper::toDtoForChart)
+                .collect(Collectors.toList());
+        return invoiceDtos;
+    }
+
+    public InvoiceAiDto getInvoiceAiAnalysis() {
+        // Zahlungsbelege nur von den letzten drei Monaten
+        LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
+        List<Invoice> invoices = invoiceRepo.findInvoicesFrom(threeMonthsAgo);
+        return invoiceMapper.toDtoForAiAnalysis(invoices);
     }
 
     public void createTestDataInvoice(Invoice invoice) {

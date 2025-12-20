@@ -1,6 +1,6 @@
 package org.example.backend.utils.mapper;
 
-import org.example.backend.ai.AiAnalysisResult;
+import org.example.backend.ai.AiContractAnalysisResult;
 import org.example.backend.ai.FileTextExtractor;
 import org.example.backend.ai.TextAnalyzer;
 import org.example.backend.exeptions.DocHubAiException;
@@ -74,10 +74,10 @@ public class ContractMapper {
             }
 
             // AI analysis
-            AiAnalysisResult analysisResult = null;
+            AiContractAnalysisResult analysisResult = null;
             try {
                 if (extractedText != null && !extractedText.isBlank()) {
-                    analysisResult = textAnalyzer.analyzeText(extractedText);
+                    analysisResult = textAnalyzer.analyzeContractText(extractedText);
                 }
             } catch (Exception e) {
                 throw new DocHubAiException("Error during AI analysis: " + e.getMessage());

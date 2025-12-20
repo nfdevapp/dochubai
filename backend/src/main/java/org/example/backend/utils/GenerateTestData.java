@@ -41,51 +41,135 @@ public class GenerateTestData {
     }
 
     private List<Invoice> createTestDataInvoices() {
+        LocalDate startDate = LocalDate.now().minusMonths(3);
+
         return List.of(
-                createInvoice("RE-2024-001", "15.01.2024", 1250.00,
-                        "Miete Büroräume Januar 2024", true, "Miete_Jan_2024.pdf"),
+                createInvoice("RE-2024-001", startDate.plusDays(0), 1250.00, "Miete Büroräume Januar 2024", true, "Miete_Jan_2024.pdf", null),
+                createInvoice("RE-2024-002", startDate.plusDays(1), 320.50, "IT-Wartung Februar", true, "IT_Wartung_Feb.pdf", null),
+                createInvoice("RE-2024-003", startDate.plusDays(2), 89.99, "Software-Abonnement", true, "SaaS_Abo_Feb.pdf", null),
+                createInvoice("ZA-2024-004", startDate.plusDays(3), 500.00, "Anzahlung Projekt Alpha", false, "Zahlungsbeleg_Alpha.pdf", null),
+                createInvoice("RE-2024-005", startDate.plusDays(4), 2450.75, "Beratungsleistung Februar", true, "Beratung_Februar.docx", null),
+                createInvoice("RE-2024-006", startDate.plusDays(5), 159.00, "Cloud-Hosting März", true, "Cloud_Hosting_Maerz.pdf", null),
+                createInvoice("ZA-2024-007", startDate.plusDays(6), 1200.00, "Leasingrate Fahrzeug", false, "Leasingrate_Maerz.pdf", null),
+                createInvoice("RE-2024-008", startDate.plusDays(7), 980.40, "Marketing Agenturleistung", true, "Agentur_Marketing.pdf", null),
+                createInvoice("RE-2024-009", startDate.plusDays(8), 75.00, "Domain- und Hostinggebühren", true, "Domain_Hosting.pdf", null),
+                createInvoice("RE-2024-010", startDate.plusDays(9), 4300.00, "Bauabschlagsrechnung", true, "Bau_Abschlag_03_2024.pdf", null),
 
-                createInvoice("RE-2024-002", "01.02.2024", 320.50,
-                        "IT-Wartung Februar", true, "IT_Wartung_Feb.pdf"),
+                createInvoice("RE-2024-011", startDate.plusDays(10), 222.0, "Beratung Müller", true, "Beratung_01_04_2024.pdf", null),
+                createInvoice("RE-2024-012", startDate.plusDays(11), 97.0, "IT-Service Schulz", true, "ITService_02_04_2024.jpeg", null),
+                createInvoice("RE-2024-013", startDate.plusDays(12), 167.0, "Marketing Schmidt", true, "Marketing_03_04_2024.pdf", null),
+                createInvoice("RE-2024-014", startDate.plusDays(13), 242.0, "Support Wagner", true, "Support_04_04_2024.jpeg", null),
+                createInvoice("RE-2024-015", startDate.plusDays(14), 373.0, "Beratung Becker", true, "Beratung_05_04_2024.pdf", null),
+                createInvoice("RE-2024-016", startDate.plusDays(15), 301.0, "IT-Service Hofmann", true, "ITService_06_04_2024.pdf", null),
+                createInvoice("RE-2024-017", startDate.plusDays(16), 245.0, "Marketing Fischer", true, "Marketing_07_04_2024.jpeg", null),
+                createInvoice("RE-2024-018", startDate.plusDays(17), 409.0, "Support Weber", true, "Support_08_04_2024.pdf", null),
+                createInvoice("RE-2024-019", startDate.plusDays(18), 59.0, "Beratung Schäfer", true, "Beratung_09_04_2024.jpeg", null),
+                createInvoice("RE-2024-020", startDate.plusDays(19), 261.0, "IT-Service Richter", true, "ITService_10_04_2024.pdf", null),
 
-                createInvoice("RE-2024-003", "10.02.2024", 89.99,
-                        "Software-Abonnement", true, "SaaS_Abo_Feb.pdf"),
+                createInvoice("RE-2024-021", startDate.plusDays(20), 327.0, "Marketing Klein", true, "Marketing_11_04_2024.jpeg", null),
+                createInvoice("RE-2024-022", startDate.plusDays(21), 292.0, "Support Wolf", true, "Support_12_04_2024.pdf", null),
+                createInvoice("RE-2024-023", startDate.plusDays(22), 342.0, "Beratung Zimmermann", true, "Beratung_13_04_2024.jpeg", null),
+                createInvoice("RE-2024-024", startDate.plusDays(23), 137.0, "IT-Service Braun", true, "ITService_14_04_2024.pdf", null),
+                createInvoice("RE-2024-025", startDate.plusDays(24), 120.0, "Marketing Hartmann", true, "Marketing_15_04_2024.jpeg", null),
+                createInvoice("RE-2024-026", startDate.plusDays(25), 138.0, "Support Lange", true, "Support_16_04_2024.pdf", null),
+                createInvoice("RE-2024-027", startDate.plusDays(26), 446.0, "Beratung Schmitt", true, "Beratung_17_04_2024.jpeg", null),
+                createInvoice("RE-2024-028", startDate.plusDays(27), 364.0, "IT-Service Werner", true, "ITService_18_04_2024.pdf", null),
+                createInvoice("RE-2024-029", startDate.plusDays(28), 243.0, "Marketing Neumann", true, "Marketing_19_04_2024.jpeg", null),
+                createInvoice("RE-2024-030", startDate.plusDays(29), 89.0, "Support König", true, "Support_20_04_2024.pdf", null),
 
-                createInvoice("ZA-2024-004", "12.02.2024", 500.00,
-                        "Anzahlung Projekt Alpha", false, "Zahlungsbeleg_Alpha.pdf"),
+                createInvoice("RE-2024-031", startDate.plusDays(30), 137.0, "Beratung Frank", true, "Beratung_21_04_2024.jpeg", null),
+                createInvoice("RE-2024-032", startDate.plusDays(31), 224.0, "IT-Service Maier", true, "ITService_22_04_2024.pdf", null),
+                createInvoice("RE-2024-033", startDate.plusDays(32), 138.0, "Marketing Bauer", true, "Marketing_23_04_2024.jpeg", null),
+                createInvoice("RE-2024-034", startDate.plusDays(33), 387.0, "Support Schulze", true, "Support_24_04_2024.pdf", null),
+                createInvoice("RE-2024-035", startDate.plusDays(34), 215.0, "Beratung Fuchs", true, "Beratung_25_04_2024.jpeg", null),
+                createInvoice("RE-2024-036", startDate.plusDays(35), 75.0, "IT-Service Busch", true, "ITService_26_04_2024.pdf", null),
+                createInvoice("RE-2024-037", startDate.plusDays(36), 383.0, "Marketing Horn", true, "Marketing_27_04_2024.jpeg", null),
+                createInvoice("RE-2024-038", startDate.plusDays(37), 122.0, "Support Krüger", true, "Support_28_04_2024.pdf", null),
+                createInvoice("RE-2024-039", startDate.plusDays(38), 315.0, "Beratung Graf", true, "Beratung_29_04_2024.jpeg", null),
+                createInvoice("RE-2024-040", startDate.plusDays(39), 454.0, "IT-Service Pohl", true, "ITService_30_04_2024.pdf", null),
 
-                createInvoice("RE-2024-005", "20.02.2024", 2450.75,
-                        "Beratungsleistung Februar", true, "Beratung_Februar.docx"),
+                createInvoice("RE-2024-041", startDate.plusDays(40), 165.0, "Marketing Lorenz", false, "Marketing_01_05_2024.jpeg", null),
+                createInvoice("RE-2024-042", startDate.plusDays(41), 293.0, "Support Voigt", true, "Support_02_05_2024.pdf", null),
+                createInvoice("RE-2024-043", startDate.plusDays(42), 247.0, "Beratung Kühn", true, "Beratung_03_05_2024.jpeg", null),
+                createInvoice("RE-2024-044", startDate.plusDays(43), 385.0, "IT-Service Stark", false, "ITService_04_05_2024.pdf", null),
+                createInvoice("RE-2024-045", startDate.plusDays(44), 481.0, "Marketing Engel", true, "Marketing_05_05_2024.jpeg", null),
+                createInvoice("RE-2024-046", startDate.plusDays(45), 498.0, "Support Dietrich", true, "Support_06_05_2024.pdf", null),
+                createInvoice("RE-2024-047", startDate.plusDays(46), 388.0, "Beratung Arnold", true, "Beratung_07_05_2024.jpeg", null),
+                createInvoice("RE-2024-048", startDate.plusDays(47), 149.0, "IT-Service Albrecht", true, "ITService_08_05_2024.pdf", null),
+                createInvoice("RE-2024-049", startDate.plusDays(48), 227.0, "Marketing Seidel", false, "Marketing_09_05_2024.jpeg", null),
+                createInvoice("RE-2024-050", startDate.plusDays(49), 293.0, "Support Barth", true, "Support_10_05_2024.pdf", null),
 
-                createInvoice("RE-2024-006", "01.03.2024", 159.00,
-                        "Cloud-Hosting März", true, "Cloud_Hosting_Maerz.pdf"),
+                createInvoice("RE-2024-051", startDate.plusDays(50), 335.0, "Beratung Huber", true, "Beratung_11_05_2024.jpeg", null),
+                createInvoice("RE-2024-052", startDate.plusDays(51), 197.0, "IT-Service König", false, "ITService_12_05_2024.pdf", null),
+                createInvoice("RE-2024-053", startDate.plusDays(52), 197.0, "Marketing Bauer", true, "Marketing_13_05_2024.jpeg", null),
+                createInvoice("RE-2024-054", startDate.plusDays(53), 448.0, "Support Wolf", true, "Support_14_05_2024.pdf", null),
+                createInvoice("RE-2024-055", startDate.plusDays(54), 473.0, "Beratung Klein", true, "Beratung_15_05_2024.jpeg", null),
+                createInvoice("RE-2024-056", startDate.plusDays(55), 338.0, "IT-Service Hartmann", true, "ITService_16_05_2024.pdf", null),
+                createInvoice("RE-2024-057", startDate.plusDays(56), 499.0, "Marketing Lehmann", false, "Marketing_17_05_2024.jpeg", null),
+                createInvoice("RE-2024-058", startDate.plusDays(57), 315.0, "Support Frank", true, "Support_18_05_2024.pdf", null),
+                createInvoice("RE-2024-059", startDate.plusDays(58), 235.0, "Beratung Graf", true, "Beratung_19_05_2024.jpeg", null),
+                createInvoice("RE-2024-060", startDate.plusDays(59), 177.0, "IT-Service Voigt", true, "ITService_20_05_2024.pdf", null),
 
-                createInvoice("ZA-2024-007", "05.03.2024", 1200.00,
-                        "Leasingrate Fahrzeug", false, "Leasingrate_Maerz.pdf"),
+                createInvoice("RE-2024-061", startDate.plusDays(60), 82.0, "Marketing Pohl", true, "Marketing_21_05_2024.jpeg", null),
+                createInvoice("RE-2024-062", startDate.plusDays(61), 81.0, "Support Lorenz", true, "Support_22_05_2024.pdf", null),
+                createInvoice("RE-2024-063", startDate.plusDays(62), 252.0, "Beratung Müller", true, "Beratung_23_05_2024.jpeg", null),
+                createInvoice("RE-2024-064", startDate.plusDays(63), 294.0, "IT-Service Schulz", false, "ITService_24_05_2024.pdf", null),
+                createInvoice("RE-2024-065", startDate.plusDays(64), 201.0, "Marketing Schmidt", true, "Marketing_25_05_2024.jpeg", null),
+                createInvoice("RE-2024-066", startDate.plusDays(65), 213.0, "Support Wagner", true, "Support_26_05_2024.pdf", null),
+                createInvoice("RE-2024-067", startDate.plusDays(66), 420.0, "Beratung Becker", true, "Beratung_27_05_2024.jpeg", null),
+                createInvoice("RE-2024-068", startDate.plusDays(67), 233.0, "IT-Service Hofmann", true, "ITService_28_05_2024.pdf", null),
+                createInvoice("RE-2024-069", startDate.plusDays(68), 78.0, "Marketing Fischer", true, "Marketing_29_05_2024.jpeg", null),
+                createInvoice("RE-2024-070", startDate.plusDays(69), 340.0, "Support Weber", true, "Support_30_05_2024.pdf", null),
 
-                createInvoice("RE-2024-008", "10.03.2024", 980.40,
-                        "Marketing Agenturleistung", true, "Agentur_Marketing.pdf"),
+                createInvoice("RE-2024-071", startDate.plusDays(70), 178.0, "Beratung Schäfer", true, "Beratung_31_05_2024.jpeg", null),
+                createInvoice("RE-2024-072", startDate.plusDays(71), 178.0, "IT-Service Richter", true, "ITService_01_06_2024.pdf", null),
+                createInvoice("RE-2024-073", startDate.plusDays(72), 470.0, "Marketing Klein", false, "Marketing_02_06_2024.jpeg", null),
+                createInvoice("RE-2024-074", startDate.plusDays(73), 103.0, "Support Wolf", true, "Support_03_06_2024.pdf", null),
+                createInvoice("RE-2024-075", startDate.plusDays(74), 439.0, "Beratung Graf", true, "Beratung_04_06_2024.jpeg", null),
+                createInvoice("RE-2024-076", startDate.plusDays(75), 88.0, "IT-Service Voigt", true, "ITService_05_06_2024.pdf", null),
+                createInvoice("RE-2024-077", startDate.plusDays(76), 294.0, "Marketing Pohl", true, "Marketing_06_06_2024.jpeg", null),
+                createInvoice("RE-2024-078", startDate.plusDays(77), 323.0, "Support Lorenz", true, "Support_07_06_2024.pdf", null),
+                createInvoice("RE-2024-079", startDate.plusDays(78), 385.0, "Beratung Müller", true, "Beratung_08_06_2024.jpeg", null),
+                createInvoice("RE-2024-080", startDate.plusDays(79), 438.0, "IT-Service Schulz", true, "ITService_09_06_2024.pdf", null),
 
-                createInvoice("RE-2024-009", "18.03.2024", 75.00,
-                        "Domain- und Hostinggebühren", true, "Domain_Hosting.pdf"),
+                createInvoice("RE-2024-081", startDate.plusDays(80), 155.0, "Marketing Schmidt", true, "Marketing_10_06_2024.jpeg", null),
+                createInvoice("RE-2024-082", startDate.plusDays(81), 92.0, "Support Wagner", true, "Support_11_06_2024.pdf", null),
+                createInvoice("RE-2024-083", startDate.plusDays(82), 492.0, "Beratung Becker", false, "Beratung_12_06_2024.jpeg", null),
+                createInvoice("RE-2024-084", startDate.plusDays(83), 81.0, "IT-Service Hofmann", true, "ITService_13_06_2024.pdf", null),
+                createInvoice("RE-2024-085", startDate.plusDays(84), 426.0, "Marketing Fischer", true, "Marketing_14_06_2024.jpeg", null),
+                createInvoice("RE-2024-086", startDate.plusDays(85), 307.0, "Support Weber", true, "Support_15_06_2024.pdf", null),
+                createInvoice("RE-2024-087", startDate.plusDays(86), 371.0, "Beratung Schäfer", true, "Beratung_16_06_2024.jpeg", null),
+                createInvoice("RE-2024-088", startDate.plusDays(87), 475.0, "IT-Service Richter", true, "ITService_17_06_2024.pdf", null),
+                createInvoice("RE-2024-089", startDate.plusDays(88), 107.0, "Marketing Klein", false, "Marketing_18_06_2024.jpeg", null),
+                createInvoice("RE-2024-090", startDate.plusDays(89), 341.0, "Support Wolf", true, "Support_19_06_2024.pdf", null),
 
-                createInvoice("RE-2024-010", "25.03.2024", 4300.00,
-                        "Bauabschlagsrechnung", true, "Bau_Abschlag_03_2024.pdf")
+                createInvoice("RE-2024-091", startDate.plusDays(90), 408.0, "Beratung Graf", true, "Beratung_20_06_2024.jpeg", null),
+                createInvoice("RE-2024-092", startDate.plusDays(91), 169.0, "IT-Service Voigt", true, "ITService_21_06_2024.pdf", null),
+                createInvoice("RE-2024-093", startDate.plusDays(92), 317.0, "Marketing Pohl", true, "Marketing_22_06_2024.jpeg", null),
+                createInvoice("RE-2024-094", startDate.plusDays(93), 480.0, "Support Lorenz", false, "Support_23_06_2024.pdf", null),
+                createInvoice("RE-2024-095", startDate.plusDays(94), 132.0, "Beratung Müller", true, "Beratung_24_06_2024.jpeg", null),
+                createInvoice("RE-2024-096", startDate.plusDays(95), 141.0, "IT-Service Schulz", true, "ITService_25_06_2024.pdf", null),
+                createInvoice("RE-2024-097", startDate.plusDays(96), 434.0, "Marketing Schmidt", true, "Marketing_26_06_2024.jpeg", null),
+                createInvoice("RE-2024-098", startDate.plusDays(97), 448.0, "Support Wagner", true, "Support_27_06_2024.pdf", null),
+                createInvoice("RE-2024-099", startDate.plusDays(98), 149.0, "Beratung Becker", true, "Beratung_28_06_2024.jpeg", null),
+                createInvoice("RE-2024-100", startDate.plusDays(99), 103.0, "IT-Service Hofmann", true, "ITService_29_06_2024.pdf", null),
+                createInvoice("RE-2024-101", startDate.plusDays(100), 446.0, "Marketing Fischer", true, "Marketing_30_06_2024.jpeg", null)
         );
-    }
 
+    }
 
     private Invoice createInvoice(
             String docNumber,
-            String date,
+            LocalDate date,
             double amount,
             String purpose,
             boolean isInvoice,
-            String fileName
+            String fileName,
+            byte[] file
     ) {
         return Invoice.builder()
                 .docNumber(docNumber)
-                .date(LocalDate.parse(date, formatter))
+                .date(date)
                 .amount(amount)
                 .purpose(purpose)
                 .isInvoice(isInvoice)

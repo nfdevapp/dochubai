@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.model.dto.InvoiceAiDto;
 import org.example.backend.model.dto.InvoiceDto;
 import org.example.backend.service.InvoiceService;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,17 @@ public class InvoiceController {
     public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
         invoiceService.deleteInvoice(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/chart")
+    public ResponseEntity<List<InvoiceDto>> getInvoiceChart() {
+        List<InvoiceDto> chartData = invoiceService.getInvoiceChart();
+        return ResponseEntity.ok(chartData);
+    }
+
+    @GetMapping("/aianalysis")
+    public ResponseEntity<InvoiceAiDto> getInvoiceAiAnalysis() {
+        InvoiceAiDto invoiceAiAnalysis  = invoiceService.getInvoiceAiAnalysis();
+        return ResponseEntity.ok(invoiceAiAnalysis);
     }
 }

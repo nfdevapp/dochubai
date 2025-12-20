@@ -64,3 +64,23 @@ export const deleteInvoice = async (id: string): Promise<void> => {
         return handleAxiosError(err);
     }
 };
+
+export const getInvoiceChart = async (): Promise<Invoice[]> => {
+    try {
+        const response = await axios.get<Invoice[]>(`${API_URL}/chart`);
+        return response.data;
+    } catch (err: unknown) {
+        return handleAxiosError(err);
+    }
+};
+
+// z.B. src/api/InvoiceService.ts
+export const getInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }> => {
+    try {
+        const response = await axios.get<{ aiAnalysisText: string }>(`${API_URL}/aianalysis`)
+        return response.data
+    } catch (err: unknown) {
+        return handleAxiosError(err)
+    }
+}
+
