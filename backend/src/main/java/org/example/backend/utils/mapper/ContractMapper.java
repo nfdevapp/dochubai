@@ -64,11 +64,19 @@ public class ContractMapper {
                     throw new DocHubAiException("Error decoding file from Base64: " + e.getMessage());
                 }
             }
-
             // Text extraction
             String extractedText;
             try {
-                extractedText = fileTextExtractor.extractText(fileBytes);
+                if (dto.fileName() != null &&
+                        (dto.fileName().toLowerCase().endsWith(".jpg")
+                                || dto.fileName().toLowerCase().endsWith(".jpeg")
+                                || dto.fileName().toLowerCase().endsWith(".png"))) {
+
+                    extractedText = fileTextExtractor.extractTextFromImage(fileBytes);
+
+                } else {
+                    extractedText = fileTextExtractor.extractText(fileBytes);
+                }
             } catch (Exception e) {
                 throw new DocHubAiException("Error extracting text from file: " + e.getMessage());
             }
