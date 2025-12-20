@@ -60,8 +60,9 @@ public class ChatGPTService {
             }
 
             String prompt = "Analysiere die folgenden Rechnungen. " +
-                    "Finde heraus, wo die meisten Ausgaben angefallen sind, " +
-                    "welche Posten am häufigsten vorkommen und gib eine kurze Zusammenfassung der Ausgabenstruktur. " +
+                    "Ermittle, in welchen Ausgabenkategorien (basierend auf dem Verwendungszweck) " +
+                    "die höchsten Kosten entstanden sind und welche Kategorien am häufigsten vorkommen. " +
+                    "Gib eine kurze Zusammenfassung der Ausgabenstruktur.\n\n" +
                     "Antworte AUSSCHLIESSLICH im JSON-Format:\n" +
                     "{\n" +
                     "  \"aiAnalysisText\": \"Text mit maximal 500 Zeichen\"\n" +
