@@ -40,6 +40,7 @@ public class ChatGPTService {
                     .retrieve()
                     .body(OpenAiResponse.class);
 
+            assert response != null;
             String jsonText = response.text();
 
             return objectMapper.readValue(jsonText, AiContractAnalysisResult.class);
@@ -74,6 +75,7 @@ public class ChatGPTService {
                     .retrieve()
                     .body(OpenAiResponse.class);
 
+            assert response != null;
             String jsonText = response.text();
 
             return objectMapper.readValue(jsonText, AiInvoiceAnalysisResult.class);

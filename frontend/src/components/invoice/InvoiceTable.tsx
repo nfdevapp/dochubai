@@ -135,8 +135,8 @@ export default function InvoiceTable() {
                 <input
                     placeholder="Suche..."
                     className="px-3 py-2 rounded-md border border-input bg-transparent w-64"
-                    value={(table.getColumn("docNumber")?.getFilterValue() as string) ?? ""}
-                    onChange={(e) => table.getColumn("docNumber")?.setFilterValue(e.target.value)}
+                    value={(table.getColumn("purpose")?.getFilterValue() as string) ?? ""}
+                    onChange={(e) => table.getColumn("purpose")?.setFilterValue(e.target.value)}
                 />
                 <div className="ml-auto">
                     <Badge
