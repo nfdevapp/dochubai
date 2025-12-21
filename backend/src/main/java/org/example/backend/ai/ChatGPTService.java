@@ -1,7 +1,7 @@
 package org.example.backend.ai;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.backend.model.dto.InvoiceDto;
+import org.example.backend.model.entities.Invoice;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -49,10 +49,10 @@ public class ChatGPTService {
         }
     }
 
-    public AiInvoiceAnalysisResult analyzeInvoiceText(List<InvoiceDto> invoices) {
+    public AiInvoiceAnalysisResult analyzeInvoiceText(List<Invoice> invoices) {
         try {
             StringBuilder invoiceText = new StringBuilder();
-            for (InvoiceDto inv : invoices) {
+            for (Invoice inv : invoices) {
                 invoiceText.append(String.format(
                         "Datum: %s, Belegnummer: %s, Betrag: %.2f, Zweck: %s%n",
                         inv.date(), inv.docNumber(), inv.amount(), inv.purpose()

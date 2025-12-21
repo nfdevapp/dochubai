@@ -74,7 +74,6 @@ export const getInvoiceChart = async (): Promise<Invoice[]> => {
     }
 };
 
-// z.B. src/api/InvoiceService.ts
 export const getInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }> => {
     try {
         const response = await axios.get<{ aiAnalysisText: string }>(`${API_URL}/aianalysis`)
@@ -83,4 +82,14 @@ export const getInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }
         return handleAxiosError(err)
     }
 }
+
+export const runInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }> => {
+    try {
+        const response = await axios.post<{ aiAnalysisText: string }>(`${API_URL}/aianalysis`)
+        return response.data
+    } catch (err: unknown) {
+        return handleAxiosError(err)
+    }
+}
+
 

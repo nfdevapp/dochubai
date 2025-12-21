@@ -1,6 +1,6 @@
 package org.example.backend.ai;
 
-import org.example.backend.model.dto.InvoiceDto;
+import org.example.backend.model.entities.Invoice;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class TextAnalyzer {
         return chatGPTService.analyzeContractText(extractedText);
     }
 
-    public AiInvoiceAnalysisResult analyzeInvoiceText(List<InvoiceDto> invoices) {
+    public AiInvoiceAnalysisResult analyzeInvoiceText(List<Invoice> invoices) {
         return chatGPTService.analyzeInvoiceText(invoices);
     }
 }

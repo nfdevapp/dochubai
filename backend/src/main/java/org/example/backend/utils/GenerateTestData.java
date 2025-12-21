@@ -30,6 +30,8 @@ public class GenerateTestData {
         contractService.deleteAllContracts();
         // Vorhandene Invoices löschen
         invoiceService.deleteAllInvoices();
+        // Vorhandene Ai Analyse Invoices löschen
+        invoiceService.deleteAiInvoices();
 
         //Testdaten als ContractDto erstellen
         List<Contract> contracts = createTestDataContracts();

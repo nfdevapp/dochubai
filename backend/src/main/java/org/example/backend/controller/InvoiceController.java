@@ -48,8 +48,13 @@ public class InvoiceController {
     }
 
     @GetMapping("/aianalysis")
-    public ResponseEntity<InvoiceAiDto> getInvoiceAiAnalysis() {
-        InvoiceAiDto invoiceAiAnalysis  = invoiceService.getInvoiceAiAnalysis();
+    public ResponseEntity<InvoiceAiDto> getLastInvoiceAiAnalysis() {
+        return ResponseEntity.ok(invoiceService.getLastInvoiceAiAnalysis());
+    }
+
+    @PostMapping("/aianalysis")
+    public ResponseEntity<InvoiceAiDto> analyzeInvoices() {
+        InvoiceAiDto invoiceAiAnalysis  = invoiceService.runInvoiceAiAnalysis();
         return ResponseEntity.ok(invoiceAiAnalysis);
     }
 }

@@ -27,7 +27,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import {getInvoiceAiAnalysis, getInvoiceChart} from "@/api/InvoiceService"
+import {getInvoiceAiAnalysis, getInvoiceChart, runInvoiceAiAnalysis} from "@/api/InvoiceService"
 import type { InvoiceChartItem } from "@/model/InvoiceChartItem";
 
 
@@ -63,8 +63,13 @@ export function InvoiceChart() {
                         desktop: inv.amount,
                     }))
                 )
+
+                // Analyse-Ergebnis aus DB laden (KEINE neue Analyse!)
+                const analysis = await getInvoiceAiAnalysis()
+                setAnalysisResult(analysis.aiAnalysisText)
+
             } catch (error) {
-                console.error("Fehler beim Laden der Chart-Daten:", error)
+                console.error("Fehler beim Laden:", error)
             } finally {
                 setLoading(false)
             }
@@ -72,6 +77,7 @@ export function InvoiceChart() {
 
         fetchData()
     }, [])
+
 
     const filteredData = data.filter((item: InvoiceChartItem) => {
         const date = parseDate(item.date)
@@ -95,10 +101,9 @@ export function InvoiceChart() {
 
     const handleAnalyze = async () => {
         setAnalyzing(true)
-        setAnalysisResult(null)
 
         try {
-            const result = await getInvoiceAiAnalysis()
+            const result = await runInvoiceAiAnalysis()
             setAnalysisResult(result.aiAnalysisText)
         } catch (error) {
             console.error("Analyse fehlgeschlagen", error)
@@ -107,8 +112,6 @@ export function InvoiceChart() {
             setAnalyzing(false)
         }
     }
-
-
 
     if (loading) {
         return (
@@ -212,13 +215,10 @@ export function InvoiceChart() {
                     </AreaChart>
                 </ChartContainer>
 
-                {analysisResult && (
-                    <div className="mt-4 p-4 bg-gray-100 rounded-lg flex items-start gap-2">
-                        {/*<Sparkles className="w-7 h-7 text-yellow-500 mt-1" />*/}
-                        <div>
-                            <h3 className="font-bold mb-1">Analyse-Ergebnis:</h3>
-                            <p>{analysisResult}</p>
-                        </div>
+                {analysisResult && analysisResult.trim() !== "" && (
+                    <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <h3 className="font-bold mb-1">Analyse-Ergebnis:</h3>
+                        <p>{analysisResult}</p>
                     </div>
                 )}
             </CardContent>

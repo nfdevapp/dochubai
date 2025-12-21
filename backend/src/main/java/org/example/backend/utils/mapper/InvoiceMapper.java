@@ -1,9 +1,6 @@
 package org.example.backend.utils.mapper;
 
-import org.example.backend.ai.AiInvoiceAnalysisResult;
-import org.example.backend.ai.TextAnalyzer;
 import org.example.backend.exeptions.DocHubAiException;
-import org.example.backend.model.dto.InvoiceAiDto;
 import org.example.backend.model.dto.InvoiceDto;
 import org.example.backend.model.entities.Invoice;
 import org.springframework.stereotype.Component;
@@ -12,16 +9,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Base64;
-import java.util.List;
 
 @Component
 public class InvoiceMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private final TextAnalyzer textAnalyzer;
-
-    public InvoiceMapper(TextAnalyzer textAnalyzer) {
-        this.textAnalyzer = textAnalyzer;
-    }
 
     // Invoice => InvoiceDto
     public InvoiceDto toDto(Invoice invoice) {
@@ -113,38 +104,5 @@ public class InvoiceMapper {
         } catch (Exception e) {
             throw new DocHubAiException("Error mapping Invoice to DTO for chart: " + e.getMessage());
         }
-    }
-
-    public InvoiceAiDto toDtoForAiAnalysis(List<Invoice> invoices) {
-        List<InvoiceDto> invoiceForAiAnalyses = invoices.stream()
-                .map(this::toDtoForAi)
-                .toList();
-
-        // AI analysis
-        AiInvoiceAnalysisResult analysisResult = null;
-        try {
-            analysisResult = textAnalyzer.analyzeInvoiceText(invoiceForAiAnalyses);
-        } catch (Exception e) {
-            throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
-        }
-
-
-        try {
-            return InvoiceAiDto.builder()
-                    .aiAnalysisText(analysisResult != null ? analysisResult.aiAnalysisText() : null)
-                    .build();
-        } catch (Exception e) {
-            throw new DocHubAiException("Error mapping Invoice to DTO for chart: " + e.getMessage());
-        }
-    }
-
-    private InvoiceDto toDtoForAi(Invoice invoice) {
-        return InvoiceDto.builder()
-                .docNumber(invoice.docNumber())
-                .date(invoice.date() != null ? invoice.date().format(FORMATTER) : null)
-                .amount(invoice.amount())
-                .purpose(invoice.purpose())
-                .fileName(invoice.fileName())
-                .build();
     }
 }

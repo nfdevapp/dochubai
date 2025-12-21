@@ -1,10 +1,14 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.ai.AiInvoiceAnalysisResult;
+import org.example.backend.ai.TextAnalyzer;
 import org.example.backend.exeptions.DocHubAiException;
 import org.example.backend.model.dto.InvoiceAiDto;
 import org.example.backend.model.dto.InvoiceDto;
 import org.example.backend.model.entities.Invoice;
+import org.example.backend.model.entities.InvoiceAi;
+import org.example.backend.repository.InvoiceAiRepo;
 import org.example.backend.repository.InvoiceRepo;
 import org.example.backend.utils.mapper.InvoiceMapper;
 import org.springframework.stereotype.Service;
@@ -18,7 +22,9 @@ import java.util.stream.Collectors;
 public class InvoiceService {
 
     private final InvoiceRepo invoiceRepo;
+    private final InvoiceAiRepo  invoiceAiRepo;
     private final InvoiceMapper invoiceMapper;
+    private final TextAnalyzer textAnalyzer;
 
     public InvoiceDto getInvoiceById(String id) {
         Invoice invoice = invoiceRepo.findById(id)
@@ -77,11 +83,45 @@ public class InvoiceService {
         return invoiceDtos;
     }
 
-    public InvoiceAiDto getInvoiceAiAnalysis() {
+    public InvoiceAiDto getLastInvoiceAiAnalysis() {
+        return invoiceAiRepo.findAll().stream()
+                .findFirst()
+                .map(ai -> InvoiceAiDto.builder()
+                        .aiAnalysisText(ai.aiAnalysisText())
+                        .build())
+                .orElse(InvoiceAiDto.builder()
+                        .aiAnalysisText(null)
+                        .build());
+    }
+
+
+    public InvoiceAiDto runInvoiceAiAnalysis() {
         // Zahlungsbelege nur von den letzten drei Monaten
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
         List<Invoice> invoices = invoiceRepo.findInvoicesFrom(threeMonthsAgo);
-        return invoiceMapper.toDtoForAiAnalysis(invoices);
+
+        AiInvoiceAnalysisResult result;
+        try {
+            result = textAnalyzer.analyzeInvoiceText(invoices);
+        } catch (Exception e) {
+            throw new DocHubAiException("Error during AI analysis: " + e.getMessage());
+        }
+
+        invoiceAiRepo.deleteAll();
+
+        InvoiceAi saved = invoiceAiRepo.save(
+                InvoiceAi.builder()
+                        .aiAnalysisText(result.aiAnalysisText())
+                        .build()
+        );
+
+        return InvoiceAiDto.builder()
+                .aiAnalysisText(saved.aiAnalysisText())
+                .build();
+    }
+
+    public void deleteAiInvoices() {
+        invoiceAiRepo.deleteAll();
     }
 
     public void createTestDataInvoice(Invoice invoice) {
