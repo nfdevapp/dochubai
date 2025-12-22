@@ -74,7 +74,7 @@ export const getInvoiceChart = async (): Promise<Invoice[]> => {
     }
 };
 
-export const getInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }> => {
+export const getLastInvoiceAiAnalysis = async (): Promise<{ aiAnalysisText: string }> => {
     try {
         const response = await axios.get<{ aiAnalysisText: string }>(`${API_URL}/aianalysis`)
         return response.data

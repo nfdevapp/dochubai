@@ -27,7 +27,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import {getInvoiceAiAnalysis, getInvoiceChart, runInvoiceAiAnalysis} from "@/api/InvoiceService"
+import {getLastInvoiceAiAnalysis, getInvoiceChart, runInvoiceAiAnalysis} from "@/api/InvoiceService"
 import type { InvoiceChartItem } from "@/model/InvoiceChartItem";
 
 
@@ -65,7 +65,7 @@ export function InvoiceChart() {
                 )
 
                 // Analyse-Ergebnis aus DB laden (KEINE neue Analyse!)
-                const analysis = await getInvoiceAiAnalysis()
+                const analysis = await getLastInvoiceAiAnalysis()
                 setAnalysisResult(analysis.aiAnalysisText)
 
             } catch (error) {
