@@ -40,18 +40,18 @@ export default function Sidebar({ setTitle, setPage }: SidebarProps) {
 
                 <button
                     onClick={() => {
-                        setTitle("Einstellungen");
-                        setPage(<div>TODO Einstellungen…</div>);
+                        setTitle("KI-Einstellungen");
+                        setPage(<div>TODO KI-Einstellungen…</div>);
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
                 >
-                    <Settings size={18} /> Einstellungen
+                    <Settings size={18} /> KI-Einstellungen
                 </button>
             </nav>
 
-            <div className="mt-auto text-sm text-muted-foreground">
-                © {new Date().getFullYear()}
-            </div>
+            {/*<div className="mt-auto text-sm text-muted-foreground">*/}
+            {/*    © {new Date().getFullYear()}*/}
+            {/*</div>*/}
         </aside>
     );
 }
