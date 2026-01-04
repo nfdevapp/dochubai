@@ -2,10 +2,13 @@ package org.example.backend.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.ai.ChatGPTService;
+import org.example.backend.model.entities.ChatGPT;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.service.ContractService;
 import org.example.backend.service.InvoiceService;
+import org.example.backend.utils.enums.PromptType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -18,28 +21,34 @@ public class GenerateTestData {
 
     private final ContractService contractService;
     private final InvoiceService invoiceService;
+    private final ChatGPTService chatGPTService;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @PostConstruct
     public void init() {
         createContracts();
+        createInoices();
+        createPrompts();
+    }
+
+    private void createInoices(){
+        // Vorhandene Invoices löschen
+        invoiceService.deleteAllInvoices();
+        // Vorhandene Ai Analyse Invoices löschen
+        invoiceService.deleteAiInvoices();
+        //Testdaten als InvoiceDto erstellen
+        List<Invoice> invoices = createTestDataInvoices();
+        invoices.forEach(invoiceService::createTestDataInvoice);
+
     }
 
     private void createContracts() {
         // Vorhandene Contracts löschen
         contractService.deleteAllContracts();
-        // Vorhandene Invoices löschen
-        invoiceService.deleteAllInvoices();
-        // Vorhandene Ai Analyse Invoices löschen
-        invoiceService.deleteAiInvoices();
-
         //Testdaten als ContractDto erstellen
         List<Contract> contracts = createTestDataContracts();
         contracts.forEach(contractService::createTestDataContract);
 
-        //Testdaten als InvoiceDto erstellen
-        List<Invoice> invoices = createTestDataInvoices();
-        invoices.forEach(invoiceService::createTestDataInvoice);
     }
 
     private List<Invoice> createTestDataInvoices() {
@@ -296,5 +305,43 @@ public class GenerateTestData {
                 .fileName(fileName)
                 .file(file)
                 .build();
+    }
+
+    private void createPrompts() {
+        //Vorhandene Prompts löschen
+        chatGPTService.deleteAllPrompts();
+
+        //Vertragsprompt
+        ChatGPT contractPrompt = ChatGPT.builder()
+                .key(PromptType.CONTRACT)
+                .prompt("Analysiere den folgenden Vertrag. " +
+                        "Bewerte ihn nach diesem Schema:\n" +
+                        "1 = ist einwandfrei\n" +
+                        "2 = sollte überprüft werden\n" +
+                        "3 = weist kritische Abweichungen auf\n\n" +
+                        "Antworte AUSSCHLIESSLICH im JSON-Format:\n" +
+                        "{\n" +
+                        "  \"aiLevel\": 1,\n" +
+                        "  \"aiAnalysisText\": \"Text mit maximal 500 Zeichen\"\n" +
+                        "}\n\n" +
+                        "Vertragstext:\n")
+                .build();
+
+        //Rechnungs-Prompt
+        ChatGPT invoicePrompt = ChatGPT.builder()
+                .key(PromptType.INVOICE)
+                .prompt("Analysiere die folgenden Rechnungen. " +
+                        "Ermittle, in welchen Ausgabenkategorien (basierend auf dem Verwendungszweck) " +
+                        "die höchsten Kosten entstanden sind und welche Kategorien am häufigsten vorkommen. " +
+                        "Gib eine kurze Zusammenfassung der Ausgabenstruktur.\n\n" +
+                        "Antworte AUSSCHLIESSLICH im JSON-Format:\n" +
+                        "{\n" +
+                        "  \"aiAnalysisText\": \"Text mit maximal 500 Zeichen\"\n" +
+                        "}\n\n" +
+                        "Rechnungen:\n")
+                .build();
+
+        chatGPTService.savePrompt(contractPrompt);
+        chatGPTService.savePrompt(invoicePrompt);
     }
 }
