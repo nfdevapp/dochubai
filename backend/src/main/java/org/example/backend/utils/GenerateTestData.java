@@ -192,114 +192,413 @@ public class GenerateTestData {
 
     private List<Contract> createTestDataContracts() {
         return List.of(
-                createContract("Mietvertrag", "Mietvertrag für Büro- oder Wohnräume.", "15.01.2024", "15.01.2025", 1,
-                        "Klare Struktur und umfassende Bedingungen, keine Auffälligkeiten.", "Mietvertrag.pdf", null),
+                createContract(
+                        "Mietvertrag",
+                        "Mietvertrag für Büro- oder Wohnräume.",
+                        "15.01.2024",
+                        "15.01.2025",
+                        "Dieser Mietvertrag regelt die Überlassung von Wohn- oder Büroräumen. Mietdauer, Miethöhe, Nebenkosten sowie Kündigungsfristen sind festgelegt.",
+                        1,
+                        "Klare Struktur und umfassende Bedingungen, keine Auffälligkeiten.",
+                        "Mietvertrag.pdf",
+                        null
+                ),
 
-                createContract("Arbeitsvertrag", "Unbefristeter Arbeitsvertrag mit Standardklauseln.", "03.11.2023", "03.11.2024", 2,
-                        "Enthält die Grundregeln, aber einige Kündigungsfristen könnten präziser sein.", "Arbeitsvertrag.docx", null),
+                createContract(
+                        "Arbeitsvertrag",
+                        "Unbefristeter Arbeitsvertrag mit Standardklauseln.",
+                        "03.11.2023",
+                        "03.11.2024",
+                        "Der Arbeitsvertrag regelt das Arbeitsverhältnis zwischen Arbeitgeber und Arbeitnehmer. Arbeitszeit, Vergütung, Urlaub und Kündigungsfristen sind definiert.",
+                        2,
+                        "Enthält die Grundregeln, aber einige Kündigungsfristen könnten präziser sein.",
+                        "Arbeitsvertrag.docx",
+                        null
+                ),
 
-                createContract("Dienstleistungsvertrag", "Vertrag über externe Dienstleistungen.", "20.02.2024", "20.02.2025", 1,
-                        "Alles Wesentliche geregelt, klare Leistungsbeschreibung vorhanden.", "Dienstleistungsvertrag.pdf", null),
+                createContract(
+                        "Dienstleistungsvertrag",
+                        "Vertrag über externe Dienstleistungen.",
+                        "20.02.2024",
+                        "20.02.2025",
+                        "Dieser Dienstleistungsvertrag beschreibt Art und Umfang externer Leistungen. Vergütung, Haftung und Laufzeit sind geregelt.",
+                        1,
+                        "Alles Wesentliche geregelt, klare Leistungsbeschreibung vorhanden.",
+                        "Dienstleistungsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Kaufvertrag", "Einmaliger Kaufvertrag für Waren oder Geräte.", "09.08.2022", "09.08.2023", 3,
-                        "Lieferbedingungen und Gewährleistungsregelungen unklar, Risiko für Streitfälle.", "Kaufvertrag.docx", null),
+                createContract(
+                        "Kaufvertrag",
+                        "Einmaliger Kaufvertrag für Waren oder Geräte.",
+                        "09.08.2022",
+                        "09.08.2023",
+                        "Der Kaufvertrag regelt den Verkauf von Waren. Kaufpreis, Lieferbedingungen sowie Gewährleistung und Haftung sind Bestandteil des Vertrages.",
+                        3,
+                        "Lieferbedingungen und Gewährleistungsregelungen unklar, Risiko für Streitfälle.",
+                        "Kaufvertrag.docx",
+                        null
+                ),
 
-                createContract("Versicherungsvertrag", "Standard-Versicherungspolice mit jährlicher Laufzeit.", "11.12.2023", "11.12.2024", 1,
-                        "Alle Versicherungsbedingungen sind verständlich und korrekt formuliert.", "Versicherungsvertrag.pdf", null),
+                createContract(
+                        "Versicherungsvertrag",
+                        "Standard-Versicherungspolice mit jährlicher Laufzeit.",
+                        "11.12.2023",
+                        "11.12.2024",
+                        "Dieser Versicherungsvertrag definiert den Versicherungsschutz, versicherte Risiken, Prämien und Pflichten im Schadensfall.",
+                        1,
+                        "Alle Versicherungsbedingungen sind verständlich und korrekt formuliert.",
+                        "Versicherungsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Leasingvertrag", "Leasingvertrag für technische Geräte oder Fahrzeuge.", "01.06.2022", "01.06.2025", 2,
-                        "Vertrag deckt die Grundpunkte ab, aber Restwertregelung könnte klarer sein.", "Leasingvertrag.pdf", null),
+                createContract(
+                        "Leasingvertrag",
+                        "Leasingvertrag für technische Geräte oder Fahrzeuge.",
+                        "01.06.2022",
+                        "01.06.2025",
+                        "Der Leasingvertrag regelt die Nutzung eines Leasingobjekts. Leasingdauer, Raten, Wartung und Rückgabe sind festgelegt.",
+                        2,
+                        "Vertrag deckt die Grundpunkte ab, aber Restwertregelung könnte klarer sein.",
+                        "Leasingvertrag.pdf",
+                        null
+                ),
 
-                createContract("Wartungsvertrag", "Regelmäßige Wartung von IT-Systemen.", "01.03.2024", "01.03.2025", 1,
-                        "Klauseln verständlich, Leistungsumfang klar definiert.", "Wartungsvertrag.docx", null),
+                createContract(
+                        "Wartungsvertrag",
+                        "Regelmäßige Wartung von IT-Systemen.",
+                        "01.03.2024",
+                        "01.03.2025",
+                        "Der Wartungsvertrag beschreibt regelmäßige Wartungsleistungen, Reaktionszeiten und den Leistungsumfang.",
+                        1,
+                        "Klauseln verständlich, Leistungsumfang klar definiert.",
+                        "Wartungsvertrag.docx",
+                        null
+                ),
 
-                createContract("Hostingvertrag", "Webhosting oder Serverhosting-Leistungen.", "14.09.2023", "14.09.2024", 1,
-                        "Hosting-Leistungen gut beschrieben, SLAs nachvollziehbar.", "Hostingvertrag.pdf", null),
+                createContract(
+                        "Hostingvertrag",
+                        "Webhosting oder Serverhosting-Leistungen.",
+                        "14.09.2023",
+                        "14.09.2024",
+                        "Dieser Hostingvertrag regelt die Bereitstellung von Server- und Hosting-Leistungen inklusive Verfügbarkeit und SLAs.",
+                        1,
+                        "Hosting-Leistungen gut beschrieben, SLAs nachvollziehbar.",
+                        "Hostingvertrag.pdf",
+                        null
+                ),
 
-                createContract("Supportvertrag", "Technischer Support und Helpdesk.", "01.01.2024", "01.01.2025", 1,
-                        "Supportzeiten und Verantwortlichkeiten klar definiert.", "Supportvertrag.docx", null),
+                createContract(
+                        "Supportvertrag",
+                        "Technischer Support und Helpdesk.",
+                        "01.01.2024",
+                        "01.01.2025",
+                        "Der Supportvertrag umfasst technischen Support, Supportzeiten sowie Reaktions- und Eskalationsstufen.",
+                        1,
+                        "Supportzeiten und Verantwortlichkeiten klar definiert.",
+                        "Supportvertrag.docx",
+                        null
+                ),
 
-                createContract("Kooperationsvertrag", "Partnerschaft für gemeinsame Projekte.", "22.11.2022", "22.11.2023", 2,
-                        "Grundlagen sind da, aber Verantwortlichkeiten könnten klarer sein.", "Kooperationsvertrag.pdf", null),
+                createContract(
+                        "Kooperationsvertrag",
+                        "Partnerschaft für gemeinsame Projekte.",
+                        "22.11.2022",
+                        "22.11.2023",
+                        "Dieser Kooperationsvertrag regelt die Zusammenarbeit der Parteien, Ziele, Aufgabenverteilung und Laufzeit.",
+                        2,
+                        "Grundlagen sind da, aber Verantwortlichkeiten könnten klarer sein.",
+                        "Kooperationsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Liefervertrag", "Regelmäßige Lieferung von Waren.", "10.01.2023", "10.01.2024", 1,
-                        "Lieferfristen und Mengenangaben klar geregelt.", "Liefervertrag.docx", null),
+                createContract(
+                        "Liefervertrag",
+                        "Regelmäßige Lieferung von Waren.",
+                        "10.01.2023",
+                        "10.01.2024",
+                        "Der Liefervertrag regelt Liefermengen, Lieferfristen sowie Zahlungsbedingungen für regelmäßig gelieferte Waren.",
+                        1,
+                        "Lieferfristen und Mengenangaben klar geregelt.",
+                        "Liefervertrag.docx",
+                        null
+                ),
 
-                createContract("Agenturvertrag", "Marketing- oder Vermittlungsagenturvertrag.", "01.02.2024", "01.02.2025", 1,
-                        "Aufgaben und Vergütung transparent beschrieben.", "Agenturvertrag.pdf", null),
+                createContract(
+                        "Agenturvertrag",
+                        "Marketing- oder Vermittlungsagenturvertrag.",
+                        "01.02.2024",
+                        "01.02.2025",
+                        "Dieser Agenturvertrag definiert Marketing- und Vermittlungsleistungen sowie Vergütung und Kündigungsmodalitäten.",
+                        1,
+                        "Aufgaben und Vergütung transparent beschrieben.",
+                        "Agenturvertrag.pdf",
+                        null
+                ),
 
-                createContract("Lizenzvertrag", "Lizenz zur Nutzung geistigen Eigentums.", "20.01.2024", "20.01.2025", 1,
-                        "Nutzungsrechte klar definiert, keine offensichtlichen Lücken.", "Lizenzvertrag.docx", null),
+                createContract(
+                        "Lizenzvertrag",
+                        "Lizenz zur Nutzung geistigen Eigentums.",
+                        "20.01.2024",
+                        "20.01.2025",
+                        "Der Lizenzvertrag regelt die Nutzung geistigen Eigentums. Umfang der Nutzungsrechte, Laufzeit, Vergütung sowie Einschränkungen sind festgelegt.",
+                        1,
+                        "Nutzungsrechte klar definiert, keine offensichtlichen Lücken.",
+                        "Lizenzvertrag.docx",
+                        null
+                ),
 
-                createContract("Bauvertrag", "Vertrag über Bauleistungen.", "15.05.2022", "15.05.2024", 3,
-                        "Unklare Abnahmebedingungen und Haftungsregelungen, hohes Risiko für Streitigkeiten.", "Bauvertrag.pdf", null),
+                createContract(
+                        "Bauvertrag",
+                        "Vertrag über Bauleistungen.",
+                        "15.05.2022",
+                        "15.05.2024",
+                        "Dieser Bauvertrag regelt die Erbringung von Bauleistungen. Leistungsumfang, Bauzeiten, Abnahmebedingungen und Haftungsregelungen sind Bestandteil des Vertrages.",
+                        3,
+                        "Unklare Abnahmebedingungen und Haftungsregelungen, hohes Risiko für Streitigkeiten.",
+                        "Bauvertrag.pdf",
+                        null
+                ),
 
-                createContract("Projektvertrag", "Befristeter Projektvertrag mit definiertem Umfang.", "11.03.2023", "11.03.2024", 1,
-                        "Projektumfang und Fristen klar definiert, keine Probleme erkennbar.", "Projektvertrag.docx", null),
+                createContract(
+                        "Projektvertrag",
+                        "Befristeter Projektvertrag mit definiertem Umfang.",
+                        "11.03.2023",
+                        "11.03.2024",
+                        "Der Projektvertrag definiert einen zeitlich befristeten Projektumfang. Meilensteine, Fristen und Verantwortlichkeiten sind geregelt.",
+                        1,
+                        "Projektumfang und Fristen klar definiert, keine Probleme erkennbar.",
+                        "Projektvertrag.docx",
+                        null
+                ),
 
-                createContract("Beratungsvertrag", "Externe Unternehmensberatung.", "02.12.2023", "02.12.2024", 1,
-                        "Vertrag deckt Beratungsumfang und Vergütung korrekt ab.", "Beratungsvertrag.pdf", null),
+                createContract(
+                        "Beratungsvertrag",
+                        "Externe Unternehmensberatung.",
+                        "02.12.2023",
+                        "02.12.2024",
+                        "Dieser Beratungsvertrag regelt externe Beratungsleistungen. Beratungsumfang, Vergütung und Vertraulichkeit sind festgelegt.",
+                        1,
+                        "Vertrag deckt Beratungsumfang und Vergütung korrekt ab.",
+                        "Beratungsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Darlehensvertrag", "Kreditvereinbarung mit langfristiger Laufzeit.", "30.09.2021", "30.09.2026", 2,
-                        "Zinsregelungen sind vorhanden, aber Rückzahlungsmodalitäten teilweise unklar.", "Darlehensvertrag.pdf", null),
+                createContract(
+                        "Darlehensvertrag",
+                        "Kreditvereinbarung mit langfristiger Laufzeit.",
+                        "30.09.2021",
+                        "30.09.2026",
+                        "Der Darlehensvertrag regelt die Gewährung eines Kredits. Darlehenssumme, Zinssätze, Laufzeit und Rückzahlungsmodalitäten sind beschrieben.",
+                        2,
+                        "Zinsregelungen sind vorhanden, aber Rückzahlungsmodalitäten teilweise unklar.",
+                        "Darlehensvertrag.pdf",
+                        null
+                ),
 
-                createContract("Schulungsvertrag", "Vertrag über Weiterbildungs- oder Schulungsleistungen.", "22.02.2024", "22.02.2025", 1,
-                        "Leistungsumfang und Termine klar definiert, alles in Ordnung.", "Schulungsvertrag.docx", null),
+                createContract(
+                        "Schulungsvertrag",
+                        "Vertrag über Weiterbildungs- oder Schulungsleistungen.",
+                        "22.02.2024",
+                        "22.02.2025",
+                        "Dieser Schulungsvertrag regelt Weiterbildungsmaßnahmen. Inhalte, Termine, Teilnahmebedingungen und Vergütung sind festgelegt.",
+                        1,
+                        "Leistungsumfang und Termine klar definiert, alles in Ordnung.",
+                        "Schulungsvertrag.docx",
+                        null
+                ),
 
-                createContract("Cloud-Service-Vertrag", "Cloud-basierte IT-Services.", "05.10.2023", "05.10.2024", 1,
-                        "Cloud-Dienste, SLAs und Supportbedingungen klar beschrieben.", "Cloud-Service-Vertrag.pdf", null),
+                createContract(
+                        "Cloud-Service-Vertrag",
+                        "Cloud-basierte IT-Services.",
+                        "05.10.2023",
+                        "05.10.2024",
+                        "Der Cloud-Service-Vertrag regelt die Nutzung cloudbasierter IT-Dienste. Serviceumfang, Verfügbarkeit, SLAs und Datenschutz sind definiert.",
+                        1,
+                        "Cloud-Dienste, SLAs und Supportbedingungen klar beschrieben.",
+                        "Cloud-Service-Vertrag.pdf",
+                        null
+                ),
 
-                createContract("IT-Rahmenvertrag", "Übergeordneter Vertrag über IT-Dienstleistungen.", "03.01.2024", "03.01.2026", 1,
-                        "Rahmenbedingungen für IT-Dienstleistungen umfassend und klar.", "IT-Rahmenvertrag.docx", null),
+                createContract(
+                        "IT-Rahmenvertrag",
+                        "Übergeordneter Vertrag über IT-Dienstleistungen.",
+                        "03.01.2024",
+                        "03.01.2026",
+                        "Dieser IT-Rahmenvertrag definiert allgemeine Bedingungen für IT-Dienstleistungen. Einzelbeauftragungen erfolgen auf Basis dieses Vertrages.",
+                        1,
+                        "Rahmenbedingungen für IT-Dienstleistungen umfassend und klar.",
+                        "IT-Rahmenvertrag.docx",
+                        null
+                ),
 
-                createContract("Werkvertrag", "Herstellung eines bestimmten Werkergebnisses.", "12.12.2022", "12.12.2024", 2,
-                        "Leistungsbeschreibung vorhanden, Qualitätsanforderungen könnten präziser sein.", "Werkvertrag.pdf", null),
+                createContract(
+                        "Werkvertrag",
+                        "Herstellung eines bestimmten Werkergebnisses.",
+                        "12.12.2022",
+                        "12.12.2024",
+                        "Der Werkvertrag regelt die Herstellung eines konkreten Werkergebnisses. Leistungsbeschreibung, Qualitätsanforderungen und Abnahme sind festgelegt.",
+                        2,
+                        "Leistungsbeschreibung vorhanden, Qualitätsanforderungen könnten präziser sein.",
+                        "Werkvertrag.pdf",
+                        null
+                ),
 
-                createContract("ADV-Vertrag", "Vertrag zur Auftragsdatenverarbeitung gemäß DSGVO.", "22.11.2023", "22.11.2024", 1,
-                        "Datenschutz- und Verarbeitungspflichten klar geregelt, alles korrekt.", "ADV-Vertrag.docx", null),
+                createContract(
+                        "ADV-Vertrag",
+                        "Vertrag zur Auftragsdatenverarbeitung gemäß DSGVO.",
+                        "22.11.2023",
+                        "22.11.2024",
+                        "Dieser ADV-Vertrag regelt die Verarbeitung personenbezogener Daten. Datenschutzpflichten, technische Maßnahmen und Verantwortlichkeiten sind definiert.",
+                        1,
+                        "Datenschutz- und Verarbeitungspflichten klar geregelt, alles korrekt.",
+                        "ADV-Vertrag.docx",
+                        null
+                ),
 
-                createContract("Telekommunikationsvertrag", "Mobilfunk oder Internet-Vertrag.", "09.03.2022", "09.03.2023", 3,
-                        "Vertragslaufzeiten und Kündigungsbedingungen unklar, potenzielles Risiko.", "Telekommunikationsvertrag.pdf", null),
+                createContract(
+                        "Telekommunikationsvertrag",
+                        "Mobilfunk oder Internet-Vertrag.",
+                        "09.03.2022",
+                        "09.03.2023",
+                        "Der Telekommunikationsvertrag regelt Mobilfunk- oder Internetleistungen. Laufzeit, Tarife, Kündigungsbedingungen und Leistungsumfang sind festgelegt.",
+                        3,
+                        "Vertragslaufzeiten und Kündigungsbedingungen unklar, potenzielles Risiko.",
+                        "Telekommunikationsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Providervertrag", "Vertrag mit Internet- oder Service-Provider.", "12.07.2023", "12.07.2024", 1,
-                        "Leistungsumfang und Gebühren klar beschrieben, keine Auffälligkeiten.", "Providervertrag.docx", null),
+                createContract(
+                        "Providervertrag",
+                        "Vertrag mit Internet- oder Service-Provider.",
+                        "12.07.2023",
+                        "12.07.2024",
+                        "Dieser Providervertrag regelt die Bereitstellung von IT- oder Internetdiensten. Leistungsumfang, Gebühren und Laufzeit sind vereinbart.",
+                        1,
+                        "Leistungsumfang und Gebühren klar beschrieben, keine Auffälligkeiten.",
+                        "Providervertrag.docx",
+                        null
+                ),
 
-                createContract("Abovertrag", "Wiederkehrendes Abonnement für Dienstleistungen.", "14.02.2024", "14.02.2025", 1,
-                        "Abo-Leistungen und Kündigungsfristen klar geregelt.", "Abovertrag.pdf", null),
 
-                createContract("Überlassungsvertrag", "Überlassung von Personal oder Gegenständen.", "01.11.2021", "01.11.2024", 2,
-                        "Grundsätze der Überlassung vorhanden, Haftung könnte deutlicher sein.", "Überlassungsvertrag.docx", null),
+                createContract(
+                        "Abovertrag",
+                        "Wiederkehrendes Abonnement für Dienstleistungen.",
+                        "14.02.2024",
+                        "14.02.2025",
+                        "Der Abovertrag regelt wiederkehrende Dienstleistungen. Leistungsumfang, Abrechnungsintervalle, Laufzeit und Kündigungsfristen sind festgelegt.",
+                        1,
+                        "Abo-Leistungen und Kündigungsfristen klar geregelt.",
+                        "Abovertrag.pdf",
+                        null
+                ),
 
-                createContract("Forschungsvertrag", "Kooperative Forschungstätigkeiten.", "18.05.2023", "18.05.2024", 1,
-                        "Forschungsziele und Verantwortlichkeiten klar definiert.", "Forschungsvertrag.pdf", null),
+                createContract(
+                        "Überlassungsvertrag",
+                        "Überlassung von Personal oder Gegenständen.",
+                        "01.11.2021",
+                        "01.11.2024",
+                        "Dieser Überlassungsvertrag regelt die zeitlich begrenzte Überlassung von Personal oder Gegenständen. Haftung, Dauer und Rückgaberegelungen sind definiert.",
+                        2,
+                        "Grundsätze der Überlassung vorhanden, Haftung könnte deutlicher sein.",
+                        "Überlassungsvertrag.docx",
+                        null
+                ),
 
-                createContract("Kreditvertrag", "Langfristiger Kreditvertrag mit festen Konditionen.", "28.01.2022", "28.01.2027", 3,
-                        "Zinsberechnung und Sicherheiten teilweise unklar, hohes Risiko für Streitigkeiten.", "Kreditvertrag.docx", null),
+                createContract(
+                        "Forschungsvertrag",
+                        "Kooperative Forschungstätigkeiten.",
+                        "18.05.2023",
+                        "18.05.2024",
+                        "Der Forschungsvertrag regelt gemeinsame Forschungstätigkeiten. Forschungsziele, Aufgabenverteilung und Rechte an Ergebnissen sind festgelegt.",
+                        1,
+                        "Forschungsziele und Verantwortlichkeiten klar definiert.",
+                        "Forschungsvertrag.pdf",
+                        null
+                ),
 
-                createContract("Vertriebsvertrag", "Vertrieb von Produkten oder Dienstleistungen.", "30.08.2023", "30.08.2024", 1,
-                        "Vertriebsgebiete und Provisionen klar definiert.", "Vertriebsvertrag.pdf", null),
+                createContract(
+                        "Kreditvertrag",
+                        "Langfristiger Kreditvertrag mit festen Konditionen.",
+                        "28.01.2022",
+                        "28.01.2027",
+                        "Der Kreditvertrag regelt die Bereitstellung eines langfristigen Kredits. Kreditbetrag, Zinsen, Sicherheiten und Rückzahlung sind Bestandteil der Vereinbarung.",
+                        3,
+                        "Zinsberechnung und Sicherheiten teilweise unklar, hohes Risiko für Streitigkeiten.",
+                        "Kreditvertrag.docx",
+                        null
+                ),
 
-                createContract("Lizenzverlängerung", "Verlängerung einer bestehenden Lizenz.", "25.02.2024", "25.02.2025", 1,
-                        "Laufzeit und Nutzungsrechte der Lizenz korrekt geregelt.", "Lizenzverlängerung.docx", null),
+                createContract(
+                        "Vertriebsvertrag",
+                        "Vertrieb von Produkten oder Dienstleistungen.",
+                        "30.08.2023",
+                        "30.08.2024",
+                        "Dieser Vertriebsvertrag regelt den Vertrieb von Produkten oder Dienstleistungen. Vertriebsgebiete, Provisionen und Pflichten sind definiert.",
+                        1,
+                        "Vertriebsgebiete und Provisionen klar definiert.",
+                        "Vertriebsvertrag.pdf",
+                        null
+                ),
 
-                createContract("SaaS-Vertrag", "Software-as-a-Service-Nutzungslizenz.", "01.09.2023", "01.09.2024", 1,
-                        "Nutzungsbedingungen und Support klar beschrieben.", "SaaS-Vertrag.pdf", null),
+                createContract(
+                        "Lizenzverlängerung",
+                        "Verlängerung einer bestehenden Lizenz.",
+                        "25.02.2024",
+                        "25.02.2025",
+                        "Die Lizenzverlängerung regelt die Fortführung bestehender Nutzungsrechte. Neue Laufzeit, Konditionen und Einschränkungen sind festgelegt.",
+                        1,
+                        "Laufzeit und Nutzungsrechte der Lizenz korrekt geregelt.",
+                        "Lizenzverlängerung.docx",
+                        null
+                ),
 
-                createContract("Partnerschaftsvertrag", "Langfristige Partnerschaft zwischen Unternehmen.", "12.03.2024", "12.03.2026", 1,
-                        "Partnerschaftsziele und Verantwortlichkeiten klar definiert.", "Partnerschaftsvertrag.docx", null),
+                createContract(
+                        "SaaS-Vertrag",
+                        "Software-as-a-Service-Nutzungslizenz.",
+                        "01.09.2023",
+                        "01.09.2024",
+                        "Der SaaS-Vertrag regelt die Nutzung einer cloudbasierten Software. Nutzungsbedingungen, Support, Verfügbarkeit und Laufzeit sind definiert.",
+                        1,
+                        "Nutzungsbedingungen und Support klar beschrieben.",
+                        "SaaS-Vertrag.pdf",
+                        null
+                ),
 
-                createContract("Wartungsvertrag Premium", "Erweiterter Wartungs- und Servicevertrag.", "10.10.2022", "10.10.2024", 2,
-                        "Leistungsumfang gut beschrieben, SLA-Klauseln könnten detaillierter sein.", "Wartungsvertrag-Premium.pdf", null)
+                createContract(
+                        "Partnerschaftsvertrag",
+                        "Langfristige Partnerschaft zwischen Unternehmen.",
+                        "12.03.2024",
+                        "12.03.2026",
+                        "Dieser Partnerschaftsvertrag regelt eine langfristige Zusammenarbeit. Ziele, Verantwortlichkeiten und Kooperationsmodelle sind festgelegt.",
+                        1,
+                        "Partnerschaftsziele und Verantwortlichkeiten klar definiert.",
+                        "Partnerschaftsvertrag.docx",
+                        null
+                ),
+
+                createContract(
+                        "Wartungsvertrag Premium",
+                        "Erweiterter Wartungs- und Servicevertrag.",
+                        "10.10.2022",
+                        "10.10.2024",
+                        "Der Premium-Wartungsvertrag umfasst erweiterte Service- und Wartungsleistungen. Garantierte Reaktionszeiten, SLAs und Zusatzservices sind geregelt.",
+                        2,
+                        "Leistungsumfang gut beschrieben, SLA-Klauseln könnten detaillierter sein.",
+                        "Wartungsvertrag-Premium.pdf",
+                        null
+                )
         );
     }
 
-    private Contract createContract(String title, String description, String startDate, String endDate, int aiLevel,
+    private Contract createContract(String title, String description, String startDate, String endDate, String extractedText, int aiLevel,
                                   String aiAnalysisText, String fileName, byte[] file) {
         return Contract.builder()
                 .title(title)
                 .description(description)
                 .startDate(LocalDate.parse(startDate, formatter))
                 .endDate(LocalDate.parse(endDate, formatter))
+                .extractedText(extractedText)
                 .aiLevel(aiLevel)
                 .aiAnalysisText(aiAnalysisText)
                 .fileName(fileName)

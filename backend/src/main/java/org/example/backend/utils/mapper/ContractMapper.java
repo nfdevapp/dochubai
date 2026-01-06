@@ -105,6 +105,7 @@ public class ContractMapper {
                     .description(dto.description())
                     .startDate(start)
                     .endDate(end)
+                    .extractedText(extractedText)
                     .aiLevel(analysisResult != null ? analysisResult.aiLevel() : null)
                     .aiAnalysisText(analysisResult != null ? analysisResult.aiAnalysisText() : null)
                     .fileName(dto.fileName())

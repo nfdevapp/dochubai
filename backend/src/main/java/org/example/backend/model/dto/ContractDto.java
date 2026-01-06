@@ -11,6 +11,7 @@ public record ContractDto (
         String description,
         String startDate,
         String endDate,
+        String extractedText,
         int aiLevel,
         String aiAnalysisText,
         String fileName,

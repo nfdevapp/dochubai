@@ -1,6 +1,5 @@
 package org.example.backend.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
@@ -18,6 +17,7 @@ public record Contract(
         String description,
         LocalDate startDate,
         LocalDate endDate,
+        String extractedText,
         int aiLevel,
         String aiAnalysisText,
         String fileName,
