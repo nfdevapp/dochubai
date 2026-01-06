@@ -1,8 +1,9 @@
 "use client";
 
-import { FileText, Receipt, Sparkles, Settings } from "lucide-react";
+import { FileText, Receipt, Sparkles, Bot } from "lucide-react";
 import ContractPage from "@/pages/ContractPage";
 import InvoicePage from "@/pages/InvoicePage.tsx";
+import AIAssistantPage from "@/pages/AIAssistantPage.tsx";
 
 interface SidebarProps {
     setTitle: (title: string) => void;
@@ -41,11 +42,11 @@ export default function Sidebar({ setTitle, setPage }: SidebarProps) {
                 <button
                     onClick={() => {
                         setTitle("KI-Assistent");
-                        setPage(<div>TODO KI-Assistent…</div>);
+                        setPage(<AIAssistantPage />);
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground font-medium"
                 >
-                    <Settings size={18} /> KI-Assistent
+                    <Bot size={18} /> KI-Assistent
                 </button>
             </nav>
 
