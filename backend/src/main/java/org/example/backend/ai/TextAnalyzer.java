@@ -1,6 +1,7 @@
 package org.example.backend.ai;
 
 import org.example.backend.model.entities.Invoice;
+import org.example.backend.service.ChatGPTService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

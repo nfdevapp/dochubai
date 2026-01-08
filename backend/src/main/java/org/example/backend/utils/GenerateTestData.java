@@ -2,7 +2,7 @@ package org.example.backend.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.ai.ChatGPTService;
+import org.example.backend.service.ChatGPTService;
 import org.example.backend.model.entities.ChatGPT;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
@@ -640,7 +640,18 @@ public class GenerateTestData {
                         "Rechnungen:\n")
                 .build();
 
+        //Chat-Prompt
+        ChatGPT chatPrompt = ChatGPT.builder()
+                .key(PromptType.CHAT)
+                .prompt("Du bist ein Assistenzsystem für Dokumentenfragen.\n" +
+                        "Beantworte die Frage ausschließlich anhand des bereitgestellten Kontexts.\n" +
+                        "Wenn die Antwort nicht im Kontext enthalten ist, sage:\n" +
+                        "\"Die Information ist im Dokument nicht enthalten.\"\n" +
+                        "Antworte sachlich, präzise und ohne Spekulationen.")
+                .build();
+
         chatGPTService.savePrompt(contractPrompt);
         chatGPTService.savePrompt(invoicePrompt);
+        chatGPTService.savePrompt(chatPrompt);
     }
 }

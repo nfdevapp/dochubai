@@ -1,10 +1,10 @@
 "use client";
-import AiChat from "@/components/aiassistant/AiChat.tsx";
+import ChatAi from "@/components/chatai/ChatAi.tsx";
 
 export default function AIAssistantPage() {
     return (
         <div className="space-y-6">
-            <AiChat />
+            <ChatAi />
         </div>
     );
 }

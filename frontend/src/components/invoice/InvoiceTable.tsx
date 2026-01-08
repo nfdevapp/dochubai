@@ -277,6 +277,15 @@ const columns: ColumnDef<Invoice>[] = [
             );
         },
     },
+    // Spacer nach amount
+    // {
+    //     accessorKey: "__spacer",
+    //     header: () => null,
+    //     cell: () => null,
+    //     enableSorting: false,
+    //     enableColumnFilter: false,
+    //     size: 150, // Breite nach Bedarf anpassen
+    // },
 ];
 
 
