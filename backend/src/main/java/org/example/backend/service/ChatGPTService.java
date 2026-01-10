@@ -3,10 +3,10 @@ package org.example.backend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.ai.*;
 import org.example.backend.exeptions.DocHubAiException;
-import org.example.backend.model.entities.ChatGPT;
+import org.example.backend.model.entities.ChatAi;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
-import org.example.backend.repository.ChatGPTRepo;
+import org.example.backend.repository.ChatAiRepo;
 import org.example.backend.repository.ContractRepo;
 import org.example.backend.repository.InvoiceRepo;
 import org.example.backend.utils.enums.PromptType;
@@ -19,14 +19,14 @@ import java.util.List;
 @Service
 public class ChatGPTService {
 
-    private final ChatGPTRepo chatGPTRepo;
+    private final ChatAiRepo chatAiRepo;
     private final RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final InvoiceRepo invoiceRepo;
     private final ContractRepo contractRepo;
 
-    public ChatGPTService(ChatGPTRepo chatGPTRepo, RestClient.Builder builder, @Value("${openai.api-key}") String apiKey, InvoiceRepo invoiceRepo, ContractRepo contractRepo) {
-        this.chatGPTRepo = chatGPTRepo;
+    public ChatGPTService(ChatAiRepo chatAiRepo, RestClient.Builder builder, @Value("${openai.api-key}") String apiKey, InvoiceRepo invoiceRepo, ContractRepo contractRepo) {
+        this.chatAiRepo = chatAiRepo;
         this.invoiceRepo = invoiceRepo;
         this.contractRepo = contractRepo;
         this.restClient = builder
@@ -38,7 +38,7 @@ public class ChatGPTService {
     public AiContractAnalysisResult analyzeContractText(String description) {
         try {
             //Prompt aus DB holen
-            ChatGPT promptEntity = chatGPTRepo.findByKey(PromptType.CONTRACT)
+            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.CONTRACT)
                     .orElseThrow(() -> new DocHubAiException("Contract-Prompt nicht gefunden in DB"));
 
             String prompt = promptEntity.prompt() + description;
@@ -61,7 +61,7 @@ public class ChatGPTService {
     public AiInvoiceAnalysisResult analyzeInvoiceText(List<Invoice> invoices) {
         try {
             // Prompt aus DB holen
-            ChatGPT promptEntity = chatGPTRepo.findByKey(PromptType.INVOICE)
+            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.INVOICE)
                     .orElseThrow(() -> new DocHubAiException("Invoice-Prompt nicht gefunden in DB"));
 
             StringBuilder invoiceText = new StringBuilder();
@@ -157,7 +157,7 @@ public class ChatGPTService {
             }
 
             // Prompt aus DB holen
-            ChatGPT promptEntity = chatGPTRepo.findByKey(PromptType.CHAT)
+            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.CHAT)
                     .orElseThrow(() -> new DocHubAiException("Chat-Prompt nicht gefunden in DB"));
 
             String userPrompt = """
@@ -229,10 +229,10 @@ public class ChatGPTService {
 
 
     public void deleteAllPrompts() {
-        chatGPTRepo.deleteAll();
+        chatAiRepo.deleteAll();
     }
 
-    public void savePrompt(ChatGPT prompt) {
-        chatGPTRepo.save(prompt);
+    public void savePrompt(ChatAi prompt) {
+        chatAiRepo.save(prompt);
     }
 }

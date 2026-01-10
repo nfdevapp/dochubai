@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
  */
 @With
 @Builder
-public record ChatGPT(
+public record ChatAi(
         @Id
         String id,
         PromptType key,//WICHTIG muss key heißen => sonst findet MongoDB nicht
