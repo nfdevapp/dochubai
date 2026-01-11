@@ -3,7 +3,7 @@ package org.example.backend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.ai.*;
 import org.example.backend.exeptions.DocHubAiException;
-import org.example.backend.model.entities.ChatAi;
+import org.example.backend.model.entities.PromptsAi;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.repository.ChatAiRepo;
@@ -38,7 +38,7 @@ public class ChatGPTService {
     public AiContractAnalysisResult analyzeContractText(String description) {
         try {
             //Prompt aus DB holen
-            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.CONTRACT)
+            PromptsAi promptEntity = chatAiRepo.findByKey(PromptType.CONTRACT)
                     .orElseThrow(() -> new DocHubAiException("Contract-Prompt nicht gefunden in DB"));
 
             String prompt = promptEntity.prompt() + description;
@@ -61,7 +61,7 @@ public class ChatGPTService {
     public AiInvoiceAnalysisResult analyzeInvoiceText(List<Invoice> invoices) {
         try {
             // Prompt aus DB holen
-            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.INVOICE)
+            PromptsAi promptEntity = chatAiRepo.findByKey(PromptType.INVOICE)
                     .orElseThrow(() -> new DocHubAiException("Invoice-Prompt nicht gefunden in DB"));
 
             StringBuilder invoiceText = new StringBuilder();
@@ -157,7 +157,7 @@ public class ChatGPTService {
             }
 
             // Prompt aus DB holen
-            ChatAi promptEntity = chatAiRepo.findByKey(PromptType.CHAT)
+            PromptsAi promptEntity = chatAiRepo.findByKey(PromptType.CHAT)
                     .orElseThrow(() -> new DocHubAiException("Chat-Prompt nicht gefunden in DB"));
 
             String userPrompt = """
@@ -232,7 +232,7 @@ public class ChatGPTService {
         chatAiRepo.deleteAll();
     }
 
-    public void savePrompt(ChatAi prompt) {
+    public void savePrompt(PromptsAi prompt) {
         chatAiRepo.save(prompt);
     }
 }
