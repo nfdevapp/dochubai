@@ -89,7 +89,7 @@ public class ChatGPTService {
         }
     }
 
-    //Einfache Suche
+    //Einfache Suche (alle Daten werden einfach aus beiden Tabellen geholt)
     public String askWithContext(String question) {
         try {
             List<Invoice> invoices = invoiceRepo.findAll();

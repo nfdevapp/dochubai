@@ -3,7 +3,7 @@ package org.example.backend.utils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.service.ChatGPTService;
-import org.example.backend.model.entities.ChatGPT;
+import org.example.backend.model.entities.ChatAi;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
 import org.example.backend.service.ContractService;
@@ -611,7 +611,7 @@ public class GenerateTestData {
         chatGPTService.deleteAllPrompts();
 
         //Vertragsprompt
-        ChatGPT contractPrompt = ChatGPT.builder()
+        ChatAi contractPrompt = ChatAi.builder()
                 .key(PromptType.CONTRACT)
                 .prompt("Analysiere den folgenden Vertrag. " +
                         "Bewerte ihn nach diesem Schema:\n" +
@@ -627,7 +627,7 @@ public class GenerateTestData {
                 .build();
 
         //Rechnungs-Prompt
-        ChatGPT invoicePrompt = ChatGPT.builder()
+        ChatAi invoicePrompt = ChatAi.builder()
                 .key(PromptType.INVOICE)
                 .prompt("Analysiere die folgenden Rechnungen. " +
                         "Ermittle, in welchen Ausgabenkategorien (basierend auf dem Verwendungszweck) " +
@@ -641,7 +641,7 @@ public class GenerateTestData {
                 .build();
 
         //Chat-Prompt
-        ChatGPT chatPrompt = ChatGPT.builder()
+        ChatAi chatPrompt = ChatAi.builder()
                 .key(PromptType.CHAT)
                 .prompt("Du bist ein Assistenzsystem für Dokumentenfragen.\n" +
                         "Beantworte die Frage ausschließlich anhand des bereitgestellten Kontexts.\n" +
