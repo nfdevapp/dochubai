@@ -1,6 +1,7 @@
 package org.example.backend.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.ai.ChatAiRequest;
 import org.example.backend.model.dto.ChatAiDto;
 import org.example.backend.service.ChatGPTService;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class ChatAiController {
     private final ChatGPTService chatGPTService;
 
     @PostMapping("/question")
-    public ResponseEntity<ChatAiDto> userQuestion(@RequestBody ChatAiDto request) {
+    public ResponseEntity<ChatAiDto> userQuestion(@RequestBody ChatAiRequest request) {
 
-        String answer = chatGPTService.askWithContext(request.userQuestion());
+        String answer = chatGPTService.askWithContextWithHistory(request.history(), request.userQuestion());
 
         ChatAiDto response = ChatAiDto.builder()
                 .userQuestion(request.userQuestion())
@@ -31,4 +32,5 @@ public class ChatAiController {
 
         return ResponseEntity.ok(response);
     }
+
 }

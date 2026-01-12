@@ -6,8 +6,9 @@ import axios from "axios";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-import { askAiQuestion } from "@/api/ChatAiService";
+import {askWithContextWithHistory} from "@/api/ChatAiService";
 import type { ApiError } from "@/api/ApiError";
+import type { ChatAiDto } from "@/model/ChatAiDto";
 
 interface Message {
     id: number;
@@ -52,6 +53,29 @@ export default function ChatAi() {
         lastMessage?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    // Hilfsfunktion: konvertiert Message[] zu ChatAiDto[]
+    const convertToDto = (messages: Message[]): ChatAiDto[] => {
+        const dtos: ChatAiDto[] = [];
+        let tempDto: ChatAiDto = { userQuestion: "", aiAnswer: "" };
+
+        messages.forEach((msg) => {
+            if (msg.isUser) {
+                // Neue User-Nachricht → neuen DTO starten
+                if (tempDto.userQuestion || tempDto.aiAnswer) dtos.push(tempDto);
+                tempDto = { userQuestion: msg.text, aiAnswer: "" };
+            } else {
+                tempDto.aiAnswer = msg.text;
+                dtos.push(tempDto);
+                tempDto = { userQuestion: "", aiAnswer: "" };
+            }
+        });
+
+        // Restlichen DTO hinzufügen, falls noch nicht
+        if (tempDto.userQuestion || tempDto.aiAnswer) dtos.push(tempDto);
+
+        return dtos;
+    };
+
     // Nachricht senden
     const sendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -70,8 +94,11 @@ export default function ChatAi() {
         setLoading(true);
 
         try {
+            // Chatverlauf in DTO umwandeln
+            const history = convertToDto([...messages, userMessage]);
+
             // AI-Antwort abrufen
-            const response = await askAiQuestion(userMessage.text);
+            const response = await askWithContextWithHistory(userMessage.text, history);
 
             // AI-Antwort zum Chat hinzufügen
             setMessages((prev) => [
@@ -176,4 +203,5 @@ export default function ChatAi() {
                 </Button>
             </form>
         </div>
-    );}
+    );
+}

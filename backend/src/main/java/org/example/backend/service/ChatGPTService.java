@@ -3,6 +3,7 @@ package org.example.backend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.ai.*;
 import org.example.backend.exeptions.DocHubAiException;
+import org.example.backend.model.dto.ChatAiDto;
 import org.example.backend.model.entities.PromptsAi;
 import org.example.backend.model.entities.Contract;
 import org.example.backend.model.entities.Invoice;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,15 +91,15 @@ public class ChatGPTService {
         }
     }
 
-    //Einfache Suche (alle Daten werden einfach aus beiden Tabellen geholt)
-    public String askWithContext(String question) {
+    // Einfache Suche mit Chatverlauf (Kontext + History)
+    public String askWithContextWithHistory(List<ChatAiDto> history, String question) {
         try {
             List<Invoice> invoices = invoiceRepo.findAll();
             List<Contract> contracts = contractRepo.findAll();
 
             StringBuilder contextBuilder = new StringBuilder();
 
-            //CONTRACTS
+            // CONTRACTS
             contextBuilder.append("VERTRÄGE:\n");
             for (Contract c : contracts) {
 
@@ -131,7 +133,7 @@ public class ChatGPTService {
                 ));
             }
 
-            //INVOICES
+            // INVOICES
             contextBuilder.append("\nRECHNUNGEN / BELEGE:\n");
             for (Invoice i : invoices) {
 
@@ -160,22 +162,29 @@ public class ChatGPTService {
             PromptsAi promptEntity = chatAiRepo.findByKey(PromptType.CHAT)
                     .orElseThrow(() -> new DocHubAiException("Chat-Prompt nicht gefunden in DB"));
 
-            String userPrompt = """
+            // Messages bauen
+            List<OpenAiMessage> messages = new ArrayList<>();
+
+            // System Prompt
+            messages.add(new OpenAiMessage("system", promptEntity.prompt()));
+
+            // ganze Kontext + neue Frage
+            messages.add(new OpenAiMessage("user", String.format("""
                 KONTEXT:
                 %s
 
                 FRAGE:
                 %s
-                """.formatted(contextBuilder.toString(), question);
+                """, contextBuilder.toString(), question)));
+
+            // Chat-History anhängen
+            for (ChatAiDto msg : history) {
+                messages.add(new OpenAiMessage("user", msg.userQuestion()));
+                messages.add(new OpenAiMessage("assistant", msg.aiAnswer()));
+            }
 
             OpenAiResponse response = restClient.post()
-                    .body(new OpenAiRequest(
-                            "gpt-5",
-                            List.of(
-                                    new OpenAiMessage("system", promptEntity.prompt()),
-                                    new OpenAiMessage("user", userPrompt)
-                            )
-                    ))
+                    .body(new OpenAiRequest("gpt-5", messages))
                     .retrieve()
                     .body(OpenAiResponse.class);
 
@@ -183,11 +192,10 @@ public class ChatGPTService {
             return response.text();
 
         } catch (Exception e) {
-            throw new DocHubAiException("Fehler bei der Dokumentensuche", e);
+            throw new DocHubAiException("Fehler bei der Chat-Abfrage", e);
         }
     }
-
-
+    
     //Rag Suche: Funz noch nicht
     public String askWithContextForRag(String context, String question) {
         try {
