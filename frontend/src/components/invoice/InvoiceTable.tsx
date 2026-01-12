@@ -254,10 +254,11 @@ const columns: ColumnDef<Invoice>[] = [
         header: ({ column }) => (
             <Button
                 variant="ghost"
-                className="justify-start pl-6"
+                className="pl-4 justify-start"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-                Betrag <ArrowUpDown className="ml-2 h-4 w-4" />
+                Betrag
+                <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
         ),
         cell: ({ row }) => {
@@ -265,27 +266,20 @@ const columns: ColumnDef<Invoice>[] = [
             const isInvoice = row.original.isInvoice;
 
             return (
-                <div
-                    className={cn(
-                        "pl-6 font-medium",
-                        isInvoice === true && "text-green-600", // Zahlungsbeleg
-                        isInvoice === false && "text-red-600"  // Rechnung
-                    )}
-                >
-                    {amount.toFixed(2).replace(".", ",")} €
+                <div className="pl-4">
+                    <div
+                        className={cn(
+                            "w-[70px] text-right font-medium tabular-nums",
+                            isInvoice === true && "text-green-600",
+                            isInvoice === false && "text-red-600"
+                        )}
+                    >
+                        {amount.toFixed(2).replace(".", ",")} €
+                    </div>
                 </div>
             );
         },
     },
-    // Spacer nach amount
-    // {
-    //     accessorKey: "__spacer",
-    //     header: () => null,
-    //     cell: () => null,
-    //     enableSorting: false,
-    //     enableColumnFilter: false,
-    //     size: 150, // Breite nach Bedarf anpassen
-    // },
 ];
 
 
