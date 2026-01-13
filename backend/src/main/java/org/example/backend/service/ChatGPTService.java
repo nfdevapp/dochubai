@@ -195,46 +195,6 @@ public class ChatGPTService {
             throw new DocHubAiException("Fehler bei der Chat-Abfrage", e);
         }
     }
-    
-    //Rag Suche: Funz noch nicht
-//    public String askWithContextForRag(String context, String question) {
-//        try {
-//
-//            String systemPrompt = """
-//            Du bist ein Assistenzsystem für Dokumentenfragen.
-//            Beantworte die Frage ausschließlich anhand des bereitgestellten Kontexts.
-//            Wenn die Antwort nicht im Kontext enthalten ist, sage:
-//            "Die Information ist im Dokument nicht enthalten."
-//            Antworte sachlich und präzise.
-//            """;
-//
-//            String userPrompt = """
-//            KONTEXT:
-//            %s
-//
-//            FRAGE:
-//            %s
-//            """.formatted(context, question);
-//
-//            OpenAiResponse response = restClient.post()
-//                    .body(new OpenAiRequest(
-//                            "gpt-5",
-//                            List.of(
-//                                    new OpenAiMessage("system", systemPrompt),
-//                                    new OpenAiMessage("user", userPrompt)
-//                            )
-//                    ))
-//                    .retrieve()
-//                    .body(OpenAiResponse.class);
-//
-//            assert response != null;
-//            return response.text();
-//
-//        } catch (Exception e) {
-//            throw new DocHubAiException("Fehler bei der RAG-Abfrage", e);
-//        }
-//    }
-
 
     public void deleteAllPrompts() {
         chatAiRepo.deleteAll();

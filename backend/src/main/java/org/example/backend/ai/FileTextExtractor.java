@@ -46,7 +46,6 @@ public class FileTextExtractor {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes)) {
             BufferedImage image = ImageIO.read(inputStream);
             if (image == null) {
-                System.err.println("Image could not be read.");
                 return null;
             }
             return tesseract.doOCR(image);
